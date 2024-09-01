@@ -7,8 +7,6 @@
 Display additional images and videos on top of the panorama.
 :::
 
-[[toc]]
-
 ## Usage
 
 Overlays are images and videos "glued" to the panorama. Contrary to [markers](./markers.md) they are part of the 3D scene and not drawn on top of the viewer.
@@ -62,40 +60,7 @@ packages:
       imports: OverlaysPlugin
 ```
 
-```js
-const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
-
-const viewer = new Viewer({
-    container: 'viewer',
-    panorama: baseUrl + 'sphere.jpg',
-    caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',
-    loadingImg: baseUrl + 'loader.gif',
-    touchmoveTwoFingers: true,
-    mousewheelCtrlKey: true,
-
-    plugins: [
-        [OverlaysPlugin, {
-            overlays: [
-                {
-                    id: 'xray',
-                    path: baseUrl + 'sphere-overlay.png',
-                    opacity: .8,
-                    zIndex: 1,
-                },
-                {
-                    path: baseUrl + 'pictos/tent.png',
-                    opacity: 1,
-                    yaw: -0.5,
-                    pitch: 0.1,
-                    width: 0.4,
-                    height: 0.3,
-                    zIndex: 2,
-                },
-            ],
-        }],
-    ],
-});
-```
+<<< ./demos-src/overlays.js
 
 :::
 

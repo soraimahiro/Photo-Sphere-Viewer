@@ -1,7 +1,5 @@
 # Navbar customization
 
-[[toc]]
-
 ## Core buttons
 
 The `navbar` option is an array which can contain the following elements:

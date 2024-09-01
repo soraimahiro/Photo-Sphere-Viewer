@@ -86,7 +86,7 @@ The data can also contains angular values:
 -   Initial View Pitch
 -   Initial Horizontal FOV
 
-![XMP_pano_pixels](../../images/XMP_pano_pixels.png)
+![XMP_pano_pixels](/images/XMP_pano_pixels.png)
 
 More information on [Google documentation](https://developers.google.com/streetview/spherical-metadata).
 
@@ -167,6 +167,10 @@ const viewer = new PhotoSphereViewer.Viewer({
 ### Playground
 
 Use this demo to find the best values for your image.
+
+<script setup>
+import CropPlayground from '../../.vitepress/components/CropPlayground.vue';
+</script>
 
 <ClientOnly>
   <CropPlayground/>

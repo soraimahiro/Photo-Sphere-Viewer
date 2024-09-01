@@ -2,7 +2,7 @@
   "name": "@photo-sphere-viewer/plan-plugin",
   "version": "0.0.0",
   "description": "Photo Sphere Viewer plugin to add a geographic map (via Leaftlet).",
-  "homepage": "https://photo-sphere-viewer.js.org/plugins/plan",
+  "homepage": "https://photo-sphere-viewer.js.org/plugins/plan.html",
   "license": "MIT",
   "main": "./src/index.ts",
   "types": "./src/index.ts",

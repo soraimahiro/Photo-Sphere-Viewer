@@ -9,8 +9,6 @@ Adds a gallery on the bottom of the viewer to navigate between multiple panorama
 This plugin is available in the [@photo-sphere-viewer/gallery-plugin](https://www.npmjs.com/package/@photo-sphere-viewer/gallery-plugin) package.
 :::
 
-[[toc]]
-
 ::: warning
 GalleryPlugin is not compatible with ResolutionPlugin.
 :::
@@ -54,51 +52,7 @@ packages:
       style: true
 ```
 
-```js
-const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
-
-const viewer = new Viewer({
-    container: 'viewer',
-    panorama: baseUrl + 'sphere.jpg',
-    caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',
-    loadingImg: baseUrl + 'loader.gif',
-    touchmoveTwoFingers: true,
-    mousewheelCtrlKey: true,
-
-    plugins: [
-        [GalleryPlugin, {
-            visibleOnLoad: true,
-        }],
-    ],
-});
-
-const gallery = viewer.getPlugin(GalleryPlugin);
-
-gallery.setItems([
-    {
-        id: 'sphere',
-        panorama: baseUrl + 'sphere.jpg',
-        thumbnail: baseUrl + 'sphere-small.jpg',
-        options: {
-            caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',
-        },
-    },
-    {
-        id: 'sphere-test',
-        panorama: baseUrl + 'sphere-test.jpg',
-        name: 'Test sphere',
-    },
-    {
-        id: 'key-biscayne',
-        panorama: baseUrl + 'tour/key-biscayne-1.jpg',
-        thumbnail: baseUrl + 'tour/key-biscayne-1-thumb.jpg',
-        name: 'Key Biscayne',
-        options: {
-            caption: 'Cape Florida Light, Key Biscayne <b>&copy; Pixexid</b>',
-        },
-    },
-]);
-```
+<<< ./demos-src/gallery.js
 
 :::
 

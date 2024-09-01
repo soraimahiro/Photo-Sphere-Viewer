@@ -33,12 +33,12 @@ Documentation : https://photo-sphere-viewer.js.org`,
             'packages/test-adapter/.typedoc/README.md': `
 NPM package : [@photo-sphere-viewer/test-adapter](https://www.npmjs.com/package/@photo-sphere-viewer/test-adapter)
 
-Documentation : https://photo-sphere-viewer.js.org/adapters/test`,
+Documentation : https://photo-sphere-viewer.js.org/adapters/test.html`,
 
             'packages/test-plugin/.typedoc/README.md': `
 NPM package : [@photo-sphere-viewer/test-plugin](https://www.npmjs.com/package/@photo-sphere-viewer/test-plugin)
 
-Documentation : https://photo-sphere-viewer.js.org/plugins/test`,
+Documentation : https://photo-sphere-viewer.js.org/plugins/test.html`,
         };
 
         Object.entries(cases).forEach(([file, expected]) => {

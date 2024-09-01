@@ -2,7 +2,7 @@
   "name": "@photo-sphere-viewer/cubemap-video-adapter",
   "version": "0.0.0",
   "description": "Photo Sphere Viewer adapter to display cubemap videos.",
-  "homepage": "https://photo-sphere-viewer.js.org/guide/adapters/cubemap-video",
+  "homepage": "https://photo-sphere-viewer.js.org/guide/adapters/cubemap-video.html",
   "license": "MIT",
   "main": "./src/index.ts",
   "types": "./src/index.ts",

@@ -7,7 +7,6 @@ Example usage of `elementLayer` marker to integrate a Youtube video.
 ```yaml
 autoload: true
 title: PSV Marker Youtube Demo
-version: 5.8.0-alpha.1
 packages:
     - name: markers-plugin
       imports: MarkersPlugin

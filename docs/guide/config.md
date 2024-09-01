@@ -1,7 +1,5 @@
 # Configuration
 
-[[toc]]
-
 ::: tip Angles definitions
 Photo Sphere Viewer uses a lot of angles for its configuration, most of them can be defined in radians by using a simple number (`3.5`) or in degrees using the "deg" suffix (`'55deg'`).
 :::
@@ -36,7 +34,7 @@ Which [adapter](./adapters/) used to load the panorama.
 
 -   type: `array`
 
-List of enabled [plugins](../plugins/README.md).
+List of enabled [plugins](../plugins/).
 
 #### `caption`
 
@@ -212,7 +210,7 @@ Allows to fix the panorama orientation.
 
 **Note:** if the XMP data contains pose heading/pitch/roll data, they will be applied before `sphereCorrection`.
 
-![pan-tilt-toll](../images/pan-tilt-roll.png)
+![pan-tilt-toll](/images/pan-tilt-roll.png)
 
 #### `panoData`
 
