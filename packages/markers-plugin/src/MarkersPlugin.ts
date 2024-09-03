@@ -114,6 +114,9 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
         hoveringMarker: null as Marker,
         // require a 2nd render (only the scene) when 3d markers visibility changes
         needsReRender: false,
+        // use when updating a polygon marker in order to keep the current position
+        lastClientX: null as number,
+        lastClientY: null as number,
     };
 
     private readonly container: HTMLElement;
@@ -361,7 +364,7 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
         }
 
         if (render) {
-            this.__afterChangerMarkers();
+            this.__afterChangeMarkers();
         }
     }
 
@@ -396,13 +399,13 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
         marker.update(config);
 
         if (render) {
-            this.__afterChangerMarkers();
+            this.__afterChangeMarkers();
 
             if (
                 (marker === this.state.hoveringMarker && marker.config.tooltip?.trigger === 'hover')
                 || marker.state.staticTooltip
             ) {
-                marker.showTooltip();
+                marker.showTooltip(this.state.lastClientX, this.state.lastClientY, true);
             }
         }
     }
@@ -435,7 +438,7 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
         delete this.markers[marker.id];
 
         if (render) {
-            this.__afterChangerMarkers();
+            this.__afterChangeMarkers();
         }
     }
 
@@ -446,7 +449,7 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
         markerIds.forEach((markerId) => this.removeMarker(markerId, false));
 
         if (render) {
-            this.__afterChangerMarkers();
+            this.__afterChangeMarkers();
         }
     }
 
@@ -461,7 +464,7 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
         });
 
         if (render) {
-            this.__afterChangerMarkers();
+            this.__afterChangeMarkers();
         }
     }
 
@@ -474,7 +477,7 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
         });
 
         if (render) {
-            this.__afterChangerMarkers();
+            this.__afterChangeMarkers();
         }
     }
 
@@ -699,6 +702,8 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
     private __onEnterMarker(e: MouseEvent, marker?: Marker) {
         if (marker) {
             this.state.hoveringMarker = marker;
+            this.state.lastClientX = e.clientX;
+            this.state.lastClientY = e.clientY;
 
             this.dispatchEvent(new EnterMarkerEvent(marker));
 
@@ -745,9 +750,14 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
      * Handles mouse move events, refresh the tooltip for polygon markers
      */
     private __onHoverMarker(e: MouseEvent, marker?: Marker) {
-        if (marker && (marker.isPoly() || marker.is3d() || marker.isCss3d())) {
-            if (marker.config.tooltip?.trigger === 'hover') {
-                marker.showTooltip(e.clientX, e.clientY);
+        if (marker) {
+            this.state.lastClientX = e.clientX;
+            this.state.lastClientY = e.clientY;
+
+            if (marker.isPoly() || marker.is3d() || marker.isCss3d()) {
+                if (marker.config.tooltip?.trigger === 'hover') {
+                    marker.showTooltip(e.clientX, e.clientY);
+                }
             }
         }
     }
@@ -801,7 +811,7 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
         }
     }
 
-    private __afterChangerMarkers() {
+    private __afterChangeMarkers() {
         this.__refreshUi();
         this.__checkObjectsObserver();
         this.viewer.needsUpdate();
