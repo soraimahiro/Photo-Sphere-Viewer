@@ -2,6 +2,7 @@ node_modules
 yarn-error.log
 .turbo
 docs/.vitepress/cache
+docs/.vitepress/.temp
 .typedoc
 !docs/.typedoc
 dist

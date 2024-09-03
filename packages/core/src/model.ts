@@ -96,7 +96,7 @@ export type AnimateOptions = Partial<ExtendedPosition> & {
  * Crop information of an equirectangular panorama
  */
 export type PanoData = {
-    isEquirectangular: true;
+    isEquirectangular?: true;
     fullWidth: number;
     fullHeight: number;
     croppedWidth: number;

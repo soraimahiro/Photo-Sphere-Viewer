@@ -71,7 +71,7 @@
 }
 
 /**
- * Overrides
+ * Vitepress Overrides
  * -------------------------------------------------------------------------- */
 
 :root {
@@ -118,8 +118,43 @@
   margin-top: 2rem;
 }
 
+
+/**
+ * Vuetify Overrides
+ * -------------------------------------------------------------------------- */
+
 .v-icon svg {
   fill: currentColor;
+}
+
+.v-slider-track__tick-label {
+  font-size: 12px;
+}
+
+.v-row.no-v-gutters {
+  margin-top: 0;
+  margin-bottom: 0;
+
+  .v-col {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.v-card {
+  display: flex;
+  flex-direction: column;
+
+  .v-tabs {
+    flex: none;
+  }
+}
+
+.v-file-input .v_field__input {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+  white-space: nowrap;
 }
 
 /**
@@ -137,10 +172,6 @@
 .sponsors a {
   display: inline-block;
   margin: 0 0.5em;
-}
-
-.psv-container {
-  background: var(--vp-c-bg) !important;
 }
 
 /**

@@ -1,56 +1,44 @@
 <template>
     <v-card>
         <v-card-text>
-            <v-row>
-                <v-col cols="12">
-                    <v-file-input label="Panorama image" v-model="file" accept="image/*"
-                        :clearable="false"></v-file-input>
+            <v-file-input label="Panorama image" v-model="file" accept="image/*" />
+
+            <v-row class="no-v-gutters">
+                <v-col cols="4">
+                    <v-number-input label="Full width" v-model="panoData.fullWidth" :min="0" :disabled="loading" />
                 </v-col>
                 <v-col cols="4">
-                    <v-number-input label="Full width" v-model.number="panoData.fullWidth" :min="0"
-                        density="compact" :disabled="loading"></v-number-input>
+                    <v-number-input label="Cropped width" v-model="panoData.croppedWidth" :min="0"
+                        :disabled="loading" />
                 </v-col>
                 <v-col cols="4">
-                    <v-number-input label="Cropped width" v-model.number="panoData.croppedWidth" :min="0"
-                        density="compact" :disabled="loading"></v-number-input>
+                    <v-number-input label="Cropped X" v-model="panoData.croppedX" :min="0" :disabled="loading" />
                 </v-col>
                 <v-col cols="4">
-                    <v-number-input label="Cropped X" v-model.number="panoData.croppedX" :min="0" density="compact"
-                        :disabled="loading"></v-number-input>
+                    <v-number-input label="Full height" v-model="panoData.fullHeight" :min="0" :disabled="loading" />
                 </v-col>
                 <v-col cols="4">
-                    <v-number-input label="Full height" v-model.number="panoData.fullHeight" :min="0"
-                        density="compact" :disabled="loading"></v-number-input>
+                    <v-number-input label="Cropped height" v-model="panoData.croppedHeight" :min="0"
+                        :disabled="loading" />
                 </v-col>
                 <v-col cols="4">
-                    <v-number-input label="Cropped height" v-model.number="panoData.croppedHeight" :min="0"
-                        density="compact" :disabled="loading"></v-number-input>
+                    <v-number-input label="Cropped Y" v-model="panoData.croppedY" :min="0" :disabled="loading" />
                 </v-col>
                 <v-col cols="4">
-                    <v-number-input label="Cropped Y" v-model.number="panoData.croppedY" :min="0" density="compact"
-                        :disabled="loading"></v-number-input>
+                    <SliderInput label="Pose heading" v-model="panoData.poseHeading" :min="0" :max="360" :step="1"
+                        :ticks="[0, 90, 180, 270, 360]" :disabled="loading" />
                 </v-col>
                 <v-col cols="4">
-                    <div class="text-caption">Pose heading</div>
-                    <v-slider v-model="panoData.poseHeading" :min="0" :max="360" :step="1"
-                        :ticks="[0, 90, 180, 270, 360]" thumb-label show-ticks="always"
-                        :disabled="loading"></v-slider>
+                    <SliderInput label="Pose pitch" v-model="panoData.posePitch" :min="-90" :max="90" :step="1"
+                        :ticks="[-90, -45, 0, 45, 90]" :disabled="loading" />
                 </v-col>
                 <v-col cols="4">
-                    <div class="text-caption">Pose pitch</div>
-                    <v-slider v-model="panoData.posePitch" :min="-90" :max="90" :step="1"
-                        :ticks="[-90, -45, 0, 45, 90]" thumb-label show-ticks="always"
-                        :disabled="loading"></v-slider>
-                </v-col>
-                <v-col cols="4">
-                    <div class="text-caption">Pose roll</div>
-                    <v-slider v-model="panoData.poseRoll" :min="-180" :max="180" :step="1"
-                        :ticks="[-180, -90, 0, 90, 180]" thumb-label show-ticks="always"
-                        :disabled="loading"></v-slider>
+                    <SliderInput label="Pose roll" v-model="panoData.poseRoll" :min="-180" :max="180" :step="1"
+                        :ticks="[-180, -90, 0, 90, 180]" :disabled="loading" />
                 </v-col>
             </v-row>
 
-            <v-btn style="margin-top: 20px;" color="primary" @click="apply">Apply</v-btn>
+            <v-btn color="primary" @click="apply">Apply</v-btn>
 
             <div v-if="error" class="custom-block danger">
                 <p class="custom-block-title">This image cannot be loaded</p>
@@ -64,17 +52,17 @@
 
     <v-card v-show="!loading" style="margin-top: 20px;">
         <v-tabs v-model="currentTab" bg-color="primary">
-            <v-tab value="Preview">Preview</v-tab>
-            <v-tab value="XMP Data">XMP Data</v-tab>
+            <v-tab value="preview">Preview</v-tab>
+            <v-tab value="data">XMP Data</v-tab>
         </v-tabs>
 
         <v-card-text>
             <v-tabs-window v-model="currentTab">
-                <v-tabs-window-item value="Preview">
+                <v-tabs-window-item value="preview">
                     <div id="viewer"></div>
                 </v-tabs-window-item>
 
-                <v-tabs-window-item value="XMP Data">
+                <v-tabs-window-item value="data">
                     <div class="language-xml">
                         <pre class="language-xml"><code>{{ xmpData }}</code></pre>
                     </div>
@@ -85,19 +73,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue';
 import type { PanoData, Viewer } from '../../../packages/core';
+import { LOADER } from './constants';
+import SliderInput from './SliderInput.vue';
 
 const file = ref<File | null>(null);
 const loading = ref(true);
 const error = ref(false);
-const currentTab = ref('Preview');
+const currentTab = ref('preview');
 
 let viewer: Viewer;
 let imageData: string | null;
 
 const panoData = reactive<PanoData>({
-    isEquirectangular: true,
     fullWidth: 0,
     fullHeight: 0,
     croppedWidth: 0,
@@ -137,6 +126,7 @@ watch(() => panoData.fullHeight, (fullHeight) => {
 
 watch(file, () => {
     error.value = false;
+    loading.value = true;
 
     if (imageData) {
         URL.revokeObjectURL(imageData);
@@ -144,8 +134,6 @@ watch(file, () => {
     }
 
     if (file.value) {
-        loading.value = true;
-
         const reader = new FileReader();
 
         reader.onload = (event) => {
@@ -171,6 +159,10 @@ watch(file, () => {
 
         reader.readAsDataURL(file.value);
     }
+});
+
+onBeforeUnmount(() => {
+    viewer?.destroy();
 });
 
 function computePanoData(width: number, height: number) {
@@ -203,7 +195,7 @@ async function apply() {
         viewer = new Viewer({
             panorama: imageData,
             container: 'viewer',
-            loadingImg: 'https://photo-sphere-viewer-data.netlify.app/assets/loader.gif',
+            loadingImg: LOADER,
             panoData: panoData,
             navbar: ['zoom', 'move', 'fullscreen'],
             size: {
@@ -216,11 +208,8 @@ async function apply() {
 </script>
 
 <style lang="scss" scoped>
-:deep(.v-input__details) {
-    display: none;
-}
-
-:deep(.v-slider-track__tick-label) {
-    font-size: 12px;
+#viewer {
+    border-radius: 5px;
+    overflow: hidden;
 }
 </style>

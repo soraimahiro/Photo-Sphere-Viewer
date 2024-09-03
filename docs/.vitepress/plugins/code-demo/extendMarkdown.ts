@@ -38,7 +38,7 @@ export default function extendMarkdown(md: MarkdownIt) {
                     }
                 }
 
-                return `<CodeDemo autoload="${config.autoload}"
+                return `<ClientOnly><CodeDemo autoload="${config.autoload}"
                             title="${config.title}"
                             version="${config.version}"
                             rawHtml="${encodeURIComponent(config.html)}"
@@ -47,7 +47,7 @@ export default function extendMarkdown(md: MarkdownIt) {
                             rawPackages="${encodeURIComponent(JSON.stringify(config.packages))}"
                             ><template #demo>\n`;
             } else {
-                return `</template></CodeDemo>\n`;
+                return `</template></CodeDemo></ClientOnly>\n`;
             }
         },
     });

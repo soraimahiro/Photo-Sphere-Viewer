@@ -4,21 +4,30 @@ import { h } from 'vue';
 import { createVuetify } from 'vuetify';
 import {
   VBtn,
+  VBtnToggle,
   VCard,
   VCardActions,
   VCardText,
+  VCardTitle,
+  VCheckbox,
   VCol,
+  VColorPicker,
   VDialog,
+  VField,
   VFileInput,
   VIcon,
+  VMenu,
+  VRangeSlider,
   VRow,
+  VSelect,
   VSlider,
   VTab,
   VTabs,
   VTabsWindow,
   VTabsWindowItem,
+  VTextarea,
   VTextField,
-  VThemeProvider,
+  VThemeProvider
 } from 'vuetify/components';
 import { Tooltip } from 'vuetify/directives';
 import { aliases, mdi } from 'vuetify/iconsets/mdi';
@@ -41,20 +50,29 @@ const vuetify = createVuetify({
   ssr: true,
   components: {
     VBtn,
+    VBtnToggle,
     VCard,
     VCardActions,
     VCardText,
+    VCardTitle,
+    VCheckbox,
     VCol,
+    VColorPicker,
     VDialog,
     VFileInput,
+    VField,
     VIcon,
+    VMenu,
     VNumberInput,
     VRow,
     VSlider,
+    VRangeSlider,
+    VSelect,
     VTab,
     VTabs,
     VTabsWindow,
     VTabsWindowItem,
+    VTextarea,
     VTextField,
     VThemeProvider,
   },
@@ -65,6 +83,38 @@ const vuetify = createVuetify({
     defaultSet: 'mdi',
     aliases,
     sets: { mdi },
+  },
+  defaults: {
+    VBtnToggle: {
+      density: 'compact',
+      variant: 'outlined',
+    },
+    VTextField: {
+      density: 'compact',
+    },
+    VFileInput: {
+      density: 'compact',
+    },
+    VField: {
+      density: 'compact',
+    },
+    VCheckbox: {
+      density: 'compact',
+    },
+    VNumberInput: {
+      density: 'compact',
+    },
+    VSelect: {
+      density: 'compact',
+    },
+    VSlider: {
+      showTicks: 'always',
+      thumbLabel: true,
+    },
+    VRangeSlider: {
+      showTicks: 'always',
+      thumbLabel: true,
+    },
   },
   theme: {
     themes: {

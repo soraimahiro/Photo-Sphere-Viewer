@@ -5,6 +5,7 @@
 <script setup lang="ts">
 import { useData } from 'vitepress';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { SPHERE, SPHERE_DARK } from './constants';
 import type { Viewer } from '../../../packages/core';
 
 let viewer: Viewer;
@@ -13,11 +14,8 @@ const { isDark } = useData();
 const loaded = ref(false);
 const container = ref<HTMLElement | null>(null);
 
-const urlLight = 'https://photo-sphere-viewer-data.netlify.app/assets/sphere.jpg';
-const urlDark = 'https://photo-sphere-viewer-data.netlify.app/assets/sphere-night.jpg';
-
 watch(isDark, () => {
-    viewer?.setPanorama(isDark.value ? urlDark : urlLight);
+    viewer?.setPanorama(isDark.value ? SPHERE_DARK : SPHERE);
 });
 
 onMounted(async () => {
@@ -29,7 +27,7 @@ onMounted(async () => {
         defaultPitch: 0.1,
         mousewheel: false,
         navbar: false,
-        panorama: isDark.value ? urlDark : urlLight,
+        panorama: isDark.value ? SPHERE_DARK : SPHERE,
     });
     viewer.addEventListener('ready', () => {
         loaded.value = true;
@@ -61,5 +59,9 @@ onBeforeUnmount(() => {
     &:deep(.psv-loader) {
         display: none !important;
     }
+}
+
+.psv-container {
+    background: var(--vp-c-bg) !important;
 }
 </style>
