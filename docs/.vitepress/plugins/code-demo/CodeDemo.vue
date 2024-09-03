@@ -1,39 +1,41 @@
 <template>
-    <v-card>
-        <v-tabs v-model="currentTab" bg-color="primary">
-            <v-tab value="Result">Result</v-tab>
-            <v-tab value="Source">Source</v-tab>
+    <ClientOnly>
+        <v-card>
+            <v-tabs v-model="currentTab" bg-color="primary">
+                <v-tab value="Result">Result</v-tab>
+                <v-tab value="Source">Source</v-tab>
 
-            <span style="flex: 1"></span>
+                <span style="flex: 1"></span>
 
-            <v-tab v-for="(service, key) in SERVICES" :value="currentTab" v-tooltip="service.name" @click="open(key)">
-                <v-icon size="large" v-html="service.icon"></v-icon>
-            </v-tab>
-        </v-tabs>
+                <v-tab v-for="(service, key) in SERVICES" :value="currentTab" v-tooltip="service.name" @click="open(key)">
+                    <v-icon size="large" v-html="service.icon"></v-icon>
+                </v-tab>
+            </v-tabs>
 
-        <v-card-text>
-            <v-tabs-window v-model="currentTab">
-                <v-tabs-window-item value="Result">
-                    <div v-if="!show" class="demo-loader">
-                        <v-btn @click="show = true" theme="light" color="primary" size="large">Load demo</v-btn>
-                    </div>
+            <v-card-text>
+                <v-tabs-window v-model="currentTab">
+                    <v-tabs-window-item value="Result">
+                        <div v-if="!show" class="demo-loader">
+                            <v-btn @click="show = true" theme="light" color="primary" size="large">Load demo</v-btn>
+                        </div>
 
-                    <iframe class="demo-runner"
-                            v-if="show && srcdoc"
-                            :srcdoc="srcdoc"
-                            allowfullscreen="allowfullscreen"
-                            frameborder="0">
-                    </iframe>
-                </v-tabs-window-item>
+                        <iframe class="demo-runner"
+                                v-if="show && srcdoc"
+                                :srcdoc="srcdoc"
+                                allowfullscreen="allowfullscreen"
+                                frameborder="0">
+                        </iframe>
+                    </v-tabs-window-item>
 
-                <v-tabs-window-item value="Source">
-                    <div class="demo-source" ref="sourceContainer">
-                        <slot name="demo"></slot>
-                    </div>
-                </v-tabs-window-item>
-            </v-tabs-window>
-        </v-card-text>
-    </v-card>
+                    <v-tabs-window-item value="Source">
+                        <div class="demo-source" ref="sourceContainer">
+                            <slot name="demo"></slot>
+                        </div>
+                    </v-tabs-window-item>
+                </v-tabs-window>
+            </v-card-text>
+        </v-card>
+    </ClientOnly>
 </template>
 
 <script setup lang="ts">
