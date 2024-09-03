@@ -58,6 +58,11 @@ const sponsors = [
     name: 'Jeffrey Warren',
     links: [ { icon: 'github', link: 'https://github.com/jywarren' } ],
   },
+  {
+    avatar: 'https://avatars.githubusercontent.com/u/2023869?s=200',
+    name: 'Rai-Rai',
+    links: [ { icon: 'github', link: 'https://github.com/Rai-Rai' } ],
+  },
 ]
 </script>
 
