@@ -201,7 +201,7 @@ export class CompassComponent extends AbstractComponent {
 
         if (marker.isPoly()) {
             context.beginPath();
-            (marker.definition as Array<[number, number]>).forEach(([yaw, pitch], i) => {
+            (marker.definition[0] as Array<[number, number]>).forEach(([yaw, pitch], i) => {
                 const a = yaw - Math.PI / 2;
                 const d = (pitch + Math.PI / 2) / Math.PI;
                 const c = this.canvas.width / 2;
