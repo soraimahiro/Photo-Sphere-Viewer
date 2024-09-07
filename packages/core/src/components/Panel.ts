@@ -1,6 +1,6 @@
 import { CAPTURE_EVENTS_CLASS, ICONS, KEY_CODES } from '../data/constants';
 import { PSVError } from '../PSVError';
-import { toggleClass } from '../utils';
+import { getEventTarget, toggleClass } from '../utils';
 import type { Viewer } from '../Viewer';
 import { HidePanelEvent, KeypressEvent, ShowPanelEvent } from '../events';
 import { AbstractComponent } from './AbstractComponent';
@@ -174,11 +174,11 @@ export class Panel extends AbstractComponent {
 
         if (config.clickHandler) {
             this.state.clickHandler = (e) => {
-                (config as PanelConfig).clickHandler(e.target as HTMLElement);
+                (config as PanelConfig).clickHandler(getEventTarget(e));
             };
             this.state.keyHandler = (e) => {
                 if (e.key === KEY_CODES.Enter) {
-                    (config as PanelConfig).clickHandler(e.target as HTMLElement);
+                    (config as PanelConfig).clickHandler(getEventTarget(e));
                 }
             };
             this.content.addEventListener('click', this.state.clickHandler);

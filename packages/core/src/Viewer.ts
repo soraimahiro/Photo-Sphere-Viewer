@@ -47,6 +47,7 @@ import { ViewerDynamics } from './services/ViewerDynamics';
 import { ViewerState } from './services/ViewerState';
 import {
     Animation,
+    checkClosedShadowDom,
     checkStylesheet,
     exitFullscreen,
     getAbortError,
@@ -118,6 +119,7 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
         this.container.classList.add('psv-container');
         this.parent.appendChild(this.container);
 
+        checkClosedShadowDom(this.parent);
         checkStylesheet(this.container, 'core');
 
         this.state = new ViewerState();

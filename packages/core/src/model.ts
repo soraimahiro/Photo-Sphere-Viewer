@@ -233,7 +233,11 @@ export type ClickData = {
     /**
      * Original element which received the click
      */
-    target: HTMLElement;
+    target?: HTMLElement;
+    /**
+     * Original event which triggered the click
+     */
+    originalEvent?: Event;
     /**
      * List of THREE scenes objects under the mouse
      */

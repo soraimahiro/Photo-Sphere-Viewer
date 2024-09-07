@@ -173,7 +173,7 @@ export class MapComponent extends AbstractComponent {
     }
 
     handleEvent(e: Event) {
-        if (utils.getClosest(e.target as HTMLElement, `.${CONSTANTS.CAPTURE_EVENTS_CLASS}:not(.psv-map)`)) {
+        if (utils.getMatchingTarget(e, `.${CONSTANTS.CAPTURE_EVENTS_CLASS}:not(.psv-map)`)) {
             return;
         }
         switch (e.type) {
@@ -213,7 +213,7 @@ export class MapComponent extends AbstractComponent {
                 if (this.state.mousedown) {
                     this.__move(event.clientX, event.clientY);
                     e.stopPropagation();
-                } else if (e.target === this.canvas) {
+                } else if (e.composedPath().includes(this.canvas)) {
                     this.__handleHotspots(event.clientX, event.clientY);
                 }
                 break;
@@ -246,7 +246,7 @@ export class MapComponent extends AbstractComponent {
                     this.state.mousedown = false;
                     e.stopPropagation();
                 }
-                if (e.target === this.canvas) {
+                if (e.composedPath().includes(this.canvas)) {
                     this.__clickHotspot(mouse.clientX, mouse.clientY);
                 }
                 break;

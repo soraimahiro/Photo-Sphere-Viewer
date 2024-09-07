@@ -235,17 +235,23 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
                 }
                 break;
 
-            case 'mouseenter':
-                this.__onEnterMarker(e as MouseEvent, this.__getTargetMarker(e.target as HTMLElement));
+            case 'mouseenter': {
+                const marker = this.__getTargetMarker(utils.getEventTarget(e));
+                this.__onEnterMarker(e as MouseEvent, marker);
                 break;
+            }
 
-            case 'mouseleave':
-                this.__onLeaveMarker(this.__getTargetMarker(e.target as HTMLElement));
+            case 'mouseleave': {
+                const marker = this.__getTargetMarker(utils.getEventTarget(e));
+                this.__onLeaveMarker(marker);
                 break;
+            }
 
-            case 'mousemove':
-                this.__onHoverMarker(e as MouseEvent, this.__getTargetMarker(e.target as HTMLElement, true));
+            case 'mousemove': {
+                const marker = this.__getTargetMarker(utils.getEventTarget(e), true);
+                this.__onHoverMarker(e as MouseEvent, marker);
                 break;
+            }
 
             case 'contextmenu':
                 e.preventDefault();
@@ -602,7 +608,7 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
             content: MARKERS_LIST_TEMPLATE(markers, this.viewer.config.lang[MarkersButton.id]),
             noMargin: true,
             clickHandler: (target) => {
-                const li = utils.getClosest(target, 'li');
+                const li = utils.getClosest(target, '.psv-panel-menu-item');
                 const markerId = li ? li.dataset[MARKER_DATA] : undefined;
 
                 if (markerId) {
@@ -797,7 +803,7 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
             }
 
             // the marker could have been deleted in an event handler
-            if (this.markers[marker.id]) {
+            if (this.markers[marker.id] && !e.data.rightclick) {
                 if (marker.config.tooltip?.trigger === 'click') {
                     if (marker.tooltip) {
                         this.hideMarkerTooltip(marker.id);

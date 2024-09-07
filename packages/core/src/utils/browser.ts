@@ -56,7 +56,7 @@ export function hasParent(el: HTMLElement, parent: Element): boolean {
 }
 
 /**
- * Gets the closest parent (can by itself)
+ * Gets the closest parent matching the selector (can by itself)
  */
 export function getClosest(el: HTMLElement, selector: string): HTMLElement | null {
     // When el is document or window, the matches does not exist
@@ -75,6 +75,29 @@ export function getClosest(el: HTMLElement, selector: string): HTMLElement | nul
 
     return null;
 }
+
+/**
+ * Returns the first element of the event' composedPath
+ */
+export function getEventTarget(e: Event): HTMLElement | null {
+    return e?.composedPath()[0] as HTMLElement || null;
+}
+
+/**
+ * Returns the first element of the event's composedPath matching the selector
+ */
+export function getMatchingTarget(e: Event, selector: string): HTMLElement | null {
+    if (!e) {
+        return null;
+    }
+    return e.composedPath().find((el) => {
+        if (!(el instanceof HTMLElement) && !(el instanceof SVGElement)) {
+            return false;
+        }
+
+        return el.matches(selector);
+    }) as HTMLElement;
+} 
 
 /**
  * Gets the position of an element in the viewport without reflow

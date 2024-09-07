@@ -165,7 +165,7 @@ export class PlanComponent extends AbstractComponent {
     }
 
     handleEvent(e: Event) {
-        if (utils.getClosest(e.target as HTMLElement, `.${CONSTANTS.CAPTURE_EVENTS_CLASS}:not(.psv-plan)`)) {
+        if (utils.getMatchingTarget(e, `.${CONSTANTS.CAPTURE_EVENTS_CLASS}:not(.psv-plan)`)) {
             return;
         }
         switch (e.type) {

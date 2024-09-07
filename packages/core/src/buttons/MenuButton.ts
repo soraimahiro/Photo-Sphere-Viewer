@@ -84,7 +84,7 @@ export class MenuButton extends AbstractButton {
             content: MENU_TEMPLATE(this.viewer.navbar.collapsed, this.viewer.config.lang.menu),
             noMargin: true,
             clickHandler: (target) => {
-                const li = target ? getClosest(target as HTMLElement, 'li') : undefined;
+                const li = target ? getClosest(target as HTMLElement, '.psv-panel-menu-item') : undefined;
                 const buttonId = li ? li.dataset[BUTTON_DATA] : undefined;
 
                 if (buttonId) {

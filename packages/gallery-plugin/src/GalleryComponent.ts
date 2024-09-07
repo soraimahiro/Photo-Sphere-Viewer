@@ -129,7 +129,7 @@ export class GalleryComponent extends AbstractComponent {
                 // prevent click on drag
                 const currentMouse = this.isAboveBreakpoint ? (e as MouseEvent).clientX : (e as MouseEvent).clientY;
                 if (Math.abs(this.state.initMouse - currentMouse) < 10) {
-                    const item = utils.getClosest(e.target as HTMLElement, `[data-${GALLERY_ITEM_DATA_KEY}]`);
+                    const item = utils.getMatchingTarget(e, `.psv-gallery-item`);
                     if (item) {
                         this.plugin.__click(item.dataset[GALLERY_ITEM_DATA]);
                     }

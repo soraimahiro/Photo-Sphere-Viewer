@@ -30,12 +30,12 @@ import {
     Animation,
     clone,
     distance,
-    getClosest,
+    getEventTarget,
+    getMatchingTarget,
     getPosition,
     getTouchData,
-    hasParent,
     isEmpty,
-    throttle,
+    throttle
 } from '../utils';
 import { PressHandler } from '../utils/PressHandler';
 import type { Viewer } from '../Viewer';
@@ -156,7 +156,7 @@ export class EventsHandler extends AbstractService {
             case 'fullscreenchange': this.__onFullscreenChange(); break;
         }
 
-        if (!getClosest(evt.target as HTMLElement, '.' + CAPTURE_EVENTS_CLASS)) {
+        if (!getMatchingTarget(evt, '.' + CAPTURE_EVENTS_CLASS)) {
             // prettier-ignore
             switch (evt.type) {
                 case 'mousedown': this.__onMouseDown(evt as MouseEvent); break;
@@ -243,7 +243,7 @@ export class EventsHandler extends AbstractService {
      */
     private __onMouseUp(evt: MouseEvent) {
         if (this.step.is(Step.CLICK, Step.MOVING)) {
-            this.__stopMove(evt.clientX, evt.clientY, evt.target, evt.button === 2);
+            this.__stopMove(evt.clientX, evt.clientY, evt, evt.button === 2);
         }
     }
 
@@ -271,7 +271,7 @@ export class EventsHandler extends AbstractService {
             if (!this.data.longtouchTimeout) {
                 this.data.longtouchTimeout = setTimeout(() => {
                     const touch = evt.touches[0];
-                    this.__stopMove(touch.clientX, touch.clientY, touch.target, true);
+                    this.__stopMove(touch.clientX, touch.clientY, evt, true);
                     this.data.longtouchTimeout = null;
                 }, LONGTOUCH_DELAY);
             }
@@ -301,7 +301,7 @@ export class EventsHandler extends AbstractService {
                 this.__stopMove(this.data.mouseX, this.data.mouseY);
             } else if (evt.touches.length === 0) {
                 const touch = evt.changedTouches[0];
-                this.__stopMove(touch.clientX, touch.clientY, touch.target);
+                this.__stopMove(touch.clientX, touch.clientY, evt);
             }
         }
     }
@@ -442,7 +442,7 @@ export class EventsHandler extends AbstractService {
      * Stops the movement
      * @description If the move threshold was not reached a click event is triggered, otherwise an animation is launched to simulate inertia
      */
-    private __stopMove(clientX: number, clientY: number, target?: EventTarget, rightclick = false) {
+    private __stopMove(clientX: number, clientY: number, event?: Event, rightclick = false) {
         if (this.step.is(Step.MOVING)) {
             if (this.config.moveInertia) {
                 this.__logMouseMove(clientX, clientY);
@@ -453,7 +453,7 @@ export class EventsHandler extends AbstractService {
             }
         } else {
             if (this.step.is(Step.CLICK) && !this.__moveThresholdReached(clientX, clientY)) {
-                this.__doClick(clientX, clientY, target, rightclick);
+                this.__doClick(clientX, clientY, event, rightclick);
             }
             this.step.remove(Step.CLICK);
             if (!this.step.is(Step.INERTIA)) {
@@ -518,7 +518,7 @@ export class EventsHandler extends AbstractService {
     /**
      * Triggers an event with all coordinates when a simple click is performed
      */
-    private __doClick(clientX: number, clientY: number, target: EventTarget, rightclick = false) {
+    private __doClick(clientX: number, clientY: number, event?: Event, rightclick = false) {
         const boundingRect = this.viewer.container.getBoundingClientRect();
 
         const viewerX = clientX - boundingRect.left;
@@ -532,7 +532,8 @@ export class EventsHandler extends AbstractService {
 
             const data: ClickData = {
                 rightclick: rightclick,
-                target: target as HTMLElement,
+                originalEvent: event,
+                target: getEventTarget(event),
                 clientX,
                 clientY,
                 viewerX,
@@ -576,7 +577,7 @@ export class EventsHandler extends AbstractService {
      * Trigger events for observed THREE objects
      */
     private __handleObjectsEvents(evt: MouseEvent) {
-        if (!isEmpty(this.state.objectsObservers) && hasParent(evt.target as HTMLElement, this.viewer.container)) {
+        if (!isEmpty(this.state.objectsObservers) && evt.composedPath().includes(this.viewer.container)) {
             const viewerPos = getPosition(this.viewer.container);
 
             const viewerPoint: Point = {

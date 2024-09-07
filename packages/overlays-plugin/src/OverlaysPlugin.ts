@@ -96,6 +96,9 @@ export class OverlaysPlugin extends AbstractConfigurablePlugin<
                 this.clearOverlays();
             }
         } else if (e instanceof events.ClickEvent) {
+            if (e.data.rightclick) {
+                return false;
+            }
             const overlay = e.data.objects
                 .map((o) => o.userData[OVERLAY_DATA] as ParsedOverlayConfig['id'])
                 .filter((o) => !!o)

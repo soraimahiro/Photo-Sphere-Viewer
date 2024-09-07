@@ -23,7 +23,7 @@ export class SettingsComponent extends AbstractComponent {
     handleEvent(e: Event) {
         switch (e.type) {
             case 'click':
-                this.__click(e.target as HTMLElement);
+                this.__click(e);
                 break;
 
             case 'transitionend':
@@ -41,7 +41,7 @@ export class SettingsComponent extends AbstractComponent {
                             this.plugin.hideSettings();
                             break;
                         case CONSTANTS.KEY_CODES.Enter:
-                            this.__click(e.target as HTMLElement);
+                            this.__click(e);
                             break;
                     }
                 }
@@ -87,8 +87,8 @@ export class SettingsComponent extends AbstractComponent {
     /**
      * Handle clicks on items
      */
-    private __click(element: HTMLElement) {
-        const li = utils.getClosest(element, 'li');
+    private __click(e: Event) {
+        const li = utils.getMatchingTarget(e, '.psv-settings-item');
         if (!li) {
             return;
         }

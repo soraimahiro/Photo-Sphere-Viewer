@@ -446,3 +446,16 @@ export function checkVersion(name: string, version: string, coreVersion: string)
         console.error(`PhotoSphereViewer: @photo-sphere-viewer/${name} is in version ${version} but @photo-sphere-viewer/core is in version ${coreVersion}`);
     }
 }
+
+/**
+ * Checks if the viewer is not used insude a closed shadow DOM
+ */
+export function checkClosedShadowDom(el: Node) {
+    do {
+        if (el instanceof ShadowRoot && el.mode === 'closed') {
+            console.error(`PhotoSphereViewer: closed shadow DOM detected, the viewer might not work as expected`);
+            return;
+        }
+        el = el.parentNode;
+    } while (el);
+}
