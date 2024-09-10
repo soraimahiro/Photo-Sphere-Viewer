@@ -39,6 +39,10 @@ Create a tooltip.
 
 Updates the position of the tooltip, the parameters are the same `top`, `left` and `position` as above.
 
+### `tooltip.update(content)`
+
+Updates the content of the tooltip.
+
 ### `tooltip.hide()`
 
 Hide and destroy the tooltip.

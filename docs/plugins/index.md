@@ -82,6 +82,22 @@ const viewer = new Viewer({
 });
 ```
 
+::: tip
+When using Typescript you can also type-check the configuration object :
+
+```ts
+import { MarkersPlugin, MarkersPluginConfig } from '@photo-sphere-viewer/markers-plugin';
+
+const viewer = new Viewer({
+    plugins: [
+        [MarkersPlugin, {
+            markers,
+        } satisfies MarkersPluginConfig],
+    ],
+});
+```
+:::
+
 After initialization the plugin instance can be obtained with the `getPlugin` method, allowing to call methods on the plugin and subscribe to events.
 
 ```js
