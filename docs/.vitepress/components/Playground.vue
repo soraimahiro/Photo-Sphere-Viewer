@@ -20,6 +20,11 @@
                     </v-tabs-window-item>
                 </v-tabs-window>
             </v-card-text>
+
+            <v-card-actions>
+                <v-btn variant="outlined" :disabled="loading" @click="codeModal!.open(config)">See code</v-btn>
+                <CodeModal ref="codeModal"/>
+            </v-card-actions>
         </v-card>
 
         <div id="viewer"></div>
@@ -32,11 +37,13 @@ import { onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import type { Viewer } from '../../../packages/core';
 import TabConfiguration, { Config } from './playground/TabConfiguration.vue';
 import TabPanorama, { PanoConfig } from './playground/TabPanorama.vue';
+import CodeModal from './playground/CodeModal.vue';
 
 const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 
 const currentTab = ref('panorama');
 const loading = ref(true);
+const codeModal = ref<typeof CodeModal | null>(null);
 
 let viewer: Viewer;
 let config: PanoConfig & Config = reactive({} as any);
@@ -112,7 +119,7 @@ function applyConfig(input: Config | PanoConfig) {
         }
 
         if (Object.keys(changes).length) {
-            viewer.setOptions(changes);
+            viewer.setOptions(cloneDeep(changes));
         }
     }
 }
