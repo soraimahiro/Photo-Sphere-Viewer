@@ -34,6 +34,7 @@ const externals = {
     'three': 'https://cdn.jsdelivr.net/npm/three/build/three.module.min.js',
     'marked': 'https://cdn.jsdelivr.net/npm/marked@14/lib/marked.esm.min.js',
     '@photo-sphere-viewer/core': 'https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core@5/index.module.min.js',
+    '@photo-sphere-viewer/equirectangular-tiles-adapter': 'https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/equirectangular-tiles-adapter@5/index.module.min.js',
     '@photo-sphere-viewer/markers-plugin': 'https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin@5/index.module.min.js',
 };
 
