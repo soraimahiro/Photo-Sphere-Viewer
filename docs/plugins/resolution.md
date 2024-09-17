@@ -67,7 +67,7 @@ packages:
 -   type: `object[]`
 -   updatable: no, use `setResolutions()` method
 
-List of available resolutions. Each resolution consists of an object with the properties `id`, `label` and `panorama`.
+List of available resolutions. Each resolution consists of an object with the properties `id`, `label`, `panorama` and `panoData` (optional).
 
 #### `defaultResolution`
 

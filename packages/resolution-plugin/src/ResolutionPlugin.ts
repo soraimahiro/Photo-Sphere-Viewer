@@ -148,7 +148,11 @@ export class ResolutionPlugin extends AbstractPlugin<ResolutionPluginEvents> {
 
     private __setResolutionIfExists(id: string): Promise<unknown> {
         if (this.resolutionsById[id]) {
-            return this.viewer.setPanorama(this.resolutionsById[id].panorama, { transition: false, showLoader: false });
+            return this.viewer.setPanorama(this.resolutionsById[id].panorama, {
+                transition: false,
+                showLoader: false,
+                panoData: this.resolutionsById[id].panoData,
+            });
         } else {
             return Promise.resolve();
         }
