@@ -1,3 +1,4 @@
+import type { Plugin } from 'esbuild';
 import { mkdir, writeFile } from 'fs/promises';
 import path from 'path';
 import { Bundler } from 'scss-bundle';
@@ -6,7 +7,7 @@ import prettyBytes from 'pretty-bytes';
 /**
  * Generates a bundled scss file
  */
-export function scssBundlePlugin() {
+export function scssBundlePlugin(): Plugin {
     return {
         name: 'scss-bundle',
         setup(build) {

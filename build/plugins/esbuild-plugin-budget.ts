@@ -1,9 +1,10 @@
+import type { Plugin } from 'esbuild';
 import chalk from 'chalk';
 
 /**
  * Checks the final bundle size
  */
-export function budgetPlugin(budget) {
+export function budgetPlugin(budget: string): Plugin {
     if (!budget || !budget.endsWith('kb')) {
         throw new Error('Missing/invalid budget');
     }

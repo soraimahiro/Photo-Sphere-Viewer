@@ -1,5 +1,5 @@
-export const readme = (pkg) => {
-    return Promise.resolve(`# ${pkg.psv.title}
+export const readme = (pkg: any) => 
+`# ${pkg.psv.title}
 
 [![NPM version](https://img.shields.io/npm/v/${pkg.name}?logo=npm)](https://www.npmjs.com/package/${pkg.name})
 [![NPM Downloads](https://img.shields.io/npm/dm/${pkg.name}?color=f86036&label=npm&logo=npm)](https://www.npmjs.com/package/${pkg.name})
@@ -14,5 +14,4 @@ ${pkg.homepage}
 ## License
 
 This library is available under the MIT license.
-`);
-};
+`;

@@ -9,7 +9,7 @@ import { npmrc } from './templates/npmrc';
 import { packageJson } from './templates/package';
 import { readme } from './templates/readme';
 
-export default function createConfig(pkg) {
+export default function createConfig(pkg: any) {
     const banner = `/*!
  * ${pkg.psv.title} ${pkg.version}
 ${pkg.name === '@photo-sphere-viewer/core' ? ' * @copyright 2014-2015 Jérémy Heleine\n' : ''
@@ -27,7 +27,7 @@ ${pkg.name === '@photo-sphere-viewer/core' ? ' * @copyright 2014-2015 Jérémy H
             format: dev ? ['esm'] : ['esm', 'cjs'],
             outExtension({ format }) {
                 return {
-                    js: { cjs: '.cjs', esm: '.module.js' }[format],
+                    js: { cjs: '.cjs', esm: '.module.js', iife: '.js' }[format],
                 };
             },
             dts: dts,
@@ -54,7 +54,7 @@ ${pkg.name === '@photo-sphere-viewer/core' ? ' * @copyright 2014-2015 Jérémy H
                         }),
                     ]),
             ],
-            esbuildOptions(options, context) {
+            esbuildOptions(options) {
                 options.banner = {
                     js: banner,
                     css: banner,

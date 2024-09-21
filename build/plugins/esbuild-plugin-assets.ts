@@ -1,3 +1,4 @@
+import type { Plugin } from 'esbuild';
 import { mkdir, writeFile } from 'fs/promises';
 import path from 'path';
 import prettyBytes from 'pretty-bytes';
@@ -5,7 +6,7 @@ import prettyBytes from 'pretty-bytes';
 /**
  * Generates static files in output directory
  */
-export function assetsPlugin(files) {
+export function assetsPlugin(files: Record<string, string | Promise<string>>): Plugin {
     return {
         name: 'assets',
         setup(build) {
@@ -21,7 +22,7 @@ export function assetsPlugin(files) {
                         Promise.all(
                             Object.entries(files).map(([filename, content]) => {
                                 const outpath = outdir + '/' + filename;
-                                return content.then((content) => {
+                                return Promise.resolve(content).then((content) => {
                                     console.log('ASSET', outpath, prettyBytes(content.length));
                                     return writeFile(outpath, content);
                                 });

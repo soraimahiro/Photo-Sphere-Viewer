@@ -1,7 +1,9 @@
+import type { Plugin } from 'esbuild';
+
 /**
  * Alters the paths in maps
  */
-export function mapFixPlugin() {
+export function mapFixPlugin(): Plugin {
     return {
         name: 'mapFix',
         setup(build) {
@@ -15,7 +17,7 @@ export function mapFixPlugin() {
                     console.log('MAP', `Fix ${mapFile.path}`);
 
                     const content = JSON.parse(mapFile.text);
-                    content.sources = content.sources.map((src) => {
+                    content.sources = content.sources.map((src: string) => {
                         return src
                             .replace('../src', 'src')
                             .replace('../../shared', '../shared')
