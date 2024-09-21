@@ -168,7 +168,7 @@ export class CompassComponent extends AbstractComponent {
         if (mouseAngle !== null) {
             this.viewer.rotate({
                 yaw: mouseAngle,
-                pitch: 0, // TODO marker or hotspot vertical angle
+                pitch: this.config.resetPicth ? this.viewer.config.defaultPitch : this.viewer.getPosition().pitch,
             });
         }
     }

@@ -75,6 +75,14 @@ Position of the widget, accepted positions are combinations of `top`, `center`, 
 
 Allows to click on the compass to rotate the viewer.
 
+#### `resetPitch`
+
+-   type: `boolean`
+-   default: `true`
+-   updatable: yes
+
+Reset viewer pitch to `defaultPitch` when using the compass navigation.
+
 #### `hotspots`
 
 -   type: `CompassHotspot[]`

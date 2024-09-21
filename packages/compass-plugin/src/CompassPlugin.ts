@@ -12,6 +12,7 @@ const getConfig = utils.getConfigParser<CompassPluginConfig, ParsedCompassPlugin
         backgroundSvg: compass,
         coneColor: 'rgba(255, 255, 255, 0.5)',
         navigation: true,
+        resetPicth: false,
         navigationColor: 'rgba(255, 0, 0, 0.2)',
         hotspots: [],
         hotspotColor: 'rgba(0, 0, 0, 0.5)',
