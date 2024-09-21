@@ -47,6 +47,7 @@
                         // navigationColor: 'rgba(200, 200, 0, 0.5)',
                         // position: 'bottom left',
                         // navigation: false,
+                        // resetPitch: false,
                         hotspots: [
                             { yaw: '0deg' },
                             { yaw: '90deg' },
@@ -124,6 +125,7 @@
                 backgroundSvg: compass.config.backgroundSvg,
                 position: compass.config.position.join(' '),
                 navigation: compass.config.navigation,
+                resetPitch: compass.config.resetPitch,
                 coneColor: compass.config.coneColor,
                 navigationColor: compass.config.navigationColor,
                 hotspotColor: compass.config.hotspotColor,
@@ -135,6 +137,7 @@
             addTextarea(gui, config, 'backgroundSvg', 10);
             gui.add(config, 'position', ['top left', 'top right', 'bottom left', 'bottom right']);
             gui.add(config, 'navigation');
+            gui.add(config, 'resetPitch');
             addColorPicker(gui, config, 'coneColor');
             addColorPicker(gui, config, 'navigationColor');
             addColorPicker(gui, config, 'hotspotColor');

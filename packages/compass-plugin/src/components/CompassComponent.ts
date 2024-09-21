@@ -168,7 +168,7 @@ export class CompassComponent extends AbstractComponent {
         if (mouseAngle !== null) {
             this.viewer.rotate({
                 yaw: mouseAngle,
-                pitch: this.config.resetPicth ? this.viewer.config.defaultPitch : this.viewer.getPosition().pitch,
+                pitch: this.config.resetPitch ? this.viewer.config.defaultPitch : this.viewer.getPosition().pitch,
             });
         }
     }
