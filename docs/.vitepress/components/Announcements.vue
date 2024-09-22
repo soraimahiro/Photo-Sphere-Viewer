@@ -2,10 +2,10 @@
     <div class="container">
         <div class="items">
             <div class="item" v-for="entry in announcements">
-                <div class="custom-block tip module">
+                <div class="custom-block">
                     <p class="custom-block-title">
                         <Badge text="NEW" /> {{ entry.title }}
-                        <small>{{ entry.date }}</small>
+                        <small>({{ entry.date }})</small>
                     </p>
                     <p v-html="entry.body"></p>
                 </div>
@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import { format, parseISO } from 'date-fns';
 import { onMounted, ref } from 'vue';
 
 type Announcement = {
@@ -23,6 +22,8 @@ type Announcement = {
     date: string;
     body: string;
 };
+
+const dateFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' });
 
 const announcements = ref<Announcement[]>([]);
 
@@ -56,7 +57,7 @@ function formatAnnouncement(announcement: any, marked: any): Announcement {
 
     return {
         title: announcement.title,
-        date: format(parseISO(announcement.createdAt), 'PPP'),
+        date: dateFormat.format(new Date(announcement.createdAt)),
         body: body,
     };
 }

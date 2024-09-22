@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { format, parseISO } from 'date-fns';
 import { kebabCase } from 'lodash-es';
 import { onMounted, ref } from 'vue';
 
@@ -29,6 +28,8 @@ type Changelog = {
     date: string;
     desc: string;
 };
+
+const dateFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' });
 
 const showLoader = ref(true);
 const changelog = ref<Changelog[]>([]);
@@ -78,7 +79,7 @@ function formatRelease(release: any, marked: any): Changelog {
         id: kebabCase(release.name),
         url: release.url,
         title: release.name,
-        date: format(parseISO(release.publishedAt), 'PPP'),
+        date: dateFormat.format(new Date(release.publishedAt)),
         desc: desc,
     };
 }
