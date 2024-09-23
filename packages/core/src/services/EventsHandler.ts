@@ -95,7 +95,7 @@ export class EventsHandler extends AbstractService {
     };
 
     private readonly step = new Step();
-    private readonly keyHandler = new PressHandler();
+    private readonly keyHandler = new PressHandler<ACTIONS>();
     private readonly resizeObserver = new ResizeObserver(throttle(() => this.viewer.autoSize(), 50));
     private readonly moveThreshold = MOVE_THRESHOLD * SYSTEM.pixelRatio;
 
@@ -207,7 +207,7 @@ export class EventsHandler extends AbstractService {
                 case ACTIONS.ZOOM_OUT: this.viewer.dynamics.zoom.roll(true); break;
             }
 
-            this.keyHandler.down();
+            this.keyHandler.down(action);
             e.preventDefault();
         }
     }
@@ -222,10 +222,13 @@ export class EventsHandler extends AbstractService {
             return;
         }
 
-        this.keyHandler.up(() => {
-            this.viewer.dynamics.position.stop();
-            this.viewer.dynamics.zoom.stop();
-            this.viewer.resetIdleTimer();
+        this.keyHandler.up((action) => {
+            if (action === ACTIONS.ZOOM_IN || action === ACTIONS.ZOOM_OUT) {
+                this.viewer.dynamics.zoom.stop();
+            } else {
+                this.viewer.dynamics.position.stop();
+                this.viewer.resetIdleTimer();
+            }
         });
     }
 
