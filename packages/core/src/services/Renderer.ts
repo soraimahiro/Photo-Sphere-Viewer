@@ -125,11 +125,10 @@ export class Renderer extends AbstractService {
      * @internal
      */
     override destroy() {
-        // cancel render loop
+        // destroy ThreeJS
         this.renderer.setAnimationLoop(null);
-
-        // destroy ThreeJS view
         this.cleanScene(this.scene);
+        this.renderer.dispose();
 
         // remove container
         this.viewer.container.removeChild(this.container);
