@@ -4,7 +4,8 @@
     "build/**",
     "tsconfig.json",
     ".eslintrc.json",
-    ".stylelintrc.json"
+    ".stylelintrc.json",
+    "packages/shared/*.{ts,scss,glsl}"
   ],
   "pipeline": {
     "build": {
