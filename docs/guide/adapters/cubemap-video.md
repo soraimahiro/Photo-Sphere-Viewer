@@ -69,9 +69,11 @@ When using this adapter, the `panorama` option and the `setPanorama()` method ac
 
 #### `source` (required)
 
--   type: `string`
+-   type: `string | MediaStream | HTMLVideoElement`
 
 Path of the video file. The video must not be larger than 4096 pixels or it won't be displayed on handled devices.
+
+It can also be an existing `MediaStream`, for example to display the feed of an USB 360° camera, or a pre-existing `HTMLVideoElement` for more control over video playback.
 
 #### `equiangular`
 
