@@ -93,6 +93,14 @@ export type AnimateOptions = Partial<ExtendedPosition> & {
 };
 
 /**
+ * Configuration of an equirectangular panorama
+ */
+export type EquirectangularPanorama = {
+    path: string;
+    data?: PanoData | PanoDataProvider;
+};
+
+/**
  * Crop information of an equirectangular panorama
  */
 export type PanoData = {
@@ -356,6 +364,8 @@ export type ViewerConfig = {
     touchmoveTwoFingers?: boolean;
     panoData?: PanoData | PanoDataProvider;
     requestHeaders?: Record<string, string> | ((url: string) => Record<string, string>);
+    /** @default '#000' */
+    canvasBackground?: string;
     /** @default '{ alpha: true, antialias: true }' */
     rendererParameters?: WebGLRendererParameters;
     /** @default false */

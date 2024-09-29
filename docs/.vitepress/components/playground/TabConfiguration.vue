@@ -53,18 +53,14 @@
             <v-col cols="4">
                 <v-menu :close-on-content-click="false" @update:modelValue="persistBgColor">
                     <template v-slot:activator="{ props }">
-                        <v-text-field label="Canvas background" v-bind="props" v-model="config.adapterConfig.backgroundColor">
+                        <v-text-field label="Canvas background" v-bind="props" v-model="config.canvasBackground">
                             <template #append-inner>
-                                <div class="colorpicker-square" :style="{ backgroundColor: config.adapterConfig.backgroundColor }">
-                                </div>
+                                <div class="colorpicker-square" :style="{ backgroundColor: config.canvasBackground }"></div>
                             </template>
                         </v-text-field>
                     </template>
                     <v-color-picker v-model="configBgColor" :hide-inputs="true" />
                 </v-menu>
-            </v-col>
-            <v-col cols="4">
-                <v-checkbox label="Interpolate background" v-model="config.adapterConfig.interpolateBackground" />
             </v-col>
         </v-row>
     </Container>
@@ -74,14 +70,13 @@
 import { watchDebounced } from '@vueuse/core';
 import { cloneDeep } from 'lodash-es';
 import { onMounted, reactive, ref, watch } from 'vue';
-import type { EquirectangularAdapterConfig, ViewerConfig } from '../../../../packages/core';
+import type { ViewerConfig } from '../../../../packages/core';
 import SliderInput from '../SliderInput.vue';
 import Container from './Container.vue';
 
 export type Config = Omit<ViewerConfig, 'container'>
     & {
         navbar: string[];
-        adapterConfig: EquirectangularAdapterConfig;
     };
 
 const BUTTONS = [
@@ -110,13 +105,10 @@ const config = reactive<Config>({
     moveSpeed: 1,
     zoomSpeed: 1,
     moveInertia: true,
-    adapterConfig: {
-        backgroundColor: '#000000',
-        interpolateBackground: true,
-    },
+    canvasBackground: '#000000',
 });
 const configFov = ref([config.minFov, config.maxFov]);
-const configBgColor = ref(config.adapterConfig.backgroundColor);
+const configBgColor = ref(config.canvasBackground);
 
 const emit = defineEmits<{
     updateConfig: [config: Config],
@@ -141,7 +133,7 @@ function persisFov() {
 
 function persistBgColor(menuOpen: boolean) {
     if (!menuOpen) {
-        config.adapterConfig.backgroundColor = configBgColor.value;
+        config.canvasBackground = configBgColor.value;
     }
 }
 

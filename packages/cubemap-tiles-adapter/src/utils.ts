@@ -89,3 +89,21 @@ function checkTile(tile: CubemapTilesPanorama | CubemapTileLevel, data: { CUBE_S
 export function isTopOrBottom(face: number) {
     return face === 2 || face === 3;
 }
+
+/**
+ * Returns a path used for cache key
+ */
+export function getCacheKey(
+    panorama: CubemapTilesPanorama | CubemapMultiTilesPanorama,
+    firstTile: CubemapTileConfig
+): string {
+    // some tiles might be "null"
+    for (let i = 0; i < firstTile.nbTiles; i++) {
+        const url = panorama.tileUrl('front', i, firstTile.nbTiles / 2, firstTile.level);
+        if (url) {
+            return url;
+        }
+    }
+
+    return panorama.tileUrl.toString();
+}

@@ -1,7 +1,7 @@
 import { BufferAttribute, Mesh, MeshBasicMaterial, SphereGeometry } from 'three';
 import { type Viewer } from '../Viewer';
 import { SPHERE_RADIUS } from '../data/constants';
-import { EquirectangularAdapter, EquirectangularMesh, EquirectangularTexture } from './EquirectangularAdapter';
+import { EquirectangularAdapter, EquirectangularMesh, EquirectangularTextureData } from './EquirectangularAdapter';
 
 export type DualFisheyeAdapterConfig = {
     /**
@@ -21,12 +21,11 @@ export class DualFisheyeAdapter extends EquirectangularAdapter {
     constructor(viewer: Viewer, config?: DualFisheyeAdapterConfig) {
         super(viewer, {
             resolution: config?.resolution ?? 64,
-            interpolateBackground: false,
             useXmpData: false,
         });
     }
 
-    override async loadTexture(panorama: string, loader?: boolean): Promise<EquirectangularTexture> {
+    override async loadTexture(panorama: string, loader?: boolean): Promise<EquirectangularTextureData> {
         const result = await super.loadTexture(panorama, loader, null, false);
         result.panoData = null;
         return result;
@@ -37,7 +36,9 @@ export class DualFisheyeAdapter extends EquirectangularAdapter {
             SPHERE_RADIUS,
             this.SPHERE_SEGMENTS,
             this.SPHERE_HORIZONTAL_SEGMENTS
-        ).scale(-1, 1, 1).toNonIndexed();
+        )
+            .scale(-1, 1, 1)
+            .toNonIndexed() as SphereGeometry;
 
         const uvs = geometry.getAttribute('uv') as BufferAttribute;
         const normals = geometry.getAttribute('normal') as BufferAttribute;
@@ -70,7 +71,9 @@ export class DualFisheyeAdapter extends EquirectangularAdapter {
         geometry.rotateX(-Math.PI / 2);
         geometry.rotateY(Math.PI);
 
-        return new Mesh(geometry, new MeshBasicMaterial());
+        const material = new MeshBasicMaterial({ depthTest: false, depthWrite: false });
+
+        return new Mesh(geometry, material);
     }
 
 }

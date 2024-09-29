@@ -19,10 +19,7 @@ new Viewer({
     container: 'viewer',
     panorama: baseUrl + 'sphere-cropped.jpg',
     caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',
-    adapter: [EquirectangularAdapter, {
-        backgroundColor: '#77addb',
-        interpolateBackground: true,
-    }],
+    // canvasBackground: '#77addb',
     defaultZoomLvl: 0,
 });
 ```

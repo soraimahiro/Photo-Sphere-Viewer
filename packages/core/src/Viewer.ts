@@ -1,3 +1,4 @@
+import { Object3D } from 'three';
 import { PSVError } from './PSVError';
 import type { AbstractAdapter } from './adapters/AbstractAdapter';
 import type { AbstractComponent } from './components/AbstractComponent';
@@ -21,6 +22,7 @@ import {
     ReadyEvent,
     SizeUpdatedEvent,
     StopAllEvent,
+    TransitionDoneEvent,
     ViewerEvents,
     ZoomUpdatedEvent,
 } from './events';
@@ -80,7 +82,7 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
     readonly container: HTMLElement;
 
     /** @internal */
-    readonly adapter: AbstractAdapter<any, any, any>;
+    readonly adapter: AbstractAdapter<any, any, any, Object3D>;
     /** @internal */
     readonly plugins: Record<string, AbstractPlugin<any>> = {};
     /** @internal */
@@ -463,6 +465,9 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
                 })
                 .then((completed) => {
                     this.state.transitionAnimation = null;
+                
+                    this.dispatchEvent(new TransitionDoneEvent(completed));
+                    
                     if (!completed) {
                         throw getAbortError();
                     }

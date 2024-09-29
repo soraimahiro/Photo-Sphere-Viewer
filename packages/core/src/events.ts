@@ -19,9 +19,9 @@ export class BeforeAnimateEvent extends ViewerEvent {
     /** @internal */
     constructor(
         /** target position, can be modified */
-        public position?: Position,
+        public position: Position | undefined,
         /** target zoom level, can be modified */
-        public zoomLevel?: number
+        public zoomLevel: number | undefined
     ) {
         super(BeforeAnimateEvent.type, true);
     }
@@ -240,6 +240,19 @@ export class PanoramaErrorEvent extends ViewerEvent {
         public readonly error: Error
     ) {
         super(PanoramaErrorEvent.type);
+    }
+}
+
+/**
+ * @event Triggered when the transition to a new panorama is done (complete or not)
+ */
+export class TransitionDoneEvent extends ViewerEvent {
+    static override readonly type = 'transition-done';
+    override type: 'transition-done';
+
+    /** @internal */
+    constructor(public readonly completed: boolean) {
+        super(TransitionDoneEvent.type);
     }
 }
 
@@ -471,6 +484,7 @@ export type ViewerEvents =
     | PanoramaLoadEvent
     | PanoramaLoadedEvent
     | PanoramaErrorEvent
+    | TransitionDoneEvent
     | PositionUpdatedEvent
     | RollUpdatedEvent
     | ReadyEvent

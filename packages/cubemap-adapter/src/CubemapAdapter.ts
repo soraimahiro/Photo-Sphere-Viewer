@@ -14,7 +14,7 @@ import {
 import { cleanCubemap, cleanCubemapArray, isCubemap } from './utils';
 
 type CubemapMesh = Mesh<BoxGeometry, MeshBasicMaterial[]>;
-type CubemapTexture = TextureData<Texture[], CubemapPanorama, CubemapData>;
+type CubemapTextureData = TextureData<Texture[], CubemapPanorama, CubemapData>;
 
 const getConfig = utils.getConfigParser<CubemapAdapterConfig>({
     blur: false,
@@ -26,7 +26,7 @@ const ORIGIN = new Vector3();
 /**
  * Adapter for cubemaps
  */
-export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, Texture[], CubemapData> {
+export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData, Texture[], CubemapMesh> {
     static override readonly id = 'cubemap';
     static override readonly VERSION = PKG_VERSION;
     static override readonly supportsDownload = false;
@@ -143,7 +143,7 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, Texture[], 
         return { textureFace, textureX, textureY };
     }
 
-    async loadTexture(panorama: CubemapPanorama, loader = true): Promise<CubemapTexture> {
+    async loadTexture(panorama: CubemapPanorama, loader = true): Promise<CubemapTextureData> {
         if (this.viewer.config.fisheye) {
             utils.logWarn('fisheye effect with cubemap texture can generate distorsion');
         }
@@ -201,14 +201,19 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, Texture[], 
         const progress = [0, 0, 0, 0, 0, 0];
 
         for (let i = 0; i < 6; i++) {
-            promises.push(
-                this.viewer.textureLoader
-                    .loadImage(paths[i], loader ? (p) => {
-                        progress[i] = p;
-                        this.viewer.loader.setProgress(utils.sum(progress) / 6);
-                    } : null, cacheKey)
-                    .then((img) => this.createCubemapTexture(img))
-            );
+            if (!paths[i]) {
+                progress[i] = 100;
+                promises.push(Promise.resolve(null));
+            } else {
+                promises.push(
+                    this.viewer.textureLoader
+                        .loadImage(paths[i], loader ? (p) => {
+                            progress[i] = p;
+                            this.viewer.loader.setProgress(utils.sum(progress) / 6);
+                        } : null, cacheKey)
+                        .then((img) => this.createCubemapTexture(img))
+                );
+            }
         }
 
         return {
@@ -354,33 +359,28 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, Texture[], 
         const cubeSize = CONSTANTS.SPHERE_RADIUS * 2;
         const geometry = new BoxGeometry(cubeSize, cubeSize, cubeSize).scale(1, 1, -1);
 
-        const materials = [];
+        const materials: MeshBasicMaterial[] = [];
         for (let i = 0; i < 6; i++) {
-            materials.push(new MeshBasicMaterial());
+            const material = new MeshBasicMaterial({ depthTest: false, depthWrite: false });
+            materials.push(material);
         }
 
-        return new Mesh(geometry, []);
+        return new Mesh(geometry, materials);
     }
 
-    setTexture(mesh: CubemapMesh, textureData: CubemapTexture, transition?: boolean) {
-        const { texture, panoData } = textureData;
-
+    setTexture(mesh: CubemapMesh, { texture, panoData }: CubemapTextureData) {
         for (let i = 0; i < 6; i++) {
-            if (panoData.flipTopBottom && (i === 2 || i === 3)) {
-                texture[i].center = new Vector2(0.5, 0.5);
-                texture[i].rotation = Math.PI;
+            if (texture[i]) {
+                if (panoData.flipTopBottom && (i === 2 || i === 3)) {
+                    texture[i].center = new Vector2(0.5, 0.5);
+                    texture[i].rotation = Math.PI;
+                }
+
+                mesh.material[i].map = texture[i];
+            } else {
+                mesh.material[i].opacity = 0;
+                mesh.material[i].transparent = true;
             }
-
-            const material = new MeshBasicMaterial();
-
-            material.map = texture[i];
-
-            if (transition) {
-                material.depthTest = false;
-                material.depthWrite = false;
-            }
-
-            mesh.material.push(material);
         }
     }
 
@@ -391,7 +391,12 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, Texture[], 
         }
     }
 
-    disposeTexture(textureData: CubemapTexture) {
-        textureData.texture?.forEach((texture) => texture.dispose());
+    disposeTexture({ texture }: CubemapTextureData): void {
+        texture.forEach(t => t.dispose());
+    }
+
+    disposeMesh(mesh: CubemapMesh): void {
+        mesh.geometry.dispose();
+        mesh.material.forEach(m => m.dispose());
     }
 }

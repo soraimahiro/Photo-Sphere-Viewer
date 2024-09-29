@@ -243,10 +243,6 @@ panoData: (image, xmpData) => ({
 });
 ```
 
-::: warning
-Only the default [equirectangular](./adapters/equirectangular.md) adapter supports `panoData`.
-:::
-
 #### `moveSpeed`
 
 -   type: `double`
@@ -343,6 +339,13 @@ keyboardActions: {
 ::: warning
 Keyboard actions will only be available in fullscreen by default, this can be changed with the [`keyboard` option](#keyboard).
 :::
+
+#### `canvasBackground`
+
+-   type: `string`
+-   default: `#000`
+
+Background of the canvas, which will be visible when using cropped panoramas. Can be any valid CSS `background` value.
 
 #### `rendererParameters`
 

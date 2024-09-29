@@ -60,6 +60,7 @@ export function createWireFrame(geometry: BufferGeometry): Object3D {
     const wireframe = new WireframeGeometry(geometry);
     const line = new LineSegments<WireframeGeometry, Material>(wireframe);
     line.material.depthTest = false;
+    line.material.depthWrite = false;
     line.material.opacity = 0.25;
     line.material.transparent = true;
     return line;

@@ -96,3 +96,21 @@ function checkTile(
         throw new PSVError('Panorama cols and rows must be powers of 2.');
     }
 }
+
+/**
+ * Returns a path used for cache key
+ */
+export function getCacheKey(
+    panorama: EquirectangularTilesPanorama | EquirectangularMultiTilesPanorama,
+    firstTile: EquirectangularTileConfig
+): string {
+    // some tiles might be "null"
+    for (let i = 0; i < firstTile.cols; i++) {
+        const url = panorama.tileUrl(i, firstTile.rows / 2, firstTile.level);
+        if (url) {
+            return url;
+        }
+    }
+
+    return panorama.tileUrl.toString();
+}

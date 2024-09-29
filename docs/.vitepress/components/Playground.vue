@@ -45,12 +45,11 @@ let viewer: Viewer;
 let config: PanoConfig & Config = reactive({} as any);
 
 onMounted(async () => {
-    const { Viewer, EquirectangularAdapter } = await import('@photo-sphere-viewer/core');
+    const { Viewer } = await import('@photo-sphere-viewer/core');
 
     viewer = new Viewer({
         container: 'viewer',
         loadingImg: baseUrl + 'loader.gif',
-        adapter: [EquirectangularAdapter, { interpolateBackground: true }],
     });
 
     setPanorama(null);
@@ -87,14 +86,6 @@ function applyConfig(input: Config | PanoConfig) {
                 console.log(key, value);
             }
         });
-
-        if (changes.adapterConfig) {
-            Object.assign((viewer.adapter as any).config, changes.adapterConfig);
-            viewer.setPanorama(viewer.config.panorama, {
-                panoData: viewer.state.textureData.panoData,
-            });
-            delete changes.adapterConfig;
-        }
 
         if (changes.panoData) {
             viewer.setPanorama(viewer.config.panorama, {

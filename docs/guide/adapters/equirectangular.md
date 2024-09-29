@@ -13,7 +13,7 @@ import { EquirectangularAdapter } from '@photo-sphere-viewer/core';
 
 const viewer = new Viewer({
     adapter: [EquirectangularAdapter, {
-        interpolateBackground: true,
+        // options
     }],
     panorama: 'path/panorama.jpg',
 });
@@ -27,24 +27,6 @@ const viewer = new Viewer({
 -   default `true`
 
 Read real image size from XMP data, must be kept `true` if the panorama has been cropped after shot. This is used for [cropped panorama](#cropped-panorama).
-
-#### `backgroundColor`
-
--   type: `string`
--   default: `#000`
-
-Background color of the viewer, which will be visible when using cropped panoramas.
-
-#### `interpolateBackground`
-
--   type: `boolean`
--   default: `false`
-
-Interpolate the missing parts of cropped panorama with a blur effect.
-
-::: warning
-The interpolation is done asynchronously in a web worker, as such the panorama will be first be displayed without interpolation with only `canvasBackground` applied, then the interpolated image will be shown (takes about 1-3 seconds depending on the hardware).
-:::
 
 #### `resolution`
 
@@ -120,7 +102,7 @@ The XMP payload is as follow:
       <!-- initial view information -->
       <GPano:InitialViewHeadingDegrees>0</GPano:InitialViewHeadingDegrees>
       <GPano:InitialViewPitchDegrees>0</GPano:InitialViewPitchDegrees>
-      <GPano:InitialHorizontalFOVDegrees>0</GPano:InitialHorizontalFOVDegrees>
+      <GPano:InitialHorizontalFOVDegrees>60</GPano:InitialHorizontalFOVDegrees>
     </rdf:Description>
   </rdf:RDF>
 </x:xmpmeta>
@@ -164,6 +146,26 @@ const viewer = new Viewer({
     // defaultPitch: '0deg',
     // defaultZoomLvl: 50,
 });
+```
+
+#### Default parameters
+
+If the image does not have a 2:1 ratio and no XMP data are found and no `panoData` is provided, a best effort is done to display the image without distortion. The exact algorithm is as follow:
+
+```js
+const fullWidth = Math.max(img.width, img.height * 2);
+const fullHeight = Math.round(fullWidth / 2);
+const croppedX = Math.round((fullWidth - img.width) / 2);
+const croppedY = Math.round((fullHeight - img.height) / 2);
+
+panoData = {
+    fullWidth: fullWidth,
+    fullHeight: fullHeight,
+    croppedWidth: img.width,
+    croppedHeight: img.height,
+    croppedX: croppedX,
+    croppedY: croppedY,
+};
 ```
 
 ### Playground

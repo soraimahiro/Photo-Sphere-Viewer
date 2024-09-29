@@ -38,6 +38,7 @@ export const DEFAULTS: Required<ParsedViewerConfig> = {
     touchmoveTwoFingers: false,
     panoData: null,
     requestHeaders: null,
+    canvasBackground: '#000',
     rendererParameters: { alpha: true, antialias: true },
     withCredentials: false,
     // prettier-ignore

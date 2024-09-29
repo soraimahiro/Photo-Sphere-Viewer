@@ -359,12 +359,9 @@ export class OverlaysPlugin extends AbstractConfigurablePlugin<
             if (id === 'equirectangular') {
                 this.equirectangularAdapter = this.viewer.adapter as EquirectangularAdapter;
             } else if (id === 'equirectangular-tiles') {
-                this.equirectangularAdapter = (this.viewer.adapter as EquirectangularTilesAdapter).getAdapter();
+                this.equirectangularAdapter = (this.viewer.adapter as EquirectangularTilesAdapter).adapter;
             } else {
-                this.equirectangularAdapter = new EquirectangularAdapter(this.viewer, {
-                    interpolateBackground: false,
-                    useXmpData: false,
-                });
+                this.equirectangularAdapter = new EquirectangularAdapter(this.viewer);
             }
         }
 
@@ -377,7 +374,7 @@ export class OverlaysPlugin extends AbstractConfigurablePlugin<
             if (id === 'cubemap') {
                 this.cubemapAdapter = this.viewer.adapter as CubemapAdapter;
             } else if (id === 'cubemap-tiles') {
-                this.cubemapAdapter = (this.viewer.adapter as CubemapTilesAdapter).getAdapter();
+                this.cubemapAdapter = (this.viewer.adapter as CubemapTilesAdapter).adapter;
             } else if (this.config.cubemapAdapter) {
                 this.cubemapAdapter = new this.config.cubemapAdapter(this.viewer) as CubemapAdapter;
             } else {

@@ -1,5 +1,7 @@
 # Getting Started
 
+<Badges module="core"/>
+
 ::: tip Playground
 Test Photo Sphere Viewer with you own panorama in the [Playground](../playground.md)
 :::

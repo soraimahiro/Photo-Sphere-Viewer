@@ -81,6 +81,10 @@ panorama: {
 }
 ```
 
+::: tip Partial cubemap
+It is possible to skip the loading of one or more faces by providing a `null` URL.
+:::
+
 ### Stripe
 
 All faces are in a single file arranged in an horizontal stripe. The default stripe order is `left, front, right, back, top, bottom` but it can be changed with the `order` field.

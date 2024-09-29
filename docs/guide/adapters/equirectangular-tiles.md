@@ -67,10 +67,6 @@ Shows a warning sign on tiles that cannot be loaded.
 
 Applies antialiasing to high resolutions tiles.
 
-#### `backgroundColor`
-
-See the [equirectangular adapter configuration](./equirectangular.md#backgroundcolor).
-
 #### `resolution`
 
 See the [equirectangular adapter configuration](./equirectangular.md#resolution).
