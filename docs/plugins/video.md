@@ -24,12 +24,16 @@ Once enabled it will add various elements to the viewer:
 It also supports advanced autorotate with timed `keypoints`.
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
-    adapter: PhotoSphereViewer.EquirectangularVideoAdapter,
+import { VideoPlugin } from '@photo-sphere-viewer/video-plugin';
+
+const viewer = new Viewer({
+    adapter: EquirectangularVideoAdapter,
     panorama: {
         source: 'path/video.mp4',
     },
-    plugins: [PhotoSphereViewer.VideoPlugin],
+    plugins: [
+        VideoPlugin,
+    ],
 });
 ```
 
@@ -114,12 +118,12 @@ _Note: this option is not part of the plugin but is merged with the main [`lang`
 You can offer multiple resolutions of your video with the [ResolutionPlugin](./resolution.md).
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
-    adapter: PhotoSphereViewer.EquirectangularVideoAdapter,
+const viewer = new Viewer({
+    adapter: EquirectangularVideoAdapter,
     plugins: [
-        PhotoSphereViewer.VideoPlugin,
-        PhotoSphereViewer.SettingsPlugin,
-        [PhotoSphereViewer.ResolutionPlugin, {
+        VideoPlugin,
+        SettingsPlugin,
+        [ResolutionPlugin, {
             defaultResolution: 'FHD',
             resolutions: [
                 {

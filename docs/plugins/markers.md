@@ -24,9 +24,11 @@ There are four types of markers :
 Markers can be added at startup with the `markers` option or after load with the various methods.
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
+import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
+
+const viewer = new Viewer({
     plugins: [
-        [PhotoSphereViewer.MarkersPlugin, {
+        [MarkersPlugin, {
             markers: [
                 {
                     id: 'new-marker',
@@ -39,7 +41,7 @@ const viewer = new PhotoSphereViewer.Viewer({
     ],
 });
 
-const markersPlugin = viewer.getPlugin(PhotoSphereViewer.MarkersPlugin);
+const markersPlugin = viewer.getPlugin(MarkersPlugin);
 
 markersPlugin.addEventListener('select-marker', ({ marker }) => {
     markersPlugin.updateMarker({

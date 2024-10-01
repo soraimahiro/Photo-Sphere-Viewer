@@ -212,50 +212,6 @@ import iconContent from './icon.svg';
 To be correctly displayed in the navbar, the icon must use `fill="currentColor"` and/or `stroke="currentColor"`.
 :::
 
-## Viewer settings
-
-A plugin can expose one or more settings to the viewer by using the Settings plugin.
-
-This is done by requiring the settings plugin and calling the `addSetting` method. Consult the [Settings plugin](./settings.md) page for more information.
-
-```js
-export default class CustomPlugin extends AbstractPlugin {
-    constructor(viewer) {
-        super(viewer);
-
-        /**
-         * @type {SettingsPlugin}
-         */
-        this.settings = null;
-    }
-
-    init() {
-        this.settings = this.viewer.getPlugin('settings');
-
-        // the user may choose to not import the Settings plugin
-        // you may choose to make it a requirement by throwing an error...
-        if (this.settings) {
-            this.settings.addSetting({
-                id: 'custom-setting',
-                type: 'toggle',
-                label: 'Custom setting',
-                active: () => this.isActive(),
-                toggle: () => this.toggle(),
-            });
-        }
-    }
-
-    destroy() {
-        if (this.settings) {
-            this.settings.removeSetting('custom-setting');
-            delete this.settings;
-        }
-
-        super.destroy();
-    }
-}
-```
-
 ## Naming and publishing
 
 If you intend to publish your plugin on npmjs.org please respect the following naming:

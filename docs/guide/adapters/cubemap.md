@@ -9,8 +9,10 @@ This adapter is available in the [@photo-sphere-viewer/cubemap-adapter](https://
 :::
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
-    adapter: PhotoSphereViewer.CubemapAdapter,
+import {  CubemapAdapter } from '@photo-sphere-viewer/cubemap-adapter';
+
+const viewer = new Viewer({
+    adapter: CubemapAdapter,
     panorama: {
         left: 'path/to/left.jpg',
         front: 'path/to/front.jpg',

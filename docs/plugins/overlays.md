@@ -5,6 +5,8 @@
 ::: module
 <ApiButton page="modules/OverlaysPlugin.html"/>
 Display additional images and videos on top of the panorama.
+
+This plugin is available in the [@photo-sphere-viewer/overlays-plugin](https://www.npmjs.com/package/@photo-sphere-viewer/overlays-plugin) package.
 :::
 
 ## Usage
@@ -17,9 +19,11 @@ Two kinds of overlays are supported :
 -   positionned rectangle : the image/video has a defined position and size (always in radians/degrees)
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
+import { OverlaysPlugin } from '@photo-sphere-viewer/overlays-plugin';
+
+const viewer = new Viewer({
     plugins: [
-        [PhotoSphereViewer.OverlaysPlugin, {
+        [OverlaysPlugin, {
             overlays: [
                 {
                     id: 'fullsize',

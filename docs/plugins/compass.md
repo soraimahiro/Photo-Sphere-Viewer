@@ -14,9 +14,11 @@ This plugin is available in the [@photo-sphere-viewer/compass-plugin](https://ww
 The plugin can be configured with a list of `hotspots` which are small dots on the compass. It can also display markers positions.
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
+import { CompassPlugin } from '@photo-sphere-viewer/compass-plugin';
+
+const viewer = new Viewer({
     plugins: [
-        [PhotoSphereViewer.CompassPlugin, {
+        [CompassPlugin, {
             hotspots: [
                 { yaw: '45deg' }, 
                 { yaw: '60deg', color: 'red' },

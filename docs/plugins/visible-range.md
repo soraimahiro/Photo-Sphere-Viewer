@@ -14,16 +14,18 @@ This plugin is available in the [@photo-sphere-viewer/visible-range-plugin](http
 The plugin allows to define `horizontalRange` and `verticalRange` to lock to viewable zone. It affects manual moves and automatic rotation.
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
+import { VisibleRangePlugin } from '@photo-sphere-viewer/visible-range-plugin';
+
+const viewer = new Viewer({
     plugins: [
-        [PhotoSphereViewer.VisibleRangePlugin, {
+        [VisibleRangePlugin, {
             horizontalRange: [-Math.PI / 2, Math.PI / 2],
             verticalRange: [-Math.PI / 3, Math.PI / 3],
         }],
     ],
 });
 
-const visibleRangePlugin = viewer.getPlugin(PhotoSphereViewer.VisibleRangePlugin);
+const visibleRangePlugin = viewer.getPlugin(VisibleRangePlugin);
 
 visibleRangePlugin.setHorizontalRange(['0deg', '180deg']);
 visibleRangePlugin.setVerticalRange(null);

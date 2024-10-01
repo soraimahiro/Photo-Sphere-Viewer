@@ -14,7 +14,7 @@ HTML element which will contain the panorama, or identifier of the element.
 
 ```js
 container: document.querySelector('.viewer');
-
+container: '.viewer'; // will target [class="viewer"]
 container: 'viewer'; // will target [id="viewer"]
 ```
 
@@ -58,7 +58,7 @@ Define the file which will be downloaded with the `download` button. This is par
 #### `downloadName`
 
 -   type: `string`
--   default: `panorama` or `downloadUrl` filename
+-   default: `=downloadUrl` filename
 
 Overrides the filename when downloading the panorama. This is mostly useful if the panorama is provided as base64.
 
@@ -318,8 +318,10 @@ Configure keyboard actions. It is a map defining key code->action. (all the avai
 You can also configure an arbitrary callback to any key.
 
 ```js
+import { DEFAULTS } from '@photo-sphere-viewer/core';
+
 keyboardActions: {
-  ...PhotoSphereViewer.DEFAULTS.keyboardActions,
+  ...DEFAULTS.keyboardActions,
   'h': (viewer) => {
       if (viewer.panel.isVisible('help')) {
           viewer.panel.hide();

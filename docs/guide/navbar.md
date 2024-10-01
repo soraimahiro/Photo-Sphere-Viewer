@@ -88,7 +88,7 @@ viewer.navbar.getButton('my-button').show();
 This example uses some core buttons, the caption and a custom button.
 
 ```js
-new PhotoSphereViewer.Viewer({
+new Viewer({
     navbar: [
         'zoom',
         {
@@ -96,7 +96,7 @@ new PhotoSphereViewer.Viewer({
             content: '<svg...>',
             title: 'Hello world',
             className: 'custom-button',
-            onClick: (viewer) => {
+            onClick(viewer) {
                 alert('Hello from custom button');
             },
         },

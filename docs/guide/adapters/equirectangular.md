@@ -9,8 +9,10 @@ There is no need to declare the equirectangular adapter as it is the default one
 :::
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
-    adapter: [PhotoSphereViewer.EquirectangularAdapter, {
+import { EquirectangularAdapter } from '@photo-sphere-viewer/core';
+
+const viewer = new Viewer({
+    adapter: [EquirectangularAdapter, {
         interpolateBackground: true,
     }],
     panorama: 'path/panorama.jpg',
@@ -136,7 +138,7 @@ exiftool -tagsfromfile data.xmp -all:all panorama.jpg
 You can also directly pass the values to Photo Sphere Viewer with the `panoData` parameter.
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
+const viewer = new Viewer({
     container: 'viewer',
     panorama: 'path/to/panorama.jpg',
 

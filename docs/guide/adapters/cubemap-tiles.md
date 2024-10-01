@@ -9,8 +9,10 @@ This adapter is available in the [@photo-sphere-viewer/cubemap-tiles-adapter](ht
 :::
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
-    adapter: PhotoSphereViewer.CubemapTilesAdapter,
+import { CubemapTilesAdapter } from '@photo-sphere-viewer/cubemap-tiles-adapter';
+
+const viewer = new Viewer({
+    adapter: CubemapTilesAdapter,
     panorama: {
         faceSize: 6000,
         nbTiles: 8,

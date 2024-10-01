@@ -18,10 +18,13 @@ ResolutionPlugin is not compatible with GalleryPlugin.
 Once enabled the plugin will add a new setting the user can use to change the resolution of the panorama.
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
+import { SettingsPlugin } from '@photo-sphere-viewer/settings-plugin';
+import { ResolutionPlugin } from '@photo-sphere-viewer/resolution-plugin';
+
+const viewer = new Viewer({
     plugins: [
-        PhotoSphereViewer.SettingsPlugin,
-        [PhotoSphereViewer.ResolutionPlugin, {
+        SettingsPlugin,
+        [ResolutionPlugin, {
             defaultResolution: 'SD',
             resolutions: [
                 {

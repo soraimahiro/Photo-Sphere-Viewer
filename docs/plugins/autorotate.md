@@ -18,9 +18,11 @@ This plugin is available in the [@photo-sphere-viewer/autorotate-plugin](https:/
 In standard mode the panorama will simply rotate around, you can configure the `autorotatePitch` and `autorotateZoomLvl`.
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
+import { AutorotatePlugin } from '@photo-sphere-viewer/autorotate-plugin';
+
+const viewer = new Viewer({
     plugins: [
-        [PhotoSphereViewer.AutorotatePlugin, {
+        [AutorotatePlugin, {
             autorotatePitch: '5deg',
         }],
     ],
@@ -36,9 +38,9 @@ In keypoints mode the plugin is configured with a list of `keypoints` which can 
 It is also possible to configure each keypoint with a pause time and a tooltip.
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
+const viewer = new Viewer({
     plugins: [
-        [PhotoSphereViewer.AutorotatePlugin, {
+        [AutorotatePlugin, {
             keypoints: [
                 'existing-marker-id',
 

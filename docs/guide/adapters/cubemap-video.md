@@ -7,12 +7,14 @@ This adapter is available in the [@photo-sphere-viewer/cubemap-video-adapter](ht
 :::
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
-    adapter: PhotoSphereViewer.CubemapVideoAdapter,
+import { CubemapVideoAdapter } from '@photo-sphere-viewer/cubemap-video-adapter';
+
+const viewer = new Viewer({
+    adapter: CubemapVideoAdapter,
     panorama: {
         source: 'path/video.mp4',
     },
-    plugins: [PhotoSphereViewer.VideoPlugin],
+    plugins: [VideoPlugin],
 });
 ```
 

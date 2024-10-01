@@ -33,9 +33,7 @@ Official plugins (listed on the left menu) are available in various `@photo-sphe
 
     const viewer = new Viewer({
         plugins: [
-            [MarkersPlugin, {
-                // optional plugin config
-            }],
+            MarkersPlugin,
         ],
     });
 </script>
@@ -51,9 +49,7 @@ import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 
 const viewer = new Viewer({
     plugins: [
-        [MarkersPlugin, {
-            // optional plugin config
-        }],
+        MarkersPlugin,
     ],
 });
 ```
@@ -98,6 +94,8 @@ const viewer = new Viewer({
 ```
 :::
 
+### Methods and events
+
 After initialization the plugin instance can be obtained with the `getPlugin` method, allowing to call methods on the plugin and subscribe to events.
 
 ```js
@@ -109,6 +107,8 @@ markersPlugin.addEventListener('select-marker', () => {
     /* ... */
 });
 ```
+
+### Update options
 
 Some plugins allow their configuration to be modified after init with the `setOption()` and `setOptions()` methods. The updatable configuration properties are documented on each plugin page.
 

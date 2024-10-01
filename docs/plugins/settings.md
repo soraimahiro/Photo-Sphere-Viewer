@@ -14,8 +14,12 @@ This plugin is available in the [@photo-sphere-viewer/settings-plugin](https://w
 Once enabled the plugin will add a new "Settings" button which can be populated by other plugins.
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
-    plugins: [PhotoSphereViewer.SettingsPlugin],
+import { SettingsPlugin } from '@photo-sphere-viewer/settings-plugin';
+
+const viewer = new Viewer({
+    plugins: [
+        SettingsPlugin,
+    ],
 });
 ```
 

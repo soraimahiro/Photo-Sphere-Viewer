@@ -64,3 +64,18 @@ new Viewer({
 :::
 
 ::::
+
+::: tip
+When using Typescript you can also type-check the panorama object :
+
+```ts
+import { CubemapAdapter, CubemapPanorama } from '@photo-sphere-viewer/cubemap-adapter';
+
+const viewer = new Viewer({
+    adapter: CubemapAdapter,
+    panorama: {
+        ...,
+    } satisfies CubemapPanorama,
+});
+```
+:::

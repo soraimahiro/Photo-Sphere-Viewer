@@ -7,8 +7,10 @@ This adapter is available in the main `@photo-sphere-viewer/core` package.
 :::
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
-    adapter: [PhotoSphereViewer.DualFisheyeAdapter, {
+import { DualFisheyeAdapter } from '@photo-sphere-viewer/core';
+
+const viewer = new Viewer({
+    adapter: [DualFisheyeAdapter, {
         // config
     }],
     panorama: 'path/panorama.jpg',

@@ -9,8 +9,10 @@ This adapter is available in the [@photo-sphere-viewer/equirectangular-tiles-ada
 :::
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
-    adapter: PhotoSphereViewer.EquirectangularTilesAdapter,
+import { EquirectangularTilesAdapter } from '@photo-sphere-viewer/equirectangular-tiles-adapter';
+
+const viewer = new Viewer({
+    adapter: EquirectangularTilesAdapter,
     panorama: {
         width: 12000,
         cols: 16,

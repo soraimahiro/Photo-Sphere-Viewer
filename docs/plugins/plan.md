@@ -14,9 +14,11 @@ This plugin is available in the [@photo-sphere-viewer/plan-plugin](https://www.n
 The minimal configuration of this plugin contains `coordinates` (the GPS position of the panorama).
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
+import { PlanPlugin } from '@photo-sphere-viewer/plan-plugin';
+
+const viewer = new Viewer({
     plugins: [
-        [PhotoSphereViewer.PlanPlugin, {
+        [PlanPlugin, {
             coordinates: [6.79077, 44.58041],
         }],
     ],

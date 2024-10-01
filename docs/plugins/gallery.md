@@ -18,9 +18,11 @@ GalleryPlugin is not compatible with ResolutionPlugin.
 The plugin has a list of `items`, each configuring the corresponding panorama, a name and a thumbnail.
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
+import { GalleryPlugin } from '@photo-sphere-viewer/gallery-plugin';
+
+const viewer = new Viewer({
     plugins: [
-        [PhotoSphereViewer.GalleryPlugin, {
+        [GalleryPlugin, {
             items: [
                 {
                     id: 'pano-1',

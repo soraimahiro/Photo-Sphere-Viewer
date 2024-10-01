@@ -11,7 +11,53 @@ This plugin is available in the [@photo-sphere-viewer/virtual-tour-plugin](https
 
 ## Usage
 
-The plugin allows to define `nodes` which contains a `panorama` and one or more `links` to other nodes.
+```js
+import { VirtualTourPlugin } from '@photo-sphere-viewer/virtual-tour-plugin';
+
+const viewer = new Viewer({
+    plugins: [
+        [VirtualTourPlugin, {
+            nodes: [...],
+            // or
+            getNode: async (id) => { ... },
+            startNodeId: ...,
+        }],
+    ],
+});
+```
+
+The plugin uses a list of nodes which contains a `panorama` with one or more `links` to other nodes and additional options.
+
+The nodes can be provided all at once or asynchronously as the user navigates.
+
+:::: tabs
+
+::: tab Client mode
+In client mode you must provide all the `nodes` at once, you can also change the nodes with the `setNodes` method.
+
+```js
+nodes: [
+    { id: 'node-1', panorama: '001.jpg', links: [{ nodeId: 'node-2', position: { textureX: 1500, textureY: 780 } }] },
+    { id: 'node-2', panorama: '002.jpg', links: [{ nodeId: 'node-1', position: { textureX: 3000, textureY: 780 } }] },
+],
+```
+
+:::
+
+::: tab Server mode
+In server mode you provide the `getNode` function which returns a Promise to load the data of a node.
+
+```js
+startNodeId: 'node-1',
+getNode: async (nodeId) => {
+    const res = await fetch(`/api/nodes/${nodeId}`);
+    return await res.json();
+},
+```
+
+:::
+
+::::
 
 There are two different ways to define the position of the links : the manual mode and the GPS mode.
 
@@ -49,36 +95,6 @@ const node = {
             gps: [-80.156168, 25.666623], // the position of the linked node must be provided here in server mode
         },
     ],
-};
-```
-
-:::
-
-::::
-
-The nodes can be provided all at once or asynchronously as the user navigates.
-
-:::: tabs
-
-::: tab Client mode
-In client mode you must provide all the `nodes` at once, you can also change the nodes with the `setNodes` method.
-
-```js
-const nodes = [
-    { id: 'node-1', panorama: '001.jpg', links: [{ nodeId: 'node-2', position: { textureX: 1500, textureY: 780 } }] },
-    { id: 'node-2', panorama: '002.jpg', links: [{ nodeId: 'node-1', position: { textureX: 3000, textureY: 780 } }] },
-];
-```
-
-:::
-
-::: tab Server mode
-In server mode you provide the `getNode` function which returns a Promise to load the data of a node.
-
-```js
-getNode = async (nodeId) => {
-    const res = await fetch(`/api/nodes/${nodeId}`);
-    return await res.json();
 };
 ```
 
@@ -258,7 +274,7 @@ Initial list of nodes. You can also call `setNodes` method later.
 
 Callback to load the configuration of a node.
 
-#### `startNodeId`
+#### `startNodeId` (required in server mode)
 
 -   type: `string`
 -   updatable: no

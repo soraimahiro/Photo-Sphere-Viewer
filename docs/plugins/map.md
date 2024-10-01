@@ -18,9 +18,11 @@ Looking for geographic map ? (OpenStreetMap, Google, etc) try the [Plan plugin](
 The minimal configuration of this plugin contains `imageUrl` and `center` (the position of the panorama on the map, in pixels). The map rotation can be ajusted with `rotation`.
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
+import { MapPlugin } from '@photo-sphere-viewer/map-plugin';
+
+const viewer = new Viewer({
     plugins: [
-        [PhotoSphereViewer.MapPlugin, {
+        [MapPlugin, {
             imageUrl: 'path/to/map.jpg',
             center: { x: 785, y: 421 },
             rotation: '-12deg',

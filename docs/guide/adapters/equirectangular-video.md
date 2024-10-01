@@ -7,12 +7,14 @@ This adapter is available in the [@photo-sphere-viewer/equirectangular-video-ada
 :::
 
 ```js
-const viewer = new PhotoSphereViewer.Viewer({
-    adapter: PhotoSphereViewer.EquirectangularVideoAdapter,
+import { EquirectangularVideoAdapter } from '@photo-sphere-viewer/equirectangular-video-adapter';
+
+const viewer = new Viewer({
+    adapter: EquirectangularVideoAdapter,
     panorama: {
         source: 'path/video.mp4',
     },
-    plugins: [PhotoSphereViewer.VideoPlugin],
+    plugins: [VideoPlugin],
 });
 ```
 
