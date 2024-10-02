@@ -74,6 +74,7 @@
                 // mousewheelCtrlKey: true,
                 // moveSpeed: 2,
                 // zoomSpeed: 2,
+                // moveInertia: false,
                 keyboard: 'always',
                 navbar: [
                     'zoom',
@@ -127,6 +128,10 @@
                         }
                     },
                 },
+            });
+
+            viewer.addEventListener('click', ({ data }) => {
+                console.log('click', data);
             });
 
             window.viewer = viewer;

@@ -31,7 +31,7 @@ export const DEFAULTS: Required<ParsedViewerConfig> = {
     sphereCorrection: null,
     moveSpeed: 1,
     zoomSpeed: 1,
-    moveInertia: true,
+    moveInertia: 0.8,
     mousewheel: true,
     mousemove: true,
     mousewheelCtrlKey: false,
@@ -152,6 +152,15 @@ export const CONFIG_PARSERS: ConfigParsers<ViewerConfig, ParsedViewerConfig> = {
         }
         // maxFov between 1 and 179
         return MathUtils.clamp(maxFov, 1, 179);
+    },
+    moveInertia: (moveInertia, { defValue }) => {
+        if (moveInertia === true) {
+            return defValue;
+        }
+        if (moveInertia === false) {
+            return 0;
+        }
+        return moveInertia;
     },
     lang: (lang) => {
         return {

@@ -279,10 +279,10 @@ requestHeaders: (url) => ({
 
 #### `moveInertia`
 
--   type: `boolean`
--   default: `true`
+-   type: `boolean | number`
+-   default: `0.8`
 
-Enabled smooth animation after a manual move.
+Applies damping to the camera movement, higher value mean stronger damping (`true` is default damping factor, `false` is not damping).
 
 #### `withCredentials`
 

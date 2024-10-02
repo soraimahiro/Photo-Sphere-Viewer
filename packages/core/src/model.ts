@@ -352,8 +352,8 @@ export type ViewerConfig = {
     moveSpeed?: number;
     /** @default 1 */
     zoomSpeed?: number;
-    /** @default true */
-    moveInertia?: boolean;
+    /** @default 0.8 */
+    moveInertia?: boolean | number;
     /** @default true */
     mousewheel?: boolean;
     /** @default true */
@@ -386,6 +386,7 @@ export type ParsedViewerConfig = Omit<
     | 'plugins'
     | 'defaultYaw'
     | 'defaultPitch'
+    | 'moveInertia'
     | 'fisheye'
     | 'requestHeaders'
     | 'navbar'
@@ -395,6 +396,7 @@ export type ParsedViewerConfig = Omit<
     plugins?: Array<[PluginConstructor, any]>;
     defaultYaw?: number;
     defaultPitch?: number;
+    moveInertia?: number;
     fisheye?: number;
     requestHeaders?: (url: string) => Record<string, string>;
     navbar?: Array<string | NavbarCustomButton>;
