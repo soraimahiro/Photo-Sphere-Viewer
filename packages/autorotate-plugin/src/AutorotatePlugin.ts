@@ -78,6 +78,7 @@ export class AutorotatePlugin extends AbstractConfigurablePlugin<
 
     private readonly state = {
         initialStart: true,
+        disableOnIdle: false,
         /** if the automatic rotation is enabled */
         enabled: false,
         /** current index in keypoints */
@@ -259,6 +260,7 @@ export class AutorotatePlugin extends AbstractConfigurablePlugin<
         }
 
         this.state.initialStart = false;
+        this.state.disableOnIdle = false;
         this.state.enabled = true;
 
         this.dispatchEvent(new AutorotateEvent(true));
@@ -303,6 +305,13 @@ export class AutorotatePlugin extends AbstractConfigurablePlugin<
             this.config.autorotateSpeed = -this.config.autorotateSpeed;
             this.__animate();
         }
+    }
+
+    /**
+     * @internal
+     */
+    disableOnIdle() {
+        this.state.disableOnIdle = true;
     }
 
     /**
@@ -363,7 +372,7 @@ export class AutorotatePlugin extends AbstractConfigurablePlugin<
      */
     private __beforeRender(timestamp: number) {
         if (
-            (this.state.initialStart || this.config.autostartOnIdle)
+            (this.state.initialStart || this.config.autostartOnIdle && !this.state.disableOnIdle)
             && this.viewer.state.idleTime > 0
             && timestamp - this.viewer.state.idleTime > this.config.autostartDelay
         ) {

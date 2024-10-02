@@ -446,6 +446,8 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
                     })
                 );
 
+                this.viewer.resetIdleTimer();
+
                 return true;
             })
             .catch((err) => {
