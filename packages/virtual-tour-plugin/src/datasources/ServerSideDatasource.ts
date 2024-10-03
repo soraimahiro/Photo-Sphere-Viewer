@@ -41,4 +41,8 @@ export class ServerSideDatasource extends AbstractDatasource {
             });
         }
     }
+
+    clearCache(): void {
+        this.nodes = {};
+    }
 }

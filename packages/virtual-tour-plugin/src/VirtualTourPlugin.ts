@@ -322,11 +322,20 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
      */
     setCurrentNode(
         nodeId: string,
-        options?: VirtualTourTransitionOptions,
+        options?: VirtualTourTransitionOptions & {
+            /**
+             * reload the node even if already loaded
+             */
+            forceUpdate?: boolean,
+        },
         fromLink?: VirtualTourLink
     ): Promise<boolean> {
-        if (nodeId === this.state.currentNode?.id) {
+        if (nodeId === this.state.currentNode?.id && !options?.forceUpdate) {
             return Promise.resolve(true);
+        }
+
+        if (options?.forceUpdate && this.isServerSide) {
+            (this.datasource as ServerSideDatasource).clearCache();
         }
 
         this.viewer.hideError();
@@ -670,7 +679,7 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
      */
     private __getGpsMapPosition(gps: GpsPosition): Point {
         const map = this.config.map;
-        if (this.isGps && map.extent && map.size) {
+        if (this.isGps && map && map.extent && map.size) {
             return {
                 x: MathUtils.mapLinear(gps[0], map.extent[0], map.extent[2], 0, map.size.width),
                 y: MathUtils.mapLinear(gps[1], map.extent[1], map.extent[3], 0, map.size.height),
