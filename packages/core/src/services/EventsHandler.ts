@@ -179,7 +179,7 @@ export class EventsHandler extends AbstractService {
             }
         }
 
-        if (!this.viewer.dispatchEvent(new KeypressEvent(e.key))) {
+        if (!this.viewer.dispatchEvent(new KeypressEvent(e.key, e))) {
             return;
         }
 
@@ -190,9 +190,16 @@ export class EventsHandler extends AbstractService {
         const action = this.config.keyboardActions?.[e.key];
 
         if (typeof action === 'function') {
-            action(this.viewer);
+            action(this.viewer, e);
             e.preventDefault();
-        } else if (action && !this.keyHandler.pending) {
+            return;
+        }
+
+        if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+            return;
+        }
+
+        if (action && !this.keyHandler.pending) {
             if (action !== ACTIONS.ZOOM_IN && action !== ACTIONS.ZOOM_OUT) {
                 this.viewer.stopAll();
             }

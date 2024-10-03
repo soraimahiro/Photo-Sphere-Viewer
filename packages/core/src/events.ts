@@ -183,7 +183,7 @@ export class KeypressEvent extends ViewerEvent {
     override type: 'key-press';
 
     /** @internal */
-    constructor(public readonly key: string) {
+    constructor(public readonly key: string, public readonly originalEvent: KeyboardEvent) {
         super(KeypressEvent.type, true);
     }
 }

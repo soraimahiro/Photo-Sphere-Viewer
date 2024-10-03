@@ -364,7 +364,7 @@ export type ViewerConfig = {
     navbar?: boolean | string | Array<string | NavbarCustomButton>;
     lang?: Record<string, string>;
     keyboard?: boolean | 'always' | 'fullscreen' | Record<string, ACTIONS | ((viewer: Viewer) => void)>;
-    keyboardActions?: Record<string, ACTIONS | ((viewer: Viewer) => void)>;
+    keyboardActions?: Record<string, ACTIONS | ((viewer: Viewer, e: KeyboardEvent) => void)>;
 };
 
 /**

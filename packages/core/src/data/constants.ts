@@ -64,7 +64,7 @@ export const VIEWER_DATA = 'photoSphereViewer';
 export const CAPTURE_EVENTS_CLASS = 'psv--capture-event';
 
 /**
- * Actions available for {@link ViewerConfig['keyboard']} configuration
+ * Actions available for {@link ViewerConfig['keyboardActions']} configuration
  */
 export enum ACTIONS {
     ROTATE_UP = 'ROTATE_UP',

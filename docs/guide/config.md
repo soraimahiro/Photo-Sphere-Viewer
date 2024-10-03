@@ -315,14 +315,14 @@ keyboardActions: {
 
 Configure keyboard actions. It is a map defining key code->action. (all the available actions are listed above)
 
-You can also configure an arbitrary callback to any key.
+You can also configure an arbitrary callback to any key, it receives the viewer itself and the original keyboard event as parameters.
 
 ```js
 import { DEFAULTS } from '@photo-sphere-viewer/core';
 
 keyboardActions: {
   ...DEFAULTS.keyboardActions,
-  'h': (viewer) => {
+  'h': (viewer, evt) => {
       if (viewer.panel.isVisible('help')) {
           viewer.panel.hide();
       } else {
@@ -332,7 +332,11 @@ keyboardActions: {
           });
       }
   },
-  'f': (viewer) => viewer.toggleFullscreen(),
+  'f': (viewer, evt) => {
+    if (!evt.ctrlKey && !evt.altKey) {
+      viewer.toggleFullscreen(),
+    }
+  },
 },
 ```
 

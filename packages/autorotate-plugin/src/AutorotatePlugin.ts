@@ -165,13 +165,7 @@ export class AutorotatePlugin extends AbstractConfigurablePlugin<
             }
 
             case events.KeypressEvent.type:
-                if (
-                    (e as events.KeypressEvent).key === CONSTANTS.KEY_CODES.Space
-                    && this.viewer.state.keyboardEnabled
-                ) {
-                    this.toggle();
-                    e.preventDefault();
-                }
+                this.__onKeyPress((e as events.KeypressEvent).originalEvent);
                 break;
         }
     }
@@ -573,5 +567,13 @@ export class AutorotatePlugin extends AbstractConfigurablePlugin<
         });
 
         return idx;
+    }
+
+    private __onKeyPress(e: KeyboardEvent) {
+        if (this.viewer.state.keyboardEnabled
+            && e.key === CONSTANTS.KEY_CODES.Space && !e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {
+            this.toggle();
+            e.preventDefault();
+        }
     }
 }
