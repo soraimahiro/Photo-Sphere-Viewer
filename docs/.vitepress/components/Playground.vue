@@ -4,7 +4,6 @@
             <v-tabs v-model="currentTab" bg-color="primary">
                 <v-tab value="panorama">Panorama</v-tab>
                 <v-tab value="config" :disabled="loading">Configuration</v-tab>
-                <v-tab value="markers" :disabled="loading">Markers</v-tab>
             </v-tabs>
 
             <v-card-text>
@@ -14,9 +13,6 @@
                     </v-tabs-window-item>
                     <v-tabs-window-item value="config" eager>
                         <TabConfiguration @updateConfig="applyConfig" :loading="loading" />
-                    </v-tabs-window-item>
-                    <v-tabs-window-item value="markers">
-                        Coming soon™
                     </v-tabs-window-item>
                 </v-tabs-window>
             </v-card-text>

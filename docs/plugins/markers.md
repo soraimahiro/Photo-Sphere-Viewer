@@ -70,10 +70,6 @@ packages:
 
 :::
 
-::: tip
-You can try markers live in [the playground](../playground.md).
-:::
-
 ## Markers
 
 ### Definition
