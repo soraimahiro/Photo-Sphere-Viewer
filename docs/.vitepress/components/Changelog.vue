@@ -44,13 +44,13 @@ onMounted(async () => {
 async function fetchReleases(): Promise<any[]> {
     const cacheDate = localStorage.releasesCacheDate;
 
-    if (cacheDate && (new Date().getDate() - new Date(cacheDate).getDate() < 1000 * 3600)) {
+    if (cacheDate && (new Date().getTime() - new Date(cacheDate).getTime() < 1000 * 3600)) {
         return JSON.parse(localStorage.releasesCache);
     } else {
         const response = await fetch('/.netlify/functions/releases');
         if (response.ok) {
             const data = await response.json();
-            localStorage.releasesCacheDate = new Date().toString();
+            localStorage.releasesCacheDate = new Date().toISOString();
             localStorage.releasesCache = JSON.stringify(data);
             return data;
         } else {

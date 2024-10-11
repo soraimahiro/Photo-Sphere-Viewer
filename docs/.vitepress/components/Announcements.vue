@@ -36,13 +36,13 @@ onMounted(async () => {
 async function fetchAnnouncements(): Promise<any[]> {
     const cacheDate = localStorage.announcementsCacheDate;
 
-    if (cacheDate && (new Date().getDate() - new Date(cacheDate).getDate() < 1000 * 3600)) {
+    if (cacheDate && (new Date().getTime() - new Date(cacheDate).getTime() < 1000 * 3600)) {
         return JSON.parse(localStorage.announcementsCache);
     } else {
         const response = await fetch('/.netlify/functions/announcements');
         if (response.ok) {
             const data = await response.json();
-            localStorage.announcementsCacheDate = new Date().toString();
+            localStorage.announcementsCacheDate = new Date().toISOString();
             localStorage.announcementsCache = JSON.stringify(data);
             return data;
         } else {
