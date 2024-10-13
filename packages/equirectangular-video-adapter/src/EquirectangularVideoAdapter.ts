@@ -69,7 +69,7 @@ export class EquirectangularVideoAdapter extends AbstractVideoAdapter<
             newPanoData = newPanoData(video);
         }
 
-        const panoData = this.adapter.mergePanoData(video.videoWidth, video.videoHeight, newPanoData);
+        const panoData = utils.mergePanoData(video.videoWidth, video.videoHeight, newPanoData);
 
         return { panorama, texture, panoData };
     }

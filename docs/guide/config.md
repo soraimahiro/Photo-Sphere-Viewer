@@ -222,15 +222,15 @@ All parameters are optional.
 ```js
 panoData: {
   fullWidth: 6000,
-  fullHeight: 3000,
-  croppedWidth: 4000,
-  croppedHeight: 2000,
+  fullHeight: 3000, // optional
+  croppedWidth: 4000, // optional
+  croppedHeight: 2000, // optional
   croppedX: 1000,
   croppedY: 500,
 }
 ```
 
-It can also be a function to dynamically compute the cropping config depending on the loaded image.
+It can also be a function to dynamically compute the cropping config depending on the loaded image (note that a [default setting](./adapters/equirectangular.md#default-parameters) is already applied when no data is found).
 
 ```js
 panoData: (image, xmpData) => ({

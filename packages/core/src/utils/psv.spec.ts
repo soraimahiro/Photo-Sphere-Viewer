@@ -1,5 +1,6 @@
 import assert from 'assert';
-import { cleanCssPosition, getXMPValue, parseAngle, parsePoint, parseSpeed, speedToDuration } from './psv';
+import { cleanCssPosition, getXMPValue, mergePanoData, parseAngle, parsePoint, parseSpeed, speedToDuration } from './psv';
+import { PanoData } from '../model';
 
 describe('utils:psv:parseAngle', () => {
     it('should normalize number', () => {
@@ -379,3 +380,190 @@ describe('utils:psv:speedToDuration', () => {
         assert.strictEqual(speedToDuration('2rpm', Math.PI), 15000);
     });
 });
+
+describe('utils:psv:mergePanoData', () => {
+    it('should generate default panoData for 2:1 image', () => {
+        assertDeepEqualLenient(mergePanoData(2000, 1000), {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 2000,
+            croppedHeight: 1000,
+            croppedX: 0,
+            croppedY: 0,
+        } satisfies PanoData);
+    });
+
+    it('should generate default panoData for partial image (horizontal)', () => {
+        assertDeepEqualLenient(mergePanoData(2000, 500), {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 2000,
+            croppedHeight: 500,
+            croppedX: 0,
+            croppedY: 250,
+        } satisfies PanoData);
+    });
+
+    it('should generate default panoData for partial image (vertical)', () => {
+        assertDeepEqualLenient(mergePanoData(1000, 1000), {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 1000,
+            croppedHeight: 1000,
+            croppedX: 500,
+            croppedY: 0,
+        } satisfies PanoData);
+    });
+
+    it('should keep XMP data', () => {
+        assertDeepEqualLenient(mergePanoData(2000, 500, undefined, {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 2000,
+            croppedHeight: 500,
+            croppedX: 0,
+            croppedY: 500,
+        }), {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 2000,
+            croppedHeight: 500,
+            croppedX: 0,
+            croppedY: 500,
+        } satisfies PanoData);
+    });
+
+    it('should keep custom data over XMP', () => {
+        assertDeepEqualLenient(mergePanoData(2000, 500, {
+            fullWidth: 3000,
+            fullHeight: 1500,
+            croppedWidth: 2000,
+            croppedHeight: 500,
+            croppedX: 500,
+            croppedY: 1000,
+        }, {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 2000,
+            croppedHeight: 500,
+            croppedX: 0,
+            croppedY: 500,
+        }), {
+            fullWidth: 3000,
+            fullHeight: 1500,
+            croppedWidth: 2000,
+            croppedHeight: 500,
+            croppedX: 500,
+            croppedY: 1000,
+        } satisfies PanoData);
+    });
+
+    it('should fix invalid fullWidth/fullHeight', () => {
+        assertDeepEqualLenient(mergePanoData(2000, 500, {
+            fullWidth: 2000,
+            fullHeight: 990, // KO
+            croppedWidth: 2000,
+            croppedHeight: 500,
+            croppedX: 0,
+            croppedY: 500,
+        }), {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 2000,
+            croppedHeight: 500,
+            croppedX: 0,
+            croppedY: 500,
+        } satisfies PanoData);
+    });
+
+    it('should fix invalid croppedY', () => {
+        assertDeepEqualLenient(mergePanoData(2000, 500, {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 2000,
+            croppedHeight: 500,
+            croppedX: 0,
+            croppedY: 1000, // KO
+        }), {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 2000,
+            croppedHeight: 500,
+            croppedX: 0,
+            croppedY: 500,
+        } satisfies PanoData);
+
+        assertDeepEqualLenient(mergePanoData(2000, 500, {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 2000,
+            croppedHeight: 500,
+            croppedX: 0,
+            croppedY: -500, // KO
+        }), {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 2000,
+            croppedHeight: 500,
+            croppedX: 0,
+            croppedY: 0,
+        } satisfies PanoData);
+    });
+
+    it('should fix invalid croppedX', () => {
+        assertDeepEqualLenient(mergePanoData(1000, 1000, {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 1000,
+            croppedHeight: 1000,
+            croppedX: 1500, // KO
+            croppedY: 0,
+        }), {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 1000,
+            croppedHeight: 1000,
+            croppedX: 1000,
+            croppedY: 0,
+        } satisfies PanoData);
+
+        assertDeepEqualLenient(mergePanoData(1000, 1000, {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 1000,
+            croppedHeight: 1000,
+            croppedX: -500, // KO
+            croppedY: 0,
+        }), {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 1000,
+            croppedHeight: 1000,
+            croppedX: 0,
+            croppedY: 0,
+        } satisfies PanoData);
+    });
+
+    it('should complete missing fullHeight', () => {
+        assertDeepEqualLenient(mergePanoData(1000, 1000, {
+            fullWidth: 2000,
+            croppedX: 500,
+            croppedY: 0,
+        }), {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 1000,
+            croppedHeight: 1000,
+            croppedX: 500,
+            croppedY: 0,
+        });
+    });
+});
+
+function assertDeepEqualLenient(actual: any, expected: any) {
+    const picked = {} as any;
+    Object.keys(expected).forEach(key => {
+        picked[key] = actual[key];
+    });
+    assert.deepStrictEqual(picked, expected);
+}

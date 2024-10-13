@@ -101,15 +101,11 @@ Can by used to define cropping information if the video does not cover a full sp
 ```js
 panorama: {
   source: 'path/video.mp4',
-  data: (video) => {
-    return {
-      fullWidth: 6000,
-      fullHeight: 3000,
-      croppedWidth: video.videoWidth,
-      croppedHeight: video.videoHeight,
-      croppedX: (6000 - video.videoWidth) / 2,
-      croppedY: (3000 - video.videoHeight) / 2,
-    };
+  data: {
+    fullWidth: 6000,
+    // "fullHeight" optional, always "fullWidth / 2"
+    croppedX: 1000,
+    croppedY: 500,
   },
 }
 ```

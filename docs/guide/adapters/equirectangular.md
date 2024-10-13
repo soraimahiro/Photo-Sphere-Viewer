@@ -127,9 +127,9 @@ const viewer = new Viewer({
     // cropping information
     panoData: {
         fullWidth: 6000,
-        fullHeight: 3000,
-        croppedWidth: 4000,
-        croppedHeight: 2000,
+        fullHeight: 3000, // optional
+        croppedWidth: 4000, // optional
+        croppedHeight: 2000, // optional
         croppedX: 1000,
         croppedY: 500,
     },

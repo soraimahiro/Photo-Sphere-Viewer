@@ -4,7 +4,7 @@ import type { Viewer } from '../Viewer';
 import { SPHERE_RADIUS } from '../data/constants';
 import { SYSTEM } from '../data/system';
 import { EquirectangularPanorama, PanoData, PanoDataProvider, PanoramaPosition, Position, TextureData } from '../model';
-import { createTexture, firstNonNull, getConfigParser, getXMPValue, isNil, logWarn } from '../utils';
+import { createTexture, getConfigParser, getXMPValue, isNil, logWarn, mergePanoData } from '../utils';
 import { AbstractAdapter } from './AbstractAdapter';
 
 /**
@@ -166,7 +166,7 @@ export class EquirectangularAdapter extends AbstractAdapter<string | Equirectang
             cleanPanorama.data = cleanPanorama.data(img, xmpPanoData);
         }
 
-        const panoData = this.mergePanoData(img.width, img.height, cleanPanorama.data, xmpPanoData);
+        const panoData = mergePanoData(img.width, img.height, cleanPanorama.data, xmpPanoData);
 
         const texture = this.createEquirectangularTexture(img);
 
@@ -292,59 +292,4 @@ export class EquirectangularAdapter extends AbstractAdapter<string | Equirectang
         mesh.material.dispose();
     }
 
-    /**
-     * @internal
-     */
-    mergePanoData(width: number, height: number, newPanoData?: PanoData, xmpPanoData?: PanoData): PanoData {
-        if (!newPanoData && !xmpPanoData) {
-            const fullWidth = Math.max(width, height * 2);
-            const fullHeight = Math.round(fullWidth / 2);
-            const croppedX = Math.round((fullWidth - width) / 2);
-            const croppedY = Math.round((fullHeight - height) / 2);
-
-            newPanoData = {
-                fullWidth: fullWidth,
-                fullHeight: fullHeight,
-                croppedWidth: width,
-                croppedHeight: height,
-                croppedX: croppedX,
-                croppedY: croppedY,
-            };
-        }
-
-        const panoData: PanoData = {
-            isEquirectangular: true,
-            fullWidth: firstNonNull(newPanoData?.fullWidth, xmpPanoData?.fullWidth, width),
-            fullHeight: firstNonNull(newPanoData?.fullHeight, xmpPanoData?.fullHeight, height),
-            croppedWidth: firstNonNull(newPanoData?.croppedWidth, xmpPanoData?.croppedWidth, width),
-            croppedHeight: firstNonNull(newPanoData?.croppedHeight, xmpPanoData?.croppedHeight, height),
-            croppedX: firstNonNull(newPanoData?.croppedX, xmpPanoData?.croppedX, 0),
-            croppedY: firstNonNull(newPanoData?.croppedY, xmpPanoData?.croppedY, 0),
-            poseHeading: firstNonNull(newPanoData?.poseHeading, xmpPanoData?.poseHeading, 0),
-            posePitch: firstNonNull(newPanoData?.posePitch, xmpPanoData?.posePitch, 0),
-            poseRoll: firstNonNull(newPanoData?.poseRoll, xmpPanoData?.poseRoll, 0),
-            initialHeading: xmpPanoData?.initialHeading,
-            initialPitch: xmpPanoData?.initialPitch,
-            initialFov: xmpPanoData?.initialFov,
-        };
-
-        if (panoData.croppedWidth !== width || panoData.croppedHeight !== height) {
-            logWarn(`Invalid panoData, croppedWidth/croppedHeight is not coherent with the loaded image.
-            panoData: ${panoData.croppedWidth}x${panoData.croppedHeight}, image: ${width}x${height}`);
-        }
-        if (Math.abs(panoData.fullWidth - panoData.fullHeight * 2) > 1) {
-            logWarn('Invalid panoData, fullWidth should be twice fullHeight');
-            panoData.fullWidth = panoData.fullHeight * 2;
-        }
-        if (panoData.croppedX + panoData.croppedWidth > panoData.fullWidth) {
-            logWarn('Invalid panoData, croppedX + croppedWidth > fullWidth');
-            panoData.croppedX = panoData.fullWidth - panoData.croppedWidth;
-        }
-        if (panoData.croppedY + panoData.croppedHeight > panoData.fullHeight) {
-            logWarn('Invalid panoData, croppedY + croppedHeight > fullHeight');
-            panoData.croppedY = panoData.fullHeight - panoData.croppedHeight;
-        }
-
-        return panoData;
-    }
 }

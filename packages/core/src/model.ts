@@ -106,9 +106,9 @@ export type EquirectangularPanorama = {
 export type PanoData = {
     isEquirectangular?: true;
     fullWidth: number;
-    fullHeight: number;
-    croppedWidth: number;
-    croppedHeight: number;
+    fullHeight?: number;
+    croppedWidth?: number;
+    croppedHeight?: number;
     croppedX: number;
     croppedY: number;
     poseHeading?: number;
