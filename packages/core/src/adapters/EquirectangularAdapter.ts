@@ -79,8 +79,10 @@ export class EquirectangularAdapter extends AbstractAdapter<string | Equirectang
 
     private readonly config: EquirectangularAdapterConfig;
 
-    readonly SPHERE_SEGMENTS: number;
-    readonly SPHERE_HORIZONTAL_SEGMENTS: number;
+    // @internal
+    public readonly SPHERE_SEGMENTS: number;
+    // @internal
+    public readonly SPHERE_HORIZONTAL_SEGMENTS: number;
 
     constructor(viewer: Viewer, config?: EquirectangularAdapterConfig) {
         super(viewer);

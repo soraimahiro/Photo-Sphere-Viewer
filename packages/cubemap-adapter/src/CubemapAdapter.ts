@@ -369,26 +369,28 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
     }
 
     setTexture(mesh: CubemapMesh, { texture, panoData }: CubemapTextureData) {
-        for (let i = 0; i < 6; i++) {
+        mesh.material.forEach((material, i) => {
             if (texture[i]) {
                 if (panoData.flipTopBottom && (i === 2 || i === 3)) {
                     texture[i].center = new Vector2(0.5, 0.5);
                     texture[i].rotation = Math.PI;
                 }
 
-                mesh.material[i].map = texture[i];
+                material.map = texture[i];
             } else {
-                mesh.material[i].opacity = 0;
-                mesh.material[i].transparent = true;
+                material.opacity = 0;
+                material.transparent = true;
             }
-        }
+        });
     }
 
     setTextureOpacity(mesh: CubemapMesh, opacity: number) {
-        for (let i = 0; i < 6; i++) {
-            mesh.material[i].opacity = opacity;
-            mesh.material[i].transparent = opacity < 1;
-        }
+        mesh.material.forEach((material) => {
+            if (material.map) {
+                material.opacity = opacity;
+                material.transparent = opacity < 1;
+            }
+        });
     }
 
     disposeTexture({ texture }: CubemapTextureData): void {
