@@ -57,7 +57,7 @@ export class ResolutionPlugin extends AbstractPlugin<ResolutionPluginEvents> {
         this.settings.addSetting({
             id: ResolutionPlugin.id,
             type: 'options',
-            label: this.viewer.config.lang.resolution,
+            label: ResolutionPlugin.id,
             current: () => this.state.resolution,
             options: () => this.resolutions,
             apply: (resolution) => this.__setResolutionIfExists(resolution),

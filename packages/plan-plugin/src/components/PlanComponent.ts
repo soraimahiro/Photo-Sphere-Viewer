@@ -64,6 +64,7 @@ export class PlanComponent extends AbstractComponent {
         });
         
         viewer.addEventListener(events.KeypressEvent.type, this);
+        viewer.addEventListener(events.ConfigChangedEvent.type, this);
 
         const mapContainer = document.createElement('div');
         mapContainer.className = 'psv-plan__container';
@@ -132,6 +133,7 @@ export class PlanComponent extends AbstractComponent {
         cancelAnimationFrame(this.state.renderLoop);
 
         this.viewer.removeEventListener(events.KeypressEvent.type, this);
+        this.viewer.removeEventListener(events.ConfigChangedEvent.type, this);
 
         this.gallery?.removeEventListener('show-gallery', this);
         this.gallery?.removeEventListener('hide-gallery', this);
@@ -148,6 +150,14 @@ export class PlanComponent extends AbstractComponent {
                 if (this.state.maximized) {
                     this.__onKeyPress((e as events.KeypressEvent).key);
                     e.preventDefault();
+                }
+                break;
+            case events.ConfigChangedEvent.type:
+                if ((e as events.ConfigChangedEvent).containsOptions('lang')) {
+                    this.resetButton?.update();
+                    this.closeButton?.update();
+                    this.layersButton?.update();
+                    this.maximizeButton?.update();
                 }
                 break;
             case 'transitionstart':

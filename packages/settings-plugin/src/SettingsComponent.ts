@@ -137,11 +137,7 @@ export class SettingsComponent extends AbstractComponent {
      * Shows the list of options
      */
     private __showSettings(focus: boolean) {
-        this.container.innerHTML = SETTINGS_TEMPLATE(this.plugin.settings, (setting) => {
-            const current = setting.current();
-            const option = setting.options().find((opt) => opt.id === current);
-            return option?.label;
-        });
+        this.container.innerHTML = SETTINGS_TEMPLATE(this.plugin.settings, this.viewer.config.lang);
 
         // must not focus during the initial transition
         if (focus) {
@@ -153,11 +149,7 @@ export class SettingsComponent extends AbstractComponent {
      * Shows setting options panel
      */
     private __showOptions(setting: OptionsSetting) {
-        const current = setting.current();
-
-        this.container.innerHTML = SETTING_OPTIONS_TEMPLATE(setting, (option) => {
-            return option.id === current;
-        });
+        this.container.innerHTML = SETTING_OPTIONS_TEMPLATE(setting, this.viewer.config.lang);
 
         this.__focusFirstOption();
     }

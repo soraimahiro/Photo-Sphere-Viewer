@@ -57,6 +57,8 @@ Unique identifier of the button, usefull when using the `navbar.getButton()` met
 
 Tooltip displayed when the mouse is over the button.
 
+For translation purposes it can be a key in the main [`lang`](./config.md#lang) object.
+
 #### `className`
 
 -   type : `string`

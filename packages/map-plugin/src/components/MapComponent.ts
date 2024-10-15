@@ -98,6 +98,7 @@ export class MapComponent extends AbstractComponent {
         window.addEventListener('touchend', this);
         canvasContainer.addEventListener('wheel', this);
         viewer.addEventListener(events.KeypressEvent.type, this);
+        viewer.addEventListener(events.ConfigChangedEvent.type, this);
 
         // map canvas
         this.canvas = document.createElement('canvas');
@@ -181,6 +182,14 @@ export class MapComponent extends AbstractComponent {
                 if (this.state.maximized) {
                     this.__onKeyPress((e as events.KeypressEvent).key);
                     e.preventDefault();
+                }
+                break;
+            case events.ConfigChangedEvent.type:
+                if ((e as events.ConfigChangedEvent).containsOptions('lang')) {
+                    this.resetButton?.update();
+                    this.closeButton?.update();
+                    this.compassButton?.update();
+                    this.maximizeButton?.update();
                 }
                 break;
             case 'mousedown': {

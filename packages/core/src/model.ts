@@ -274,6 +274,7 @@ export type NavbarCustomButton = {
     id?: string;
     /**
      * Tooltip displayed when the mouse is over the button
+     * If can be a key in the global `lang` config
      */
     title?: string;
     /**

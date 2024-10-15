@@ -81,6 +81,8 @@ settings.addSetting({
 });
 ```
 
+For translation purposes, both `label` can be a key in the main [`lang`](../guide/config.md#lang) object.
+
 ## Button badge
 
 A setting can also have a `badge` function, which return value will be used as a badge on the settings button itself. **Only one setting can declare a badge.**

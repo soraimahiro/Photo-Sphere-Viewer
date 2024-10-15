@@ -8,19 +8,14 @@ export class PlanLayersButton extends AbstractPlanButton {
 
     constructor(plan: PlanComponent) {
         super(plan, ButtonPosition.VERTICAL);
-
-        const title = this.viewer.config.lang['mapLayers'];
-
-        this.container.title = title;
+        
         this.container.innerHTML = layersIcon;
 
         this.select = document.createElement('select');
         this.select.className = 'psv-plan__layers-select';
-        this.select.setAttribute('aria-label', title)
 
         const placeholder = document.createElement('option');
         placeholder.disabled = true;
-        placeholder.innerText = title;
         this.select.appendChild(placeholder);
 
         this.select.addEventListener('change', () => {
@@ -31,6 +26,14 @@ export class PlanLayersButton extends AbstractPlanButton {
         this.container.appendChild(this.select);
 
         this.hide();
+    }
+
+    override update() {
+        const title = this.viewer.config.lang['mapLayers'];
+
+        this.container.title = title;
+        this.select.setAttribute('aria-label', title);
+        this.select.querySelector('option').innerText = title;
     }
 
     setLayers(layers: string[]) {
