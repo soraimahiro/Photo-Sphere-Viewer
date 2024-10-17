@@ -290,8 +290,8 @@ export class Renderer extends AbstractService {
 
         const i = (cleanCorrection.pan ? 1 : 0) + (cleanCorrection.tilt ? 1 : 0) + (cleanCorrection.roll ? 1 : 0);
         if (!Viewer.useNewAnglesOrder && i > 1) {
-            logWarn(`'panoData' Euler angles will change in version 5.11.0.`);
-            logWarn(`Set 'Viewer.useNewAnglesOrder = true;' to remove this warning (you might have to adapt your poseHeading/posePitch/poseRoll parameters).`);
+            logWarn(`'panoData' Euler angles have changed in version 5.11.0.`);
+            logWarn(`Remove your 'useNewAnglesOrder' override to remove this warning (you might have to adapt your poseHeading/posePitch/poseRoll parameters).`);
         }
 
         if (Viewer.useNewAnglesOrder) {
@@ -310,8 +310,8 @@ export class Renderer extends AbstractService {
 
         const i = (cleanCorrection.pan ? 1 : 0) + (cleanCorrection.tilt ? 1 : 0) + (cleanCorrection.roll ? 1 : 0);
         if (!Viewer.useNewAnglesOrder && i > 1) {
-            logWarn(`'sphereCorrection' Euler angles will change in version 5.11.0.`);
-            logWarn(`Set 'Viewer.useNewAnglesOrder = true;' to remove this warning (you might have to adapt your pan/tilt/roll parameters).`);
+            logWarn(`'sphereCorrection' Euler angles have changed in version 5.11.0.`);
+            logWarn(`Remove your 'useNewAnglesOrder' override to remove this warning (you might have to adapt your poseHeading/posePitch/poseRoll parameters).`);
         }
 
         if (Viewer.useNewAnglesOrder) {
