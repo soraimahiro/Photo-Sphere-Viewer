@@ -236,9 +236,7 @@ export class EquirectangularAdapter extends AbstractAdapter<string | Equirectang
         if (this.config.blur || img.width > SYSTEM.maxTextureWidth) {
             const ratio = Math.min(1, SYSTEM.maxCanvasWidth / img.width);
 
-            const buffer = document.createElement('canvas');
-            buffer.width = img.width * ratio;
-            buffer.height = img.height * ratio;
+            const buffer = new OffscreenCanvas(Math.floor(img.width * ratio), Math.floor(img.height * ratio));
 
             const ctx = buffer.getContext('2d');
 

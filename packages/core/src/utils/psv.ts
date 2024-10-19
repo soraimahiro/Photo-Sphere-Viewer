@@ -330,7 +330,7 @@ export function parseAngle(angle: string | number, zeroCenter = false, halfCircl
 /**
  * Creates a THREE texture from an image
  */
-export function createTexture(img: HTMLImageElement | HTMLCanvasElement, mimaps = false): Texture {
+export function createTexture(img: TexImageSource, mimaps = false): Texture {
     const texture = new Texture(img);
     texture.needsUpdate = true;
     texture.minFilter = mimaps ? LinearMipmapLinearFilter : LinearFilter;

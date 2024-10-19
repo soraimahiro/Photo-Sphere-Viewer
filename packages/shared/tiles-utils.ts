@@ -35,9 +35,7 @@ export function getTileIndexByZoomLevel<T extends { zoomRange: [number, number] 
  * @internal
  */
 export function buildErrorMaterial(): MeshBasicMaterial {
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 512;
+    const canvas = new OffscreenCanvas(512, 512);
 
     const ctx = canvas.getContext('2d');
 

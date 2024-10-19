@@ -232,9 +232,7 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
         if (this.config.blur || img.width > SYSTEM.maxTextureWidth) {
             const ratio = Math.min(1, SYSTEM.maxCanvasWidth / img.width);
 
-            const buffer = document.createElement('canvas');
-            buffer.width = img.width * ratio;
-            buffer.height = img.height * ratio;
+            const buffer = new OffscreenCanvas(Math.floor(img.width * ratio), Math.floor(img.height * ratio));
 
             const ctx = buffer.getContext('2d');
 
@@ -267,14 +265,12 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
         }
 
         const ratio = Math.min(1, SYSTEM.maxCanvasWidth / img.height);
-        const tileWidth = img.height * ratio;
+        const tileWidth = Math.floor(img.height * ratio);
 
         const textures = {} as { [K in CubemapFaces]: Texture };
 
         for (let i = 0; i < 6; i++) {
-            const buffer = document.createElement('canvas');
-            buffer.width = tileWidth;
-            buffer.height = tileWidth;
+            const buffer = new OffscreenCanvas(tileWidth, tileWidth);
 
             const ctx = buffer.getContext('2d');
 
@@ -313,7 +309,7 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
         }
 
         const ratio = Math.min(1, SYSTEM.maxCanvasWidth / (img.width / 4));
-        const tileWidth = (img.width / 4) * ratio;
+        const tileWidth = Math.floor((img.width / 4) * ratio);
 
         const pts = [
             [0, 1 / 3], // left
@@ -327,9 +323,7 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
         const textures: Texture[] = [];
 
         for (let i = 0; i < 6; i++) {
-            const buffer = document.createElement('canvas');
-            buffer.width = tileWidth;
-            buffer.height = tileWidth;
+            const buffer = new OffscreenCanvas(tileWidth, tileWidth);
 
             const ctx = buffer.getContext('2d');
 
