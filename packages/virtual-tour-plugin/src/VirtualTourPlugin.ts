@@ -37,6 +37,7 @@ const getConfig = utils.getConfigParser<VirtualTourPluginConfig>(
             rotation: true,
         },
         linksOnCompass: true,
+        showLinkTooltip: true,
         getLinkTooltip: null,
         markerStyle: null,
         arrowStyle: DEFAULT_ARROW,
@@ -171,25 +172,26 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
 
         this.markers = this.viewer.getPlugin('markers');
         this.compass = this.viewer.getPlugin('compass');
-        this.gallery = this.viewer.getPlugin('gallery');
 
         if (this.markers?.config.markers) {
             utils.logWarn(
-                'No default markers can be configured on Markers plugin when using VirtualTour plugin. '
+                'No default markers can be configured on the MarkersPlugin when using the VirtualTourPlugin. '
                 + 'Consider defining `markers` on each tour node.'
             );
             delete this.markers.config.markers;
         }
 
-        if (this.config.map) {
-            this.map = this.viewer.getPlugin('map');
-            if (!this.map) {
-                utils.logWarn('The map is configured on the VirtualTourPlugin but the MapPlugin is not loaded.');
-            }
-        }
-
         if (this.isGps) {
             this.plan = this.viewer.getPlugin('plan');
+        }
+
+        if (!this.isServerSide) {
+            this.gallery = this.viewer.getPlugin('gallery');
+            this.map = this.viewer.getPlugin('map');
+
+            if (this.config.map && !this.map) {
+                utils.logWarn('The map is configured on the VirtualTourPlugin but the MapPlugin is not loaded.');
+            }
         }
 
         this.datasource = this.isServerSide
@@ -265,8 +267,7 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
             throw new PSVError('Cannot set nodes in server side mode');
         }
 
-        this.state.currentTooltip?.hide();
-        this.state.currentTooltip = null;
+        this.__hideTooltip();
         this.state.currentNode = null;
 
         (this.datasource as ClientSideDatasource).setNodes(nodes);
@@ -279,41 +280,9 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
         }
         this.setCurrentNode(startNodeId);
 
-        if (this.gallery) {
-            this.gallery.setItems(
-                nodes.map((node) => ({
-                    id: node.id,
-                    panorama: node.panorama,
-                    name: node.name,
-                    thumbnail: node.thumbnail,
-                })),
-                (id) => {
-                    this.setCurrentNode(id as string);
-                }
-            );
-        }
-
-        if (this.map) {
-            this.map.setHotspots([
-                ...nodes.map((node) => ({
-                    ...(node.map || {}),
-                    ...this.__getNodeMapPosition(node),
-                    id: LINK_ID + node.id,
-                    tooltip: node.name,
-                })),
-            ]);
-        }
-
-        if (this.plan) {
-            this.plan.setHotspots([
-                ...nodes.map((node) => ({
-                    ...(node.plan || {}),
-                    coordinates: node.gps,
-                    id: LINK_ID + node.id,
-                    tooltip: node.name,
-                })),
-            ]);
-        }
+        this.__setGalleryItems();
+        this.__setMapHotspots();
+        this.__setPlanHotspots();
     }
 
     /**
@@ -385,24 +354,23 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
                 if (this.state.loadingNode !== nodeId) {
                     throw utils.getAbortError();
                 }
-
-                if (transitionOptions.showLoader) {
-                    this.viewer.loader.show();
-                }
+                
+                this.__hideTooltip();
 
                 this.state.currentNode = node;
 
-                if (this.state.currentTooltip) {
-                    this.state.currentTooltip.hide();
-                    this.state.currentTooltip = null;
-                }
-
                 this.arrowsRenderer.clear();
+
                 if (this.gallery?.config.hideOnClick) {
                     this.gallery.hide();
                 }
+
                 this.markers?.clearMarkers();
-                this.compass?.clearHotspots();
+
+                if (this.config.linksOnCompass) {
+                    this.compass?.clearHotspots();
+                }
+
                 this.map?.minimize();
                 this.plan?.minimize();
 
@@ -431,17 +399,10 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
 
                 const node = this.state.currentNode;
 
-                if (this.map) {
-                    const center = this.__getNodeMapPosition(node);
-                    this.map.setCenter(center);
-                }
-
+                this.map?.setCenter(this.__getNodeMapPosition(node));
                 this.plan?.setCoordinates(node.gps);
 
-                if (node.markers) {
-                    this.__addNodeMarkers(node);
-                }
-
+                this.__addNodeMarkers(node);
                 this.__renderLinks(node);
                 this.__preload(node);
 
@@ -476,9 +437,125 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
     }
 
     /**
+     * Updates a node (client mode only)
+     * All properties but "id" are optional, the new config will be merged with the previous
+     * @throws {@link PSVError} if not in client mode
+     */
+    updateNode(newNode: Partial<VirtualTourNode> & { id: VirtualTourNode['id'] }) {
+        if (this.isServerSide) {
+            throw new PSVError('Cannot update node in server side mode');
+        }
+        if (!newNode.id) {
+            throw new PSVError('No id given for node');
+        }
+
+        const node = this.datasource.nodes[newNode.id];
+        if (!node) {
+            throw new PSVError(`Node ${newNode.id} does not exist`);
+        }
+
+        Object.assign(node, newNode);
+
+        if (newNode.name || newNode.thumbnail || newNode.panorama) {
+            this.__setGalleryItems();
+        }
+        if (newNode.name || newNode.gps || newNode.map) {
+            this.__setMapHotspots();
+        }
+        if (newNode.name || newNode.gps || newNode.plan) {
+            this.__setPlanHotspots();
+        }
+
+        if (this.state.currentNode?.id === node.id) {
+            this.__hideTooltip();
+
+            if (newNode.panorama || newNode.panoData || newNode.sphereCorrection) {
+                this.setCurrentNode(node.id, { forceUpdate: true });
+                return;
+            }
+
+            if (newNode.caption) {
+                this.viewer.setOption('caption', node.caption);
+            }
+            if (newNode.description) {
+                this.viewer.setOption('description', node.description);
+            }
+
+            if (newNode.links || newNode.gps) {
+                this.__renderLinks(node);
+            }
+
+            if (newNode.gps) {
+                this.plan?.setCoordinates(node.gps);
+            }
+
+            if (newNode.map || newNode.gps) {
+                this.map?.setCenter(this.__getNodeMapPosition(node));
+            }
+
+            if (newNode.markers || newNode.gps) {
+                this.__addNodeMarkers(node);
+            }
+        }
+    }
+
+    /**
+     * Updates the gallery plugin
+     */
+    private __setGalleryItems() {
+        if (this.gallery) {
+            this.gallery.setItems(
+                Object.values(this.datasource.nodes).map((node) => ({
+                    id: node.id,
+                    panorama: node.panorama,
+                    name: node.name,
+                    thumbnail: node.thumbnail,
+                })),
+                (id) => {
+                    this.setCurrentNode(id as string);
+                }
+            );
+        }
+    }
+
+    /**
+     * Update the map plugin
+     */
+    private __setMapHotspots() {
+        if (this.map) {
+            this.map.setHotspots(
+                Object.values(this.datasource.nodes).map((node) => ({
+                    ...(node.map || {}),
+                    ...this.__getNodeMapPosition(node),
+                    id: LINK_ID + node.id,
+                    tooltip: node.name,
+                }))
+            );
+        }
+    }
+
+    /**
+     * Updates the plan plugin
+     */
+    private __setPlanHotspots() {
+        if (this.plan) {
+            this.plan.setHotspots(
+                Object.values(this.datasource.nodes).map((node) => ({
+                    ...(node.plan || {}),
+                    coordinates: node.gps,
+                    id: LINK_ID + node.id,
+                    tooltip: node.name,
+                }))
+            );
+        }
+    }
+
+    /**
      * Adds the links for the node
      */
     private __renderLinks(node: VirtualTourNode) {
+        this.arrowsRenderer.clear();
+
         const positions: Position[] = [];
 
         node.links.forEach((link) => {
@@ -536,9 +613,6 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
         if (this.config.getLinkTooltip) {
             content = this.config.getLinkTooltip(content, link, node);
         }
-        if (!content) {
-            content = node.id;
-        }
         return content;
     }
 
@@ -551,20 +625,26 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
             y: evt.clientY - viewerPos.y,
         };
 
-        this.state.currentTooltip = this.viewer.createTooltip({
-            ...LOADING_TOOLTIP,
-            left: viewerPoint.x,
-            top: viewerPoint.y,
-            box: {
-                // separate the tooltip from the cursor
-                width: 20,
-                height: 20,
-            },
-        }),
+        if (this.config.showLinkTooltip) {
+            this.state.currentTooltip = this.viewer.createTooltip({
+                ...LOADING_TOOLTIP,
+                left: viewerPoint.x,
+                top: viewerPoint.y,
+                box: {
+                    // separate the tooltip from the cursor
+                    width: 20,
+                    height: 20,
+                },
+            }),
 
-        this.__getTooltipContent(link).then((content) => {
-            this.state.currentTooltip.update(content);
-        });
+            this.__getTooltipContent(link).then((content) => {
+                if (content) {
+                    this.state.currentTooltip.update(content);
+                } else {
+                    this.__hideTooltip();
+                }
+            });
+        }
 
         this.map?.setActiveHotspot(LINK_ID + link.nodeId);
         this.plan?.setActiveHotspot(LINK_ID + link.nodeId);
@@ -581,25 +661,28 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
             y: evt.clientY - viewerPos.y,
         };
 
-        if (this.state.currentTooltip) {
-            this.state.currentTooltip.move({
-                left: viewerPoint.x,
-                top: viewerPoint.y,
-            });
-        }
+        this.state.currentTooltip?.move({
+            left: viewerPoint.x,
+            top: viewerPoint.y,
+        });
     }
 
     /** @internal */
     __onLeaveArrow(link: VirtualTourLink) {
-        if (this.state.currentTooltip) {
-            this.state.currentTooltip.hide();
-            this.state.currentTooltip = null;
-        }
+        this.__hideTooltip();
 
         this.map?.setActiveHotspot(null);
         this.plan?.setActiveHotspot(null);
 
         this.dispatchEvent(new LeaveArrowEvent(link, this.state.currentNode));
+    }
+
+    /**
+     * Hides the tooltip
+     */
+    private __hideTooltip() {
+        this.state.currentTooltip?.hide();
+        this.state.currentTooltip = null;
     }
 
     /**
@@ -640,23 +723,25 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
      * Changes the markers to the ones defined on the node
      */
     private __addNodeMarkers(node: VirtualTourNode) {
-        if (this.markers) {
-            this.markers.setMarkers(
-                node.markers.map((marker) => {
-                    if (marker.gps && this.isGps) {
-                        marker.position = gpsToSpherical(node.gps, marker.gps);
-                        if (marker.data?.['map']) {
-                            Object.assign(marker.data['map'], this.__getGpsMapPosition(marker.gps));
+        if (node.markers) {
+            if (this.markers) {
+                this.markers.setMarkers(
+                    node.markers.map((marker) => {
+                        if (marker.gps && this.isGps) {
+                            marker.position = gpsToSpherical(node.gps, marker.gps);
+                            if (marker.data?.['map']) {
+                                Object.assign(marker.data['map'], this.__getGpsMapPosition(marker.gps));
+                            }
+                            if (marker.data?.['plan']) {
+                                marker.data['plan'].coordinates = marker.gps;
+                            }
                         }
-                        if (marker.data?.['plan']) {
-                            marker.data['plan'].coordinates = marker.gps;
-                        }
-                    }
-                    return marker;
-                })
-            );
-        } else {
-            utils.logWarn(`Node ${node.id} markers ignored because the plugin is not loaded.`);
+                        return marker;
+                    })
+                );
+            } else {
+                utils.logWarn(`Node ${node.id} markers ignored because the plugin is not loaded.`);
+            }
         }
     }
 
