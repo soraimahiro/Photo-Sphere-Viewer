@@ -1,3 +1,8 @@
+/**
+ * Prompts for the packages to use
+ * Returns the '--filter' arguments for Turbo
+ */
+
 import fs from 'fs';
 import inquirer from 'inquirer';
 import process from 'process';
@@ -18,19 +23,9 @@ prompt([
         name: 'packages',
         message: 'Select which packages to build',
         type: 'checkbox',
-        choices: [
-            { value: 'core', checked: true },
-            ...packages,
-        ],
-    }
-])
-    .then((answers) => {
-        const filters = [
-            '//',
-            ...answers.packages,
-        ]
-            .map(p => `--filter=${p}`)
-            .join(' ');
-
-        process.stdout.write(filters);
-    });
+        choices: [{ value: 'core', checked: true }, ...packages],
+    },
+]).then((answers) => {
+    const filters = ['//', ...answers.packages].map((p) => `--filter=${p}`).join(' ');
+    process.stdout.write(filters);
+});

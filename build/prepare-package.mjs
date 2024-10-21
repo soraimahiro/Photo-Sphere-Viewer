@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * Copy the contents of each package "dist" folders to a root "dist" folder
  * In order to prepare the creation of the release ZIP

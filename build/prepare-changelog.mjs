@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * Generate the release note
  */

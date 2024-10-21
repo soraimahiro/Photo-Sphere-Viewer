@@ -14,19 +14,19 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "serve": "turbo run watch --concurrency 50",
-    "serve:filter": "run() { read filters; turbo run watch --concurrency 50 $filters; }; FORCE_COLOR=true node build/select-packages.mjs | run",
+    "serve:filter": "run() { read filters; turbo run watch --concurrency 50 $filters; }; FORCE_COLOR=true node ./build/select-packages.mjs | run",
     "npm-link": "turbo run npm-link --output-logs=new-only",
     "doc:build": "turbo run build-doc --force",
     "doc:serve": "turbo run serve-doc",
     "ci:build": "turbo run lint build test --cache-dir=.turbo",
     "ci:build-doc": "turbo run build-doc --cache-dir=.turbo",
-    "ci:e2e": "node build/start-and-test.mjs \"watch --no-open\" e2e:run",
+    "ci:e2e": "node ./build/start-and-test.mjs \"watch --no-open\" e2e:run",
     "ci:version": "set-versions --workspaces",
     "ci:publish": "turbo run publish-dist --concurrency=1",
     "e2e:open": "cypress open --e2e --browser=electron",
     "e2e:run": "cypress run --e2e --browser=electron",
     "build-doc": "node ./build/generate-typedoc-readme.mjs && typedoc --plugin typedoc-plugin-extras --out public/api",
-    "watch": "node build/liveserver.mjs"
+    "watch": "node ./build/liveserver.mjs"
   },
   "devDependencies": {
     "@stylistic/stylelint-plugin": "^3.1.0",

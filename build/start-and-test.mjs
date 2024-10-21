@@ -1,3 +1,7 @@
+/**
+ * Starts the server (first argument), launches the tests (second argument), then close the server
+ */
+
 import { spawn } from 'child_process';
 
 const SERVE_SCRIPT = process.argv[2];

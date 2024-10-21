@@ -19,7 +19,8 @@ export function budgetPlugin(budget: string): Plugin {
                     const file = result.outputFiles.find((f) => f.path.endsWith(filename));
                     if (file) {
                         if (file.contents.length > maxsize) {
-                            throw chalk.red(`File ${filename} exceeds budget of ${budget}, current size: ${Math.round(file.contents.length / 1024)}kb`);
+                            const size = Math.round(file.contents.length / 1024);
+                            throw chalk.red(`File ${filename} exceeds budget of ${budget}, current size: ${size}kb`);
                         }
                     }
                 });

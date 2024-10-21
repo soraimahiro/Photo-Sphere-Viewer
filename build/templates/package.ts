@@ -18,12 +18,7 @@ export const packageJson = (pkg: any) => {
             email: 'contact@git.strangeplanet.fr',
             homepage: 'https://www.strangeplanet.fr',
         },
-        keywords: [
-            'photosphere',
-            'panorama',
-            'threejs',
-            ...(pkg.keywords || []),
-        ],
+        keywords: ['photosphere', 'panorama', 'threejs', ...(pkg.keywords || [])],
     };
 
     if (pkg.psv.style) {

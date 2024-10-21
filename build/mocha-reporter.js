@@ -19,7 +19,7 @@ module.exports = class MultiReporter extends BaseReporter {
         } else {
             new JsonReporter(runner, {
                 reporterOption: {
-                    output: `reports/mocha.json`,
+                    output: 'reports/mocha.json',
                 },
             });
         }
@@ -59,7 +59,7 @@ function CypressJsonReporter(runner, options) {
             tests: tests.map(clean),
             pending: pending.map(clean),
             failures: failures.map(clean),
-            passes: passes.map(clean)
+            passes: passes.map(clean),
         };
         const json = JSON.stringify(obj, null, 2);
         const output = options.reporterOption.output;
@@ -80,7 +80,7 @@ function CypressJsonReporter(runner, options) {
             duration: test.duration,
             currentRetry: test.currentRetry(),
             speed: test.speed,
-            err: cleanCycles(err)
+            err: cleanCycles(err),
         };
     }
 
