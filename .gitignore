@@ -9,3 +9,4 @@ dist
 /public
 reports
 cypress/screenshots
+.tmp

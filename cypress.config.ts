@@ -4,7 +4,7 @@ export default defineConfig({
     e2e: {
         viewportWidth: 1280,
         viewportHeight: 900,
-        baseUrl: 'http://127.0.0.1:8080',
+        baseUrl: 'https://127.0.0.1:8080',
         scrollBehavior: false,
         screenshotOnRunFailure: false,
         setupNodeEvents(on) {
@@ -32,6 +32,15 @@ export default defineConfig({
             });
         },
     },
+    clientCertificates: [
+        {
+            url: 'https://127.0.0.1:8080',
+            certs: [{
+                cert: '.tmp/fake-cert.pem',
+                key: '.tmp/fake-cert.key',
+            }],
+        },
+    ],
     reporter: 'build/mocha-reporter.js',
     reporterOptions: {
         cypress: true,

@@ -5,12 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>PhotoSphereViewer - Demos</title>
 
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-            crossorigin="anonymous"
-        />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body>
         <div class="container py-4">
@@ -30,11 +25,9 @@
             </header>
 
             <div class="row">
-                <div class="col">
+                <div class="col-lg-3">
                     <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Adapters</h5>
-                        </div>
+                        <h5 class="card-header">Adapters</h5>
                         <!-- prettier-ignore -->
                         <div class="list-group list-group-flush">
                             <a href="adapter-equirectangular.html" class="list-group-item list-group-item-action">Equirectangular</a>
@@ -47,11 +40,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-lg-3">
                     <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Plugins</h5>
-                        </div>
+                        <h5 class="card-header">Plugins</h5>
                         <!-- prettier-ignore -->
                         <div class="list-group list-group-flush">
                             <a href="plugin-autorotate.html" class="list-group-item list-group-item-action">Autorotate</a>
@@ -73,11 +64,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-lg-3">
                     <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Misc</h5>
-                        </div>
+                        <h5 class="card-header">Misc</h5>
                         <!-- prettier-ignore -->
                         <div class="list-group list-group-flush">
                             <a href="misc-components.html" class="list-group-item list-group-item-action">Components</a>
@@ -87,7 +76,41 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-3" id="qrcode-container">
+                    <div class="card">
+                        <h5 class="card-header">Remote debug</h5>
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Scan to open on smartphone</h6>
+                            <div id="qrcode"></div>
+                            <p id="qrcode-label" class="card-text"></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "qrcode": "https://esm.run/qrcode"
+                }
+            }
+        </script>
+
+        <script type="module">
+            import * as QRCode from 'qrcode';
+
+            const ip = location.hash.replace('#ip=', '');
+            if (ip) {
+                const addr = `${location.protocol}//${ip}:${location.port}`;
+
+                QRCode.toCanvas(addr, { margin: 0, scale: 8 }, (error, canvas) => {
+                    document.querySelector('#qrcode').appendChild(canvas);
+                    document.querySelector('#qrcode-label').innerText = addr;
+                });
+            } else {
+                document.querySelector('#qrcode-container').remove();
+            }
+        </script>
     </body>
 </html>
