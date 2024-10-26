@@ -23,14 +23,14 @@ runs:
       if: ${{ !startsWith(github.ref_name, 'dependabot') }}
       with:
         key: yarn-${{ hashFiles('yarn.lock') }}
-        path: $YARN_CACHE_DIR
+        path: ${{ env.YARN_CACHE_DIR }}
 
     - name: yarn cache ro
       uses: actions/cache/restore@v4
       if: ${{ startsWith(github.ref_name, 'dependabot') }}
       with:
         key: yarn-${{ hashFiles('yarn.lock') }}
-        path: $YARN_CACHE_DIR
+        path: ${{ env.YARN_CACHE_DIR }}
 
     - name: turbo cache
       uses: actions/cache@v4

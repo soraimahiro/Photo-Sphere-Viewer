@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ (success() || failure()) && github.repository == 'mistic100/Photo-Sphere-Viewer' }}
         with:
-          name: e2e-report-${{ github.ref_name }}-$SHORT_SHA
+          name: e2e-report-${{ github.ref_name }}-${{ env.SHORT_SHA }}
           path: cypress/reports/html
 
       - name: test summary
