@@ -25,11 +25,11 @@ jobs:
         run: yarn ci:build
 
       - name: test summary
-        uses: dorny/test-reporter@1a288b62f8b75c0f433cbfdbc2e4800fbae50bd7
+        uses: phoenix-actions/test-reporting@v15
         if: ${{ (success() || failure()) && github.repository == 'mistic100/Photo-Sphere-Viewer' }}
         with:
           name: build
-          use-actions-summary: true
+          output-to: step-summary
           path: 'packages/*/reports/mocha.json'
           reporter: mocha-json
 
@@ -55,16 +55,18 @@ jobs:
         if: ${{ (success() || failure()) && github.repository == 'mistic100/Photo-Sphere-Viewer' }}
         with:
           name: e2e-report-${{ github.ref_name }}-${{ env.SHORT_SHA }}
-          path: cypress/reports/html
+          path: |
+            cypress/reports/html
+            !cypress/reports/html/.jsons
 
       - name: test summary
-        uses: dorny/test-reporter@1a288b62f8b75c0f433cbfdbc2e4800fbae50bd7
+        uses: phoenix-actions/test-reporting@v15
         if: ${{ (success() || failure()) && github.repository == 'mistic100/Photo-Sphere-Viewer' }}
         with:
           name: e2e
-          use-actions-summary: true
-          path: cypress/reports/e2e.json
-          reporter: mocha-json
+          output-to: step-summary
+          path: 'cypress/reports/html/.jsons/*.json'
+          reporter: mochawesome-json
 
   build-doc:
     runs-on: ubuntu-latest

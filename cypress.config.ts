@@ -53,5 +53,8 @@ export default defineConfig({
     reporter: 'build/mocha-reporter.js',
     reporterOptions: {
         cypress: true,
+        // cypress-mochawesome-reporter
+        removeJsonsFolderAfterMerge: false,
+        cdn: true,
     },
 });
