@@ -445,16 +445,8 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
         if (this.isServerSide) {
             throw new PSVError('Cannot update node in server side mode');
         }
-        if (!newNode.id) {
-            throw new PSVError('No id given for node');
-        }
 
-        const node = this.datasource.nodes[newNode.id];
-        if (!node) {
-            throw new PSVError(`Node ${newNode.id} does not exist`);
-        }
-
-        Object.assign(node, newNode);
+        const node = (this.datasource as ClientSideDatasource).updateNode(newNode);
 
         if (newNode.name || newNode.thumbnail || newNode.panorama) {
             this.__setGalleryItems();
