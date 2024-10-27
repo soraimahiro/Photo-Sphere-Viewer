@@ -8,6 +8,12 @@ export const packageJson = (pkg: any) => {
         main: 'index.cjs',
         module: 'index.module.js',
         types: 'index.d.ts',
+        exports: {
+            '.': {
+                import: './index.module.js',
+                require: './index.cjs',
+            },
+        },
         license: 'MIT',
         repository: {
             type: 'git',
