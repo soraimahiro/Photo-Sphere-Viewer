@@ -7,7 +7,7 @@ body,
 }
 
 * {
-    font-family: Arial !important;
+    font-family: "Helvetica", "Arial", sans-serif !important;
 }
 
 .psv-button.custom-button {

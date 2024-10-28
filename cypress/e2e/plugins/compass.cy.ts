@@ -1,8 +1,10 @@
 import type { CompassPlugin, CompassPluginConfig } from '@photo-sphere-viewer/compass-plugin';
+import type { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 import type { Point } from '@photo-sphere-viewer/core';
-import { checkPosition, getPlugin, getViewer, waitViewerReady } from '../utils';
+import { checkPosition, getPlugin, getViewer, waitViewerReady } from '../../utils';
+import { BASE_URL, NO_LOG } from '../../utils/constants';
 
-describe('compass', () => {
+describe('plugin: compass', () => {
     beforeEach(() => {
         cy.visit('e2e/compass.html');
         waitViewerReady();
@@ -16,13 +18,11 @@ describe('compass', () => {
     });
 
     it('should hide the compass', () => {
-        getPlugin<CompassPlugin>('compass', 'hide compass')
-            .then(compass => compass.hide());
+        getCompass('hide compass').then(compass => compass.hide());
 
         cy.get('.psv-compass').should('not.be.visible');
 
-        getPlugin<CompassPlugin>('compass', 'show compass')
-            .then(compass => compass.show());
+        getCompass('show compass').then(compass => compass.show());
 
         cy.get('.psv-compass').should('be.visible');
     });
@@ -65,8 +65,7 @@ describe('compass', () => {
     });
 
     it('should disable navigation', () => {
-        getPlugin<CompassPlugin>('compass', 'disable navigation')
-            .then(compass => compass.setOption('navigation', false));
+        getCompass('disable navigation').then(compass => compass.setOption('navigation', false));
 
         withCompassPosition(({ element, x, y, width, height }) => {
             const point = { clientX: x + width * .5, clientY: y + height * .75 };
@@ -97,8 +96,7 @@ describe('compass', () => {
 
         checkPosition({ yaw: Math.PI / 2, pitch: -1 });
 
-        getPlugin<CompassPlugin>('compass', 'set resetPitch')
-            .then(compass => compass.setOption('resetPitch', true));
+        getCompass('set resetPitch').then(compass => compass.setOption('resetPitch', true));
 
         withCompassPosition(({ element, x, y, width, height }) => {
             const point = { clientX: x + width * .5, clientY: y + height * .75 };
@@ -118,13 +116,14 @@ describe('compass', () => {
         backgroundSvg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="rgba(0, 0, 0, .5)"/></svg>',
     } satisfies CompassPluginConfig).forEach(([key, value]) => {
         it(`should set the ${key}`, () => {
-            getPlugin<CompassPlugin>('compass', `set ${key}`)
-                .then(compass => compass.setOption(key as any, value));
+            getCompass(`set ${key}`).then(compass => compass.setOption(key as any, value));
 
             if (key === 'navigationColor') {
                 withCompassPosition(({ element, x, y, width, height }) => {
+                    const point = { clientX: x + width * .5, clientY: y + height * .75 };
+
                     element
-                        .trigger('mousemove', { clientX: x + width * .5, clientY: y + height * .75 })
+                        .trigger('mousemove', point)
                         .compareScreenshots(`set-${key}`)
                         .trigger('mouseleave');
                 });
@@ -152,15 +151,13 @@ describe('compass', () => {
             ['bottom center', { x: vw / 2 - size / 2, y: vh - nav - margin - size }],
             ['bottom right', { x: vw - size - margin, y: vh - nav - margin - size }],
         ].forEach(([position, coords]: [string, Point]) => {
-            getPlugin<CompassPlugin>('compass', `set position ${position}`)
-                .then(compass => compass.setOption('position', position));
+            getCompass(`set position ${position}`).then(compass => compass.setOption('position', position));
 
             cy.get('.psv-compass')
-                .then(element => {
-                    const { x, y } = element[0].getBoundingClientRect();
-                    return { x, y } satisfies Point;
-                })
-                .should('deep.equal', coords);
+                .should(compass => {
+                    const { x, y } = compass[0].getBoundingClientRect();
+                    expect({ x, y }).to.deep.eq(coords);
+                });
         });
 
         getViewer('hide navbar')
@@ -172,8 +169,7 @@ describe('compass', () => {
             ['bottom center', { x: vw / 2 - size / 2, y: vh - margin - size }],
             ['bottom right', { x: vw - size - margin, y: vh - margin - size }],
         ].forEach(([position, coords]: [string, Point]) => {
-            getPlugin<CompassPlugin>('compass', `set position ${position}`)
-                .then(compass => compass.setOption('position', position));
+            getCompass(`set position ${position}`).then(compass => compass.setOption('position', position));
 
             cy.get('.psv-compass')
                 .then(element => {
@@ -185,46 +181,93 @@ describe('compass', () => {
     });
 
     it('should show hotspots', () => {
-        getPlugin<CompassPlugin>('compass', 'set hotspots')
-            .then(compass => {
-                compass.setHotspots([
-                    // @ts-ignore missing pitch
-                    { yaw: 0 },
-                    { yaw: Math.PI / 2, pitch: 0 },
-                    { yaw: Math.PI, pitch: -1 },
-                    { yaw: Math.PI * 3 / 2, pitch: 1 },
-                ]);
-            });
+        getCompass('set hotspots').then(compass => {
+            compass.setHotspots([
+                // @ts-ignore missing pitch
+                { yaw: 0 },
+                { yaw: Math.PI / 2, pitch: 0 },
+                { yaw: Math.PI, pitch: -1 },
+                { yaw: Math.PI * 3 / 2, pitch: 1 },
+            ]);
+        });
 
         cy.get('.psv-compass').compareScreenshots('hotspots');
     });
 
     it('should set hotspots color', () => {
-        getPlugin<CompassPlugin>('compass', 'set hotspots')
-            .then(compass => {
-                compass.setOption('hotspotColor', 'green')
+        getCompass('set hotspots').then(compass => {
+            compass.setOption('hotspotColor', 'green')
 
-                compass.setHotspots([
-                    { yaw: 0, pitch: 0 },
-                    { yaw: Math.PI / 2, pitch: 0, color: 'red' },
-                    { yaw: Math.PI, pitch: 0, color: 'rgba(255, 0, 0, 0.5)' },
-                    { yaw: Math.PI * 3 / 2, pitch: 0, color: '#ff000050' },
-                ]);
-            });
+            compass.setHotspots([
+                { yaw: 0, pitch: 0 },
+                { yaw: Math.PI / 2, pitch: 0, color: 'red' },
+                { yaw: Math.PI, pitch: 0, color: 'rgba(255, 0, 0, 0.5)' },
+                { yaw: Math.PI * 3 / 2, pitch: 0, color: '#ff000050' },
+            ]);
+        });
 
         cy.get('.psv-compass').compareScreenshots('hotspots-color');
     });
 
-    function withCompassPosition(cb: (res: { element: Cypress.Chainable<JQuery<HTMLElement>>, x: number, y: number, width: number, height: number }) => void) {
-        cy.get('.psv-compass')
-            .then(element => {
-                const { x, y, width, height } = element[0].getBoundingClientRect();
-
-                cb({
-                    element: cy.wrap(element, { log: false }),
-                    x, y, width, height,
-                });
+    it('should display markers', () => {
+        getPlugin<MarkersPlugin>('markers', 'set markers')
+            .then(markers => {
+                markers.setMarkers([
+                    {
+                        id: 'image',
+                        position: { yaw: Math.PI / 2, pitch: 0 },
+                        image: BASE_URL + 'pictos/pin-red.png',
+                        size: { width: 32, height: 32 },
+                        data: { compass: '#cc3333' },
+                    },
+                    {
+                        id: 'image-hidden',
+                        position: { yaw: Math.PI / 2, pitch: 1 },
+                        image: BASE_URL + 'pictos/pin-red.png',
+                        size: { width: 32, height: 32 },
+                    },
+                    {
+                        id: 'polygon',
+                        polygonPixels: [
+                            [2941 / 3, 1413 / 3], [3042 / 3, 1402 / 3], [3222 / 3, 1419 / 3], [3433 / 3, 1463 / 3],
+                            [3480 / 3, 1505 / 3], [3438 / 3, 1538 / 3], [3241 / 3, 1543 / 3], [3041 / 3, 1555 / 3],
+                            [2854 / 3, 1559 / 3], [2739 / 3, 1516 / 3], [2775 / 3, 1469 / 3], [2941 / 3, 1413 / 3],
+                        ],
+                        data: { compass: 'rgba(255, 0, 50, 0.8)' },
+                    },
+                    {
+                        id: 'polyline',
+                        polylinePixels: [
+                            [2478 / 3, 1635 / 3], [2184 / 3, 1747 / 3], [1674 / 3, 1953 / 3], [1166 / 3, 1852 / 3],
+                            [709 / 3, 1669 / 3], [301 / 3, 1519 / 3], [94 / 3, 1399 / 3], [34 / 3, 1356 / 3],
+                        ],
+                        data: { compass: 'rgba(80, 150, 50, 0.8)' },
+                    }
+                ]);
             });
+
+        cy.get('.psv-compass').compareScreenshots('markers');
+    });
+
+    function withCompassPosition(cb: (res: {
+        element: Cypress.Chainable<JQuery<HTMLElement>>,
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+    }) => void) {
+        cy.get('.psv-compass').then(element => {
+            const { x, y, width, height } = element[0].getBoundingClientRect();
+
+            cb({
+                element: cy.wrap(element, NO_LOG),
+                x, y, width, height,
+            });
+        });
+    }
+
+    function getCompass(log: string) {
+        return getPlugin<CompassPlugin>('compass', log);
     }
 
 });

@@ -1,6 +1,6 @@
-import { getViewer, waitViewerReady } from '../utils';
+import { getViewer, waitViewerReady } from '../../utils';
 
-describe('navbar', () => {
+describe('core: navbar', () => {
     beforeEach(() => {
         localStorage.photoSphereViewer_touchSupport = 'false';
         cy.visit('e2e/navbar.html');

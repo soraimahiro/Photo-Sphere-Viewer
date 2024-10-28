@@ -62,7 +62,9 @@ export class GalleryPlugin extends AbstractConfigurablePlugin<
 
         if (this.config.visibleOnLoad) {
             this.viewer.addEventListener(events.ReadyEvent.type, () => {
-                this.show();
+                if (this.items.length) {
+                    this.show();
+                }
             }, { once: true });
         }
 
@@ -172,6 +174,10 @@ export class GalleryPlugin extends AbstractConfigurablePlugin<
             const item = this.items.find((i) => i.id === this.currentId);
             this.currentId = item?.id;
             this.gallery.setActive(this.currentId);
+        }
+
+        if (!this.items.length) {
+            this.gallery.hide();
         }
 
         this.__updateButton();

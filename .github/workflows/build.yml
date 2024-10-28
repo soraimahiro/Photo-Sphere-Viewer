@@ -75,8 +75,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: setup
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            docs:
+              - 'docs/**'
+              - 'package.json'
+
+      - if: steps.changes.outputs.docs == 'true'
+        name: setup
         uses: ./.github/workflows/shared/setup
 
-      - name: build-doc
+      - if: steps.changes.outputs.docs == 'true'
+        name: build-doc
         run: yarn ci:build-doc
