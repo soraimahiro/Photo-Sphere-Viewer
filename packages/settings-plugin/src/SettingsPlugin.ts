@@ -106,7 +106,7 @@ export class SettingsPlugin extends AbstractPlugin<SettingsPluginEvents> {
         this.settings.push(setting);
 
         if (this.component.isVisible()) {
-            this.component.show(); // re-render
+            this.showSettings(); // re-render
         }
 
         this.updateButton();
@@ -172,28 +172,32 @@ export class SettingsPlugin extends AbstractPlugin<SettingsPluginEvents> {
      * Hides the settings menu
      */
     hideSettings() {
+        const button = this.__getButton();
+        button?.toggleActive(false);
         this.component.hide();
-        this.updateButton();
     }
 
     /**
      * Shows the settings menu
      */
     showSettings() {
-        const button = this.viewer.navbar.getButton(SettingsButton.id, false);
-        const buttonPosition = button?.container.getBoundingClientRect();
-        this.component.show(buttonPosition);
-        this.updateButton();
+        const button = this.__getButton();
+        this.component.show(button?.container.getBoundingClientRect());
+        button?.toggleActive(true);
     }
 
     /**
      * Updates the badge in the button
      */
     updateButton() {
-        const value = this.settings.find((s) => s.badge)?.badge();
-        const button = this.viewer.navbar.getButton(SettingsButton.id, false) as SettingsButton;
-        button?.toggleActive(this.component.isVisible());
-        button?.setBadge(value);
+        const button = this.__getButton();
+        if (this.settings.length) {
+            const value = this.settings.find((s) => s.badge)?.badge();
+            button?.show();
+            button?.setBadge(value);
+        } else {
+            button?.hide();
+        }
     }
 
     /**
@@ -228,5 +232,9 @@ export class SettingsPlugin extends AbstractPlugin<SettingsPluginEvents> {
         }
 
         this.updateButton();
+    }
+
+    private __getButton() {
+        return this.viewer.navbar.getButton(SettingsButton.id, false) as SettingsButton;
     }
 }

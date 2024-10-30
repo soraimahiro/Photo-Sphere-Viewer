@@ -22,3 +22,9 @@ const testProcess = spawn('yarn', TEST_SCRIPT.split(' '), {
 testProcess.on('exit', () => {
     serveProcess.kill();
 });
+
+process.on('SIGINT', () => {
+    testProcess.kill();
+    serveProcess.kill();
+    process.exit();
+});

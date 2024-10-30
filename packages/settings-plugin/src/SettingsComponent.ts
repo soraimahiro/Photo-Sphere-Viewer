@@ -64,12 +64,16 @@ export class SettingsComponent extends AbstractComponent {
             const menuWidth = this.container.offsetWidth;
 
             if (menuWidth >= buttonLeft + buttonWidth) {
+                // if the button is close to the left, stick the menu to the left side
                 this.container.style.left = '0px';
-            } else if (buttonLeft + menuWidth < viewerRect.width) {
-                this.container.style.left = `${buttonLeft}px`;
             } else if (menuWidth >= buttonRight + buttonWidth) {
+                // if the button is close to the right, stick the menu to the right side
                 this.container.style.right = '0px';
+            } else if (buttonLeft + menuWidth < viewerRect.width) {
+                // if there is enough space on the right of the button, stick the menu to the left of the button
+                this.container.style.left = `${buttonLeft}px`;
             } else {
+                // else stick to the right of the button
                 this.container.style.right = `${buttonRight}px`;
             }
         } else {

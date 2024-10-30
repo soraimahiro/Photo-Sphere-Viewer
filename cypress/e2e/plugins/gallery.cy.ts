@@ -3,15 +3,15 @@ import { getPlugin, getViewer, waitViewerReady } from '../../utils';
 import { BASE_URL } from '../../utils/constants';
 
 describe('plugin: gallery', () => {
-    let first = true;
-
     beforeEach(() => {
-        cy.visit('e2e/gallery.html');
+        cy.visit('e2e/plugins/gallery.html');
         waitViewerReady();
-        if (first) { // wait for async thumbnails
-            cy.wait(1000);
-            first = false;
-        }
+        cy.waitForResources(
+            'key-biscayne-1-thumb.jpg',
+            'key-biscayne-2-thumb.jpg',
+            'key-biscayne-3-thumb.jpg',
+            'key-biscayne-4-thumb.jpg',
+        );
         // createBaseSnapshot();
     });
 
@@ -31,6 +31,12 @@ describe('plugin: gallery', () => {
         viewportWidth: 400,
         viewportHeight: 800,
     }, () => {
+        cy.waitForResources(
+            'key-biscayne-5-thumb.jpg',
+            'key-biscayne-6-thumb.jpg',
+            'key-biscayne-7-thumb.jpg',
+        );
+
         cy.get('.psv-gallery')
             .should(gallery => {
                 const { x, y, width, height } = gallery[0].getBoundingClientRect();
@@ -92,7 +98,12 @@ describe('plugin: gallery', () => {
 
     it('should change thumbnails size', () => {
         getGallery('set thumbnailSize').then(gallery => gallery.setOption('thumbnailSize', { width: 100, height: 100 }));
-        cy.wait(500); // more async thumbnails
+        
+        cy.waitForResources(
+            'key-biscayne-5-thumb.jpg',
+            'key-biscayne-6-thumb.jpg',
+            'key-biscayne-7-thumb.jpg',
+        );
 
         cy.get('.psv-gallery').compareScreenshots('set-thumbnailSize');
     });
@@ -148,17 +159,14 @@ describe('plugin: gallery', () => {
         cy.get('.psv-gallery').should('not.be.visible');
     });
 
-    function getGallery(log: string) {
-        return getPlugin<GalleryPlugin>('gallery', log);
-    }
-
-});
-
-describe('plugin: gallery', () => {
     it('should not be visible on load', () => {
-        cy.visit('e2e/gallery.html?visibleOnLoad=false');
+        cy.visit('e2e/plugins/gallery.html?visibleOnLoad=false');
         waitViewerReady();
 
         cy.get('.psv-gallery').should('not.be.visible');
     });
+
+    function getGallery(log: string) {
+        return getPlugin<GalleryPlugin>('gallery', log);
+    }
 });

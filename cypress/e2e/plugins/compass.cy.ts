@@ -6,7 +6,7 @@ import { BASE_URL, NO_LOG } from '../../utils/constants';
 
 describe('plugin: compass', () => {
     beforeEach(() => {
-        cy.visit('e2e/compass.html');
+        cy.visit('e2e/plugins/compass.html');
         waitViewerReady();
         // createBaseSnapshot();
     });

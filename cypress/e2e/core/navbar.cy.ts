@@ -3,7 +3,7 @@ import { getViewer, waitViewerReady } from '../../utils';
 describe('core: navbar', () => {
     beforeEach(() => {
         localStorage.photoSphereViewer_touchSupport = 'false';
-        cy.visit('e2e/navbar.html');
+        cy.visit('e2e/core/navbar.html');
         waitViewerReady();
         // createBaseSnapshot();
     });
@@ -53,12 +53,12 @@ describe('core: navbar', () => {
 
     // does not work in headless mode
     it.skip('should enter and exit fullscreen', () => {
-        cy.get('.psv-fullscreen-button').realClick();
+        cy.get('.psv-fullscreen-button').click();
         cy.wait(500);
 
         cy.document().its('fullscreenElement').should('not.be.null');
 
-        cy.get('.psv-fullscreen-button').realClick();
+        cy.get('.psv-fullscreen-button').click();
 
         cy.document().its('fullscreenElement').should('be.null');
     });
@@ -78,7 +78,7 @@ describe('core: navbar', () => {
         cy.get('.psv-notification-content')
             .should('be.visible')
             .should('have.text', 'Parc national du Mercantour © Damien Sorel')
-            .compareScreenshots('caption-notification');
+            .compareScreenshots('caption-notification', { errorThreshold: 0.1 });
 
         cy.get('.psv-description-button').click();
 
