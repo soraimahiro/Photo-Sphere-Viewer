@@ -3,6 +3,8 @@ import { configureVisualRegression } from 'cypress-visual-regression';
 // @ts-ignore
 import  cypressMochawesomeReporterPlugin from 'cypress-mochawesome-reporter/plugin';
 
+const BRANCH_NAME = process.env.GITHUB_REF_NAME ?? 'dev';
+
 export default defineConfig({
     e2e: {
         viewportWidth: 1280,
@@ -56,5 +58,8 @@ export default defineConfig({
         // cypress-mochawesome-reporter
         removeJsonsFolderAfterMerge: false,
         cdn: true,
+        charts: true,
+        reportPageTitle: 'Photo Sphere Viewer',
+        reportTitle: `Photo Sphere Viewer (${BRANCH_NAME})`,
     },
 });

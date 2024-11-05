@@ -2,7 +2,7 @@ name: setup
 
 inputs:
   turbo-cache:
-    default: True
+    default: true
 
 runs:
   using: composite

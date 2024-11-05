@@ -7,6 +7,7 @@
 import { createHash } from 'crypto';
 import { createReadStream, existsSync } from 'fs';
 import { readdir } from 'fs/promises';
+import { exec } from 'child_process';
 import path from 'path';
 import yargs from 'yargs';
 import Queue from 'queue';
@@ -32,6 +33,10 @@ import Queue from 'queue';
         throw `Folder ${config.rootFolder} does not exist`;
     }
 
+    if (config.branch === 'main') {
+        config.branch = null;
+    }
+
     const files = await listFilesWithHashes(config.rootFolder, config.exclude, 'sha1');
     // TODO zip functions
     const functions = {};// await listFilesWithHashes(config.functionsFolder, null, 'sha256');
@@ -40,6 +45,14 @@ import Queue from 'queue';
 
     await uploadFiles(config.rootFolder, files, deploy);
     // await uploadFunctions(config.functionsFolder, functions, deploy);
+
+    if (!config.branch) {
+        await publishDeploy(deploy);
+    }
+
+    if (process.env.CI) {
+        exec(`echo "deploy_url=${config.branch ? deploy.deploy_ssl_url : deploy.ssl_url}" >> $GITHUB_OUTPUT`);
+    }
 })();
 
 /**
@@ -109,16 +122,32 @@ async function createDeploy(branch, files, functions) {
             files,
             functions: Object.entries(functions).reduce((res, [name, hash]) => ({
                 ...res,
-                [name.replace('.zip')]: hash,
+                [name.replace('.zip', '')]: hash,
             }), {}),
         }),
     });
 
     const deploy = await result.json();
 
-    console.log(`Created deploy #${deploy.id} (${deploy.deploy_url}). ${deploy.required.length} new files.`)
+    console.log(`Created deploy #${deploy.id} (${deploy.deploy_ssl_url}). ${deploy.required.length} new files.`)
 
     return deploy;
+}
+
+/**
+ * Publish the deploy
+ */
+async function publishDeploy(deploy) {
+    const result = await fetch(`https://api.netlify.com/api/v1/sites/${process.env.NETLIFY_SITE_ID}/deploys/${deploy.id}/restore`, {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + process.env.NETLIFY_AUTH_TOKEN,
+        },
+    });
+
+    deploy = await result.json();
+
+    console.log(`Published deploy #${deploy.id} (${deploy.ssl_url}).`)
 }
 
 /**

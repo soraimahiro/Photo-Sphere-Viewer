@@ -26,7 +26,7 @@ jobs:
 
       - name: test summary
         uses: phoenix-actions/test-reporting@v15
-        if: ${{ (success() || failure()) && github.repository == 'mistic100/Photo-Sphere-Viewer' }}
+        if: ${{ !cancelled() }}
         with:
           name: build
           output-to: step-summary
@@ -50,23 +50,21 @@ jobs:
           yarn ci:build
           yarn ci:e2e
 
-      - name: test report
-        if: ${{ (success() || failure()) && github.repository == 'mistic100/Photo-Sphere-Viewer' && github.event_name != 'pull_request' }}
-        run: |
-          branch=$([ "${{ github.ref_name }}" == "main" ] && echo "" || echo "${{ github.ref_name }}")
-          node ./build/deploy-netlify.mjs --rootFolder=cypress/reports/html --exclude=.jsons --branch=$branch
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_REPORTS_SITE_ID }}
-
       - name: test summary
         uses: phoenix-actions/test-reporting@v15
-        if: ${{ (success() || failure()) && github.repository == 'mistic100/Photo-Sphere-Viewer' }}
+        if: ${{ !cancelled() }}
         with:
           name: e2e
           output-to: step-summary
           path: 'cypress/reports/html/.jsons/*.json'
           reporter: mochawesome-json
+
+      - name: deploy report
+        uses: ./.github/workflows/shared/deploy-e2e-report
+        if: ${{ !cancelled() && github.repository == 'mistic100/Photo-Sphere-Viewer' && github.event_name != 'pull_request' }}
+        with:
+          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify-site-id: ${{ secrets.NETLIFY_REPORTS_SITE_ID }}
 
   build-doc:
     runs-on: ubuntu-latest
