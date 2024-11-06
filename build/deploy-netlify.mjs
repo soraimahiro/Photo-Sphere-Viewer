@@ -12,6 +12,8 @@ import path from 'path';
 import yargs from 'yargs';
 import Queue from 'queue';
 
+const MAX_RETRIES = 5;
+
 (async () => {
     // --branch (optional)
     // --rootFolder
@@ -111,43 +113,69 @@ async function listFilesWithHashes(dir, exclude, hashfn) {
  * Creates a new deployment on Netlify
  */
 async function createDeploy(branch, files, functions) {
-    const result = await fetch(`https://api.netlify.com/api/v1/sites/${process.env.NETLIFY_SITE_ID}/deploys`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + process.env.NETLIFY_AUTH_TOKEN,
-        },
-        body: JSON.stringify({
-            branch,
-            files,
-            functions: Object.entries(functions).reduce((res, [name, hash]) => ({
-                ...res,
-                [name.replace('.zip', '')]: hash,
-            }), {}),
-        }),
-    });
+    try {
+        const result = await retryFetch(`https://api.netlify.com/api/v1/sites/${process.env.NETLIFY_SITE_ID}/deploys`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + process.env.NETLIFY_AUTH_TOKEN,
+            },
+            body: JSON.stringify({
+                branch,
+                files,
+                functions: Object.entries(functions).reduce((res, [name, hash]) => ({
+                    ...res,
+                    [name.replace('.zip', '')]: hash,
+                }), {}),
+            }),
+        });
 
-    const deploy = await result.json();
+        const deploy = await result.json();
 
-    console.log(`Created deploy #${deploy.id} (${deploy.deploy_ssl_url}). ${deploy.required.length} new files.`)
+        console.log(`Created deploy #${deploy.id} (${deploy.deploy_ssl_url}). ${deploy.required.length} new files.`);
 
-    return deploy;
+        return deploy;
+
+    } catch {
+        console.error('Cannot create deploy');
+        process.exit(1);
+    }
 }
 
 /**
  * Publish the deploy
  */
 async function publishDeploy(deploy) {
-    const result = await fetch(`https://api.netlify.com/api/v1/sites/${process.env.NETLIFY_SITE_ID}/deploys/${deploy.id}/restore`, {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer ' + process.env.NETLIFY_AUTH_TOKEN,
-        },
-    });
+    try {
+        await retryFetch(`https://api.netlify.com/api/v1/sites/${process.env.NETLIFY_SITE_ID}/deploys/${deploy.id}/restore`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + process.env.NETLIFY_AUTH_TOKEN,
+            },
+        });
 
-    deploy = await result.json();
+        console.log(`Published deploy #${deploy.id} (${deploy.ssl_url}).`);
+    } catch {
+        console.warn(`Cannot publish deploy`);
+    }
+}
 
-    console.log(`Published deploy #${deploy.id} (${deploy.ssl_url}).`)
+/**
+ * Cancel the deploy
+ */
+async function cancelDeploy(deploy) {
+    try {
+        await retryFetch(`https://api.netlify.com/api/v1/deploys/${deploy.id}/cancel`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + process.env.NETLIFY_AUTH_TOKEN,
+            },
+        });
+
+        console.log(`Cancelled deploy #${deploy.id} (${deploy.ssl_url}).`);
+    } catch {
+        console.warn(`Cannot cancel deploy`);
+    }
 }
 
 /**
@@ -172,7 +200,7 @@ async function uploadFiles(dir, files, deploy) {
 
             console.log(`Upload ${file}`);
 
-            fetch(`https://api.netlify.com/api/v1/deploys/${deploy.id}/files/${encodeURIComponent(file)}`, {
+            retryFetch(`https://api.netlify.com/api/v1/deploys/${deploy.id}/files/${encodeURIComponent(file)}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/octet-stream',
@@ -186,11 +214,17 @@ async function uploadFiles(dir, files, deploy) {
         });
     });
 
-    return new Promise((resolve, reject) => {
-        queue.start((err) => {
-            err ? reject(err) : resolve();
+    try {
+        await new Promise((resolve, reject) => {
+            queue.start((err) => {
+                err ? reject(err) : resolve();
+            });
         });
-    });
+    } catch {
+        console.error(`Cannot upload files`);
+        await cancelDeploy(deploy);
+        process.exit(1);
+    }
 }
 
 /**
@@ -227,9 +261,32 @@ async function uploadFunctions(dir, functions, deploy) {
         });
     });
 
-    return new Promise((resolve, reject) => {
-        queue.start((err) => {
-            err ? reject(err) : resolve();
+    try {
+        await new Promise((resolve, reject) => {
+            queue.start((err) => {
+                err ? reject(err) : resolve();
+            });
         });
-    });
+    } catch {
+        console.error(`Cannot upload functions`);
+        await cancelDeploy(deploy);
+        process.exit(1);
+    }
+}
+
+async function retryFetch(url, params) {
+    for (let i = 0; i < MAX_RETRIES; i++) {
+        const result = await fetch(url, params);
+
+        if (result.status < 300) {
+            return result;
+        }
+
+        if (i < MAX_RETRIES - 1) {
+            console.warn(`http status=${result.status}; retry ${i + 1}/${MAX_RETRIES}`);
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+    }
+
+    throw new Error();
 }

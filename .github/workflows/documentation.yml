@@ -1,0 +1,31 @@
+name: documentation
+
+on:
+  push:
+    branches:
+      - '*'
+    paths-ignore:
+      - 'cypress/**'
+      - 'examples/**'
+      - 'packages/**'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'cypress/**'
+      - 'examples/**'
+      - 'packages/**'
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: setup
+        uses: ./.github/workflows/shared/setup
+
+      - name: build
+        run: yarn ci:build-doc
