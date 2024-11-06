@@ -36,7 +36,7 @@ const MAX_RETRIES = 5;
     }
 
     if (config.branch === 'main') {
-        config.branch = null;
+        config.branch = undefined;
     }
 
     const files = await listFilesWithHashes(config.rootFolder, config.exclude, 'sha1');
