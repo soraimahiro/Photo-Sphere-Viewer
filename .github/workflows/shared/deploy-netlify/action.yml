@@ -40,4 +40,4 @@ runs:
         status: success
         env: ${{ steps.deployment.outputs.env }}
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-        env_url: ${{ steps.netlify.deploy_url }}
+        env_url: ${{ steps.netlify.outputs.deploy_url }}

@@ -5,9 +5,8 @@
  */
 
 import { createHash } from 'crypto';
-import { createReadStream, existsSync } from 'fs';
+import { createReadStream, existsSync, writeFileSync } from 'fs';
 import { readdir } from 'fs/promises';
-import { exec } from 'child_process';
 import path from 'path';
 import yargs from 'yargs';
 import Queue from 'queue';
@@ -53,7 +52,7 @@ const MAX_RETRIES = 5;
     }
 
     if (process.env.CI) {
-        exec(`echo "deploy_url=${config.branch ? deploy.deploy_ssl_url : deploy.ssl_url}" >> $GITHUB_OUTPUT`);
+        writeFileSync(process.env.GITHUB_OUTPUT, `deploy_url=${config.branch ? deploy.deploy_ssl_url : deploy.ssl_url}`, 'utf-8');
     }
 })();
 
