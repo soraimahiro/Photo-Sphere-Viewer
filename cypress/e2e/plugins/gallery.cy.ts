@@ -1,5 +1,5 @@
 import type { GalleryPlugin } from '@photo-sphere-viewer/gallery-plugin';
-import { getPlugin, getViewer, waitViewerReady } from '../../utils';
+import { callPlugin, callViewer, checkPanorama, setPanorama, waitViewerReady } from '../../utils';
 import { BASE_URL } from '../../utils/constants';
 
 describe('plugin: gallery', () => {
@@ -22,7 +22,7 @@ describe('plugin: gallery', () => {
     });
 
     it('should hide gallery on panel open', () => {
-        getViewer('open panel').then(viewer => viewer.panel.show('Lorem ipsum'));
+        callViewer('open panel').then(viewer => viewer.panel.show('Lorem ipsum'));
 
         cy.get('.psv-gallery').should('not.be.visible');
     });
@@ -63,14 +63,12 @@ describe('plugin: gallery', () => {
     it('should highlight the current item', () => {
         cy.get('[data-psv-gallery-item=sphere]').should('have.class', 'psv-gallery-item--active');
 
-        getViewer('change panorama').then(viewer => viewer.setPanorama(BASE_URL + 'sphere-test.jpg', { transition: false }));
-        waitViewerReady();
+        setPanorama('sphere-test.jpg');
 
         cy.get('[data-psv-gallery-item=sphere]').should('not.have.class', 'psv-gallery-item--active');
         cy.get('[data-psv-gallery-item=test-sphere]').should('have.class', 'psv-gallery-item--active');
 
-        getViewer('change panorama').then(viewer => viewer.setPanorama(BASE_URL + 'sphere-cropped.jpg', { transition: false }));
-        waitViewerReady();
+        setPanorama('sphere-cropped.jpg');
 
         cy.get('.psv-gallery-item--active').should('not.exist');
     });
@@ -79,7 +77,7 @@ describe('plugin: gallery', () => {
         cy.get('[data-psv-gallery-item=test-sphere]').click();
         waitViewerReady();
 
-        getViewer('check panorama').then(viewer => expect(viewer.config.panorama as string).to.eq(BASE_URL + 'sphere-test.jpg'));
+        checkPanorama('sphere-test.jpg');
         cy.get('.psv-caption-content').should('have.text', 'Test sphere'); // use name as caption
 
         cy.get('[data-psv-gallery-item=1]').click();
@@ -89,7 +87,7 @@ describe('plugin: gallery', () => {
     });
 
     it('should hide on click', () => {
-        getGallery('set hideOnClick').then(gallery => gallery.setOption('hideOnClick', true));
+        callGallery('set hideOnClick').then(gallery => gallery.setOption('hideOnClick', true));
 
         cy.get('[data-psv-gallery-item=test-sphere]').click();
 
@@ -97,7 +95,7 @@ describe('plugin: gallery', () => {
     });
 
     it('should change thumbnails size', () => {
-        getGallery('set thumbnailSize').then(gallery => gallery.setOption('thumbnailSize', { width: 100, height: 100 }));
+        callGallery('set thumbnailSize').then(gallery => gallery.setOption('thumbnailSize', { width: 100, height: 100 }));
         
         cy.waitForResources(
             'key-biscayne-5-thumb.jpg',
@@ -109,7 +107,7 @@ describe('plugin: gallery', () => {
     });
 
     it('should change the items', () => {
-        getGallery('set items').then(gallery => {
+        callGallery('set items').then(gallery => {
             gallery.setItems([
                 {
                     id: 1,
@@ -130,7 +128,7 @@ describe('plugin: gallery', () => {
     it('should change the items w. custom callback', () => {
         const callback = cy.stub();
 
-        getGallery('set items').then(gallery => {
+        callGallery('set items').then(gallery => {
             gallery.setItems([
                 {
                     id: 1,
@@ -148,11 +146,11 @@ describe('plugin: gallery', () => {
             });
 
         // not changed
-        getViewer('check panorama').then(viewer => expect(viewer.config.panorama as string).to.eq(BASE_URL + 'sphere-small.jpg'));
+        checkPanorama('sphere-small.jpg');
     });
 
     it('should hide the button when no items', () => {
-        getGallery('set items').then(gallery => gallery.setItems([]));
+        callGallery('set items').then(gallery => gallery.setItems([]));
 
         cy.get('.psv-gallery-button').should('not.be.visible');
 
@@ -166,7 +164,7 @@ describe('plugin: gallery', () => {
         cy.get('.psv-gallery').should('not.be.visible');
     });
 
-    function getGallery(log: string) {
-        return getPlugin<GalleryPlugin>('gallery', log);
+    function callGallery(log: string) {
+        return callPlugin<GalleryPlugin>('gallery', log);
     }
 });

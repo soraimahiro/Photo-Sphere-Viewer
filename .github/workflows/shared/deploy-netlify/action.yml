@@ -28,7 +28,7 @@ runs:
     - name: deploy
       id: netlify
       shell: bash
-      run: node ./build/deploy-netlify.mjs --rootFolder=${{ inputs.root-folder }} --exclude=${{ inputs.excludes }} --functionsFolder=${{ inputs.functions-folder }} --branch=${{ github.ref_name }}
+      run: node ./build/deploy-netlify.mjs --rootFolder=${{ inputs.root-folder }} --exclude=${{ inputs.excludes }} --functionsFolder=${{ inputs.functions-folder }}
       env:
         NETLIFY_AUTH_TOKEN: ${{ inputs.auth-token }}
         NETLIFY_SITE_ID: ${{ inputs.site-id }}

@@ -1,8 +1,8 @@
 import type { AbstractPlugin, SphericalPosition, Viewer } from '@photo-sphere-viewer/core';
-import { NO_LOG } from './constants';
+import { BASE_URL, NO_LOG } from './constants';
 
 export function waitViewerReady() {
-    getViewer('wait ready').then(viewer => {
+    callViewer('wait ready').then(viewer => {
         if (!viewer.state.ready) {
             return new Promise(resolve => {
                 viewer.addEventListener('ready', () => {
@@ -17,13 +17,13 @@ export function waitViewerReady() {
     });
 }
 
-export function getViewer(log: string): Cypress.Chainable<Viewer> {
+export function callViewer(log: string): Cypress.Chainable<Viewer> {
     cy.log(`Viewer: ${log}`);
     return cy.window(NO_LOG)
         .its('viewer', NO_LOG);
 }
 
-export function getPlugin<T extends AbstractPlugin<any>>(id: string, log: string | false): Cypress.Chainable<T> {
+export function callPlugin<T extends AbstractPlugin<any>>(id: string, log: string | false): Cypress.Chainable<T> {
     if (log !== false) {
         cy.log(`${id}: ${log}`);
     }
@@ -33,8 +33,19 @@ export function getPlugin<T extends AbstractPlugin<any>>(id: string, log: string
 }
 
 export function checkPosition(position: SphericalPosition) {
-    getViewer('check position')
+    callViewer('check position')
         .then(viewer => expect(viewer.getPosition()).to.deep.eq(position));
+}
+
+export function checkPanorama(name: string) {
+    callViewer('check panorama')
+        .then(viewer => expect(viewer.config.panorama as string).to.eq(BASE_URL + name));
+}
+
+export function setPanorama(name: string) {
+    callViewer('change panorama')
+        .then(viewer => viewer.setPanorama(BASE_URL + name, { transition: false }));
+    waitViewerReady();
 }
 
 export function createBaseSnapshot() {

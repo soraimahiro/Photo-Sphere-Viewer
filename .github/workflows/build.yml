@@ -63,9 +63,18 @@ jobs:
           path: 'cypress/reports/html/.jsons/*.json'
           reporter: mochawesome-json
 
+      - name: report artifact
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: e2e-report-${{ env.REF_NAME_SLUG }}-${{ env.SHORT_SHA }}
+          path: |
+            cypress/reports/html
+            !cypress/reports/html/.jsons
+
       - name: deploy report
         uses: ./.github/workflows/shared/deploy-netlify
-        if: ${{ !cancelled() && github.repository == 'mistic100/Photo-Sphere-Viewer' && github.event_name != 'pull_request' }}
+        if: ${{ !cancelled() && github.repository == 'mistic100/Photo-Sphere-Viewer' && github.ref_name == 'main' }}
         with:
           env: cypress
           root-folder: cypress/reports/html

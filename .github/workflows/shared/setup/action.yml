@@ -17,6 +17,7 @@ runs:
       run: |
         echo "YARN_CACHE_DIR=$(yarn cache dir)" >> $GITHUB_ENV
         echo "SHORT_SHA=`echo ${{ github.sha }} | cut -c1-8`" >> $GITHUB_ENV
+        echo "REF_NAME_SLUG=${GITHUB_REF_NAME////_}" >> $GITHUB_ENV
 
     - name: yarn cache
       uses: actions/cache@v4

@@ -1,5 +1,5 @@
 import type { OptionsSetting, SettingsPlugin, ToggleSetting } from '@photo-sphere-viewer/settings-plugin';
-import { getPlugin, getViewer, waitViewerReady } from '../../utils';
+import { callPlugin, callViewer, waitViewerReady } from '../../utils';
 
 describe('plugin: settings', () => {
     beforeEach(() => {
@@ -50,7 +50,7 @@ describe('plugin: settings', () => {
             ['download settings caption', 'left', '0px'],
             ['caption settings fullscreen', 'right', '0px'],
         ].forEach(([navbar, prop, value]) => {
-            getViewer(`navbar "${navbar}"`).then(viewer => viewer.setOption('navbar', navbar));
+            callViewer(`navbar "${navbar}"`).then(viewer => viewer.setOption('navbar', navbar));
 
             cy.get('.psv-settings-button').click();
 
@@ -140,17 +140,21 @@ describe('plugin: settings', () => {
             });
         });
 
-        cy.get('.psv-settings-button').compareScreenshots('badge-a');
+        cy.get('.psv-settings-button')
+            .should('include.text', 'A')
+            .compareScreenshots('badge-a');
 
         cy.get('.psv-settings-button').click();
         cy.get('[data-setting-id=options-setting]').click();
         cy.get('[data-option-id=B]').click();
 
-        cy.get('.psv-settings-button').compareScreenshots('badge-b');
+        cy.get('.psv-settings-button')
+            .should('include.text', 'B')
+            .compareScreenshots('badge-b');
     });
 
 
     function getSettings(log: string) {
-        return getPlugin<SettingsPlugin>('settings', log);
+        return callPlugin<SettingsPlugin>('settings', log);
     }
 });

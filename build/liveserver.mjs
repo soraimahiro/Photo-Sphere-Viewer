@@ -10,6 +10,7 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
 const EXAMPLES_DIR = 'examples';
+const CYPRESS_DIR = 'cypress/pages';
 const PACKAGES_DIR = 'packages';
 const DIST_DIR = 'dist';
 
@@ -31,12 +32,13 @@ liveServer.start({
     open: !e2e ? `/index.html#ip=${currentIp}` : null,
     watch: [
         path.join(rootDir, EXAMPLES_DIR),
+        path.join(rootDir, CYPRESS_DIR),
         ...packages.map((name) => path.join(rootDir, PACKAGES_DIR, name, DIST_DIR)),
     ],
     mount: [
         ['/node_modules', path.join(rootDir, 'node_modules')],
-        ['/data', path.join(rootDir, '..', 'photo-sphere-viewer-data/assets')],
-        ...packages.map((name) => [`/${DIST_DIR}/${name}`, path.join(rootDir, PACKAGES_DIR, name, DIST_DIR)]),
+        ['/e2e', path.join(CYPRESS_DIR)],
+        ...packages.map((name) => [`/dist/${name}`, path.join(rootDir, PACKAGES_DIR, name, DIST_DIR)]),
     ],
     https: {
         cert: fakeCert,

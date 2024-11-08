@@ -14,7 +14,6 @@ import Queue from 'queue';
 const MAX_RETRIES = 5;
 
 (async () => {
-    // --branch (optional)
     // --rootFolder
     // --functionsFolder (unsupported)
     // --exclude (optional)
@@ -34,25 +33,19 @@ const MAX_RETRIES = 5;
         throw `Folder ${config.rootFolder} does not exist`;
     }
 
-    if (config.branch === 'main') {
-        config.branch = undefined;
-    }
-
     const files = await listFilesWithHashes(config.rootFolder, config.exclude, 'sha1');
     // TODO zip functions
     const functions = {};// await listFilesWithHashes(config.functionsFolder, null, 'sha256');
 
-    const deploy = await createDeploy(config.branch, files, functions);
+    const deploy = await createDeploy(files, functions);
 
     await uploadFiles(config.rootFolder, files, deploy);
     // await uploadFunctions(config.functionsFolder, functions, deploy);
 
-    if (!config.branch) {
-        await publishDeploy(deploy);
-    }
+    await publishDeploy(deploy);
 
     if (process.env.CI) {
-        writeFileSync(process.env.GITHUB_OUTPUT, `deploy_url=${config.branch ? deploy.deploy_ssl_url : deploy.ssl_url}`, 'utf-8');
+        writeFileSync(process.env.GITHUB_OUTPUT, `deploy_url=${deploy.ssl_url}`, 'utf-8');
     }
 })();
 
@@ -111,7 +104,7 @@ async function listFilesWithHashes(dir, exclude, hashfn) {
 /**
  * Creates a new deployment on Netlify
  */
-async function createDeploy(branch, files, functions) {
+async function createDeploy(files, functions) {
     try {
         const result = await retryFetch(`https://api.netlify.com/api/v1/sites/${process.env.NETLIFY_SITE_ID}/deploys`, {
             method: 'POST',
@@ -120,7 +113,6 @@ async function createDeploy(branch, files, functions) {
                 'Authorization': 'Bearer ' + process.env.NETLIFY_AUTH_TOKEN,
             },
             body: JSON.stringify({
-                branch,
                 files,
                 functions: Object.entries(functions).reduce((res, [name, hash]) => ({
                     ...res,
