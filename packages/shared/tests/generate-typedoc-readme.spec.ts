@@ -6,6 +6,10 @@ import assert from 'assert';
 const testDir = path.join(__dirname, 'fixtures/generate-typedoc-readme');
 
 describe('generate-typedoc-readme', () => {
+    beforeEach(() => {
+        execSync(`git clean -Xdf`, { cwd: testDir });
+    });
+
     it('should generate the readme', () => {
         execSync(`node ${path.join(__dirname, '../../../build/generate-typedoc-readme.mjs')}`, { cwd: testDir });
 

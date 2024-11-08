@@ -7,25 +7,38 @@
     ".stylelintrc.json",
     "packages/shared/*.{ts,scss,glsl}"
   ],
-  "pipeline": {
+  "tasks": {
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["src/**"],
-      "outputs": ["dist/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "src/**"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
     "lint": {
-      "inputs": ["src/**"]
+      "inputs": [
+        "src/**"
+      ]
     },
-    "photo-sphere-viewer-e2e#lint": {
-      "inputs": ["e2e/**", "support/**", "utils/**"]
+    "@photo-sphere-viewer/e2e#lint": {
+      "inputs": [
+        "e2e/**",
+        "support/**",
+        "utils/**"
+      ]
     },
     "test": {
-      "inputs": ["src/**"],
-      "outputs": ["reports/**"]
-    },
-    "build-doc": {},
-    "//#build-doc": {
-      "dependsOn": ["photo-sphere-viewer-doc#build-doc"]
+      "inputs": [
+        "src/**",
+        "tests/**"
+      ],
+      "outputs": [
+        "reports/**"
+      ]
     },
     "watch": {
       "cache": false,
@@ -35,15 +48,28 @@
       "cache": false,
       "persistent": true
     },
+    "build-doc": {
+      "cache": false
+    },
+    "//#build-doc": {
+      "dependsOn": [
+        "@photo-sphere-viewer/docs#build-doc"
+      ],
+      "cache": false
+    },
     "serve-doc": {
       "cache": false
     },
     "npm-link": {
-      "dependsOn": ["build"],
+      "dependsOn": [
+        "build"
+      ],
       "cache": false
     },
     "publish-dist": {
-      "dependsOn": ["^publish-dist"],
+      "dependsOn": [
+        "^publish-dist"
+      ],
       "cache": false
     }
   }

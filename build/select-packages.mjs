@@ -26,6 +26,6 @@ prompt([
         choices: [{ value: 'core', checked: true }, ...packages],
     },
 ]).then((answers) => {
-    const filters = ['//', ...answers.packages].map((p) => `--filter=${p}`).join(' ');
-    process.stdout.write(filters);
+    const filters = answers.packages.map((p) => `--filter=@photo-sphere-viewer/${p}`).join(' ');
+    process.stdout.write(`--filter=// ${filters}`);
 });

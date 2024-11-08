@@ -50,9 +50,7 @@ jobs:
         uses: ./.github/workflows/shared/setup
 
       - name: e2e
-        run: |
-          yarn ci:build
-          yarn ci:e2e
+        run: yarn ci:e2e
 
       - name: test summary
         uses: phoenix-actions/test-reporting@v15

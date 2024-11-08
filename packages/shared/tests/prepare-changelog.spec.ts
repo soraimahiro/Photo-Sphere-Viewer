@@ -1,11 +1,15 @@
-import { exec } from 'child_process';
+import assert from 'assert';
+import { exec, execSync } from 'child_process';
 import { readFileSync } from 'fs';
 import path from 'path';
-import assert from 'assert';
 
 const testDir = path.join(__dirname, 'fixtures/prepare-changelog');
 
 describe('prepare-changelog', () => {
+    beforeEach(() => {
+        execSync(`git clean -Xdf`, { cwd: testDir });
+    });
+
     it('should generate the changelog', (done) => {
         const gitLog = readFileSync(path.join(testDir, 'git-log.txt'), { encoding: 'utf8' });
 
