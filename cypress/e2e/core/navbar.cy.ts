@@ -1,4 +1,6 @@
+import { type Navbar } from '@photo-sphere-viewer/core';
 import { callViewer, waitViewerReady } from '../../utils';
+import { VIEWPORT_MOBILE } from '../../utils/constants';
 
 describe('core: navbar', () => {
     beforeEach(() => {
@@ -34,7 +36,7 @@ describe('core: navbar', () => {
 
         cy.get('.psv-navbar').compareScreenshots('update-caption');
 
-        callViewer('change caption via API').then(viewer => viewer.navbar.setCaption('Loading...'));
+        callNavbar('change caption via API').then(navbar => navbar.setCaption('Loading...'));
 
         cy.get('.psv-caption-content').should('have.text', 'Loading...');
     });
@@ -85,10 +87,7 @@ describe('core: navbar', () => {
         cy.get('.psv-notification').should('not.be.visible');
     });
 
-    it('should display a menu on small screens', {
-        viewportWidth: 400,
-        viewportHeight: 800,
-    }, () => {
+    it('should display a menu on small screens', VIEWPORT_MOBILE, () => {
         [
             '.psv-caption-content',
             '.psv-zoom-range',
@@ -174,13 +173,19 @@ describe('core: navbar', () => {
     });
 
     it('should hide the navbar', () => {
-        callViewer('hide navbar').then(viewer => viewer.navbar.hide());
+        callNavbar('hide navbar').then(navbar => navbar.hide());
+        checkNavbarVisibleApi(false);
+        cy.get('.psv-navbar')
+            .should('not.be.visible')
+            .should('not.have.class', 'psv-navbar--open');
+        cy.get('.psv-container').should('not.have.class', 'psv--has-navbar');
 
-        cy.get('.psv-navbar').should('not.be.visible');
-
-        callViewer('show navbar').then(viewer => viewer.navbar.show());
-
-        cy.get('.psv-navbar').should('be.visible');
+        callNavbar('show navbar').then(navbar => navbar.show());
+        checkNavbarVisibleApi(true);
+        cy.get('.psv-navbar')
+            .should('be.visible')
+            .should('have.class', 'psv-navbar--open');
+        cy.get('.psv-container').should('have.class', 'psv--has-navbar');
     });
 
     it('should update the buttons', () => {
@@ -200,38 +205,38 @@ describe('core: navbar', () => {
 
         cy.get('.psv-navbar').compareScreenshots('update-buttons');
 
-        callViewer('change buttons via API').then(viewer => viewer.navbar.setButtons(['download', 'fullscreen']));
+        callNavbar('change buttons via API').then(navbar => navbar.setButtons(['download', 'fullscreen']));
 
         assertButtons(['Download', 'Fullscreen']);
     });
 
     it('should hide a button', () => {
-        callViewer('hide fullscreen button').then(viewer => viewer.navbar.getButton('fullscreen').hide());
+        callNavbar('hide fullscreen button').then(navbar => navbar.getButton('fullscreen').hide());
 
         cy.get('.psv-fullscreen-button').should('not.be.visible');
 
         cy.get('.psv-navbar').compareScreenshots('hide-button');
 
-        callViewer('show fullscreen button').then(viewer => viewer.navbar.getButton('fullscreen').show());
+        callNavbar('show fullscreen button').then(navbar => navbar.getButton('fullscreen').show());
 
         cy.get('.psv-fullscreen-button').should('be.visible');
     });
 
     it('should disable a button', () => {
-        callViewer('disable download button').then(viewer => viewer.navbar.getButton('download').disable());
+        callNavbar('disable download button').then(navbar => navbar.getButton('download').disable());
 
         cy.get('.psv-download-button').should('have.class', 'psv-button--disabled');
 
         cy.get('.psv-navbar').compareScreenshots('disable-button');
 
-        callViewer('enable download button').then(viewer => viewer.navbar.getButton('download').enable());
+        callNavbar('enable download button').then(navbar => navbar.getButton('download').enable());
 
         cy.get('.psv-download-button').should('not.have.class', 'psv-button--disabled');
     });
 
     it('should display a custom element', () => {
         cy.document().then(document => {
-            callViewer('set custom element').then(viewer => viewer.navbar.setButtons([
+            callNavbar('set custom element').then(navbar => navbar.setButtons([
                 {
                     content: document.createElement('custom-navbar-button'),
                 }
@@ -249,4 +254,15 @@ describe('core: navbar', () => {
 
         cy.get('.psv-custom-button').compareScreenshots('custom-element');
     });
+
+    function callNavbar(log: string): Cypress.Chainable<Navbar> {
+        return callViewer(log).then(viewer => viewer.navbar);
+    }
+
+    function checkNavbarVisibleApi(visible: boolean) {
+        callNavbar(`check navbar ${visible ? 'visible' : 'not visible'}`)
+            .then(navbar => {
+                expect(navbar.isVisible()).to.eq(visible);
+            });
+    }
 });

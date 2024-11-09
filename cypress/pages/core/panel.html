@@ -3,18 +3,10 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PhotoSphereViewer - settings demo</title>
+        <title>PhotoSphereViewer</title>
 
         <link rel="stylesheet" href="/dist/core/index.css" />
-        <link rel="stylesheet" href="/dist/settings-plugin/index.css" />
         <link rel="stylesheet" href="/style.css" />
-
-        <style>
-            /* inconsistent behavior in Cypress */
-            .psv-settings *:focus-visible {
-                outline: none !important;
-            }
-        </style>
     </head>
     <body>
         <div id="photosphere"></div>
@@ -23,26 +15,19 @@
             {
                 "imports": {
                     "three": "/node_modules/three/build/three.module.js",
-                    "@photo-sphere-viewer/core": "/dist/core/index.module.js",
-                    "@photo-sphere-viewer/settings-plugin": "/dist/settings-plugin/index.module.js"
+                    "@photo-sphere-viewer/core": "/dist/core/index.module.js"
                 }
             }
         </script>
 
         <script type="module">
-            import { Viewer } from '@photo-sphere-viewer/core';
-            import { SettingsPlugin } from '@photo-sphere-viewer/settings-plugin';
+            import { Viewer, DEFAULTS } from '@photo-sphere-viewer/core';
 
             const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 
             const viewer = new Viewer({
                 container: 'photosphere',
                 panorama: baseUrl + 'sphere-small.jpg',
-                caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',
-                loadingImg: baseUrl + 'loader.gif',
-                plugins: [
-                    SettingsPlugin,
-                ],
             });
 
             window.viewer = viewer;

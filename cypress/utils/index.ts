@@ -48,6 +48,17 @@ export function setPanorama(name: string) {
     waitViewerReady();
 }
 
+export function listenViewerEvent(name: Parameters<Viewer['addEventListener']>[0]): Cypress.Agent<sinon.SinonStub> {
+    const handler = cy.stub();
+    callViewer(`listen "${name}"`).then(viewer => viewer.addEventListener(name, handler));
+    return handler;
+}
+
+export function checkEventHandler(handler: Cypress.Agent<sinon.SinonStub>, params: any) {
+    cy.wrap(handler, NO_LOG)
+        .should('have.been.calledWithMatch', params);
+}
+
 export function createBaseSnapshot() {
     if (Cypress.config('isInteractive')) {
         Cypress.env('visualRegressionType', 'base');

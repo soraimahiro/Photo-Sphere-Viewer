@@ -1,6 +1,6 @@
 import type { GalleryPlugin } from '@photo-sphere-viewer/gallery-plugin';
 import { callPlugin, callViewer, checkPanorama, setPanorama, waitViewerReady } from '../../utils';
-import { BASE_URL } from '../../utils/constants';
+import { BASE_URL, VIEWPORT_MOBILE } from '../../utils/constants';
 
 describe('plugin: gallery', () => {
     beforeEach(() => {
@@ -27,21 +27,17 @@ describe('plugin: gallery', () => {
         cy.get('.psv-gallery').should('not.be.visible');
     });
 
-    it('should display fullscreen on mobile', {
-        viewportWidth: 400,
-        viewportHeight: 800,
-    }, () => {
+    it('should display fullscreen on mobile', VIEWPORT_MOBILE, () => {
         cy.waitForResources(
             'key-biscayne-5-thumb.jpg',
             'key-biscayne-6-thumb.jpg',
             'key-biscayne-7-thumb.jpg',
         );
 
-        cy.get('.psv-gallery')
-            .should(gallery => {
-                const { x, y, width, height } = gallery[0].getBoundingClientRect();
-                expect({ x, y, width, height }).to.deep.eq({ x: 0, y: 0, width: 400, height: 760 });
-            });
+        cy.get('.psv-gallery').should(gallery => {
+            const { x, y, width, height } = gallery[0].getBoundingClientRect();
+            expect({ x, y, width, height }).to.deep.eq({ x: 0, y: 0, width: 400, height: 760 });
+        });
 
         cy.get('.psv-gallery').compareScreenshots('mobile');
 
@@ -96,7 +92,7 @@ describe('plugin: gallery', () => {
 
     it('should change thumbnails size', () => {
         callGallery('set thumbnailSize').then(gallery => gallery.setOption('thumbnailSize', { width: 100, height: 100 }));
-        
+
         cy.waitForResources(
             'key-biscayne-5-thumb.jpg',
             'key-biscayne-6-thumb.jpg',
