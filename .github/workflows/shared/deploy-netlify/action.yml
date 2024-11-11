@@ -35,9 +35,10 @@ runs:
 
     - name: finish deploy
       uses: bobheadxi/deployments@v1
+      if: always()
       with:
         step: finish
-        status: success
+        status: ${{ job.status }}
         env: ${{ steps.deployment.outputs.env }}
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
         env_url: ${{ steps.netlify.outputs.deploy_url }}

@@ -12,7 +12,7 @@
     "polygon",
     "green-screen"
   ],
-  "peerDependencies": {
+  "dependencies": {
     "@photo-sphere-viewer/core": "0.0.0"
   },
   "scripts": {

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import sortPackageJson, { sortOrder } from 'sort-package-json';
 
 sortOrder.splice(sortOrder.indexOf('style') + 1, 0, 'sass');
@@ -25,6 +26,8 @@ export const packageJson = (pkg: any) => {
             homepage: 'https://www.strangeplanet.fr',
         },
         keywords: ['photosphere', 'panorama', 'threejs', ...(pkg.keywords || [])],
+        dependencies: _.pickBy(pkg.dependencies, (val, key) => !key.startsWith('@photo-sphere-viewer')),
+        peerDependencies: _.pickBy(pkg.dependencies, (val, key) => key.startsWith('@photo-sphere-viewer')),
     };
 
     if (pkg.psv.style) {

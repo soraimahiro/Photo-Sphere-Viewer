@@ -1,5 +1,5 @@
 
-import fs from 'fs';
+import fs from 'fs-extra';
 import registerCodeCoverageTasks from '@cypress/code-coverage/task';
 import { defineConfig } from 'cypress';
 // @ts-ignore
@@ -21,7 +21,7 @@ export default defineConfig({
         setupNodeEvents(on, config) {
             on = cypressOnFix(on);
 
-            fs.rmdirSync('.nyc_output', { recursive: true });
+            fs.removeSync('.nyc_output');
 
             registerCodeCoverageTasks(on, config);
             configureVisualRegression(on);
