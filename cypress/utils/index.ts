@@ -43,7 +43,7 @@ export function checkPanorama(name: string) {
 }
 
 export function setPanorama(name: string) {
-    callViewer('change panorama')
+    callViewer(`set panorama "${name}"`)
         .then(viewer => viewer.setPanorama(BASE_URL + name, { transition: false }));
     waitViewerReady();
 }

@@ -110,27 +110,31 @@ export class ResolutionPlugin extends AbstractPlugin<ResolutionPluginEvents> {
             if (!resolution.id) {
                 throw new PSVError('Missing resolution id');
             }
+            if (!resolution.label) {
+                throw new PSVError('Missing resolution label');
+            }
             if (!resolution.panorama) {
                 throw new PSVError('Missing resolution panorama');
             }
             this.resolutionsById[resolution.id] = resolution;
         });
 
-        // pick first resolution if no default provided and no current panorama
-        if (!this.viewer.config.panorama && !defaultResolution) {
-            defaultResolution = resolutions[0].id;
-        }
-
-        // ensure the default resolution exists
-        if (defaultResolution && !this.resolutionsById[defaultResolution]) {
-            utils.logWarn(`Resolution ${defaultResolution} unknown`);
-            defaultResolution = resolutions[0].id;
+        // pick first resolution if no default provided and cannot find match with current panorama
+        if (!defaultResolution) {
+            if (this.viewer.config.panorama) {
+                const resolution = this.resolutions.find((r) => utils.deepEqual(this.viewer.config.panorama, r.panorama));
+                if (!resolution) {
+                    defaultResolution = resolutions[0].id;
+                }
+            } else {
+                defaultResolution = resolutions[0].id;
+            }
         }
 
         if (defaultResolution) {
             this.setResolution(defaultResolution);
         }
-
+        
         this.__refreshResolution();
     }
 
@@ -140,7 +144,7 @@ export class ResolutionPlugin extends AbstractPlugin<ResolutionPluginEvents> {
      */
     setResolution(id: string): Promise<unknown> {
         if (!this.resolutionsById[id]) {
-            throw new PSVError(`Resolution ${id} unknown`);
+            throw new PSVError(`Resolution "${id}" unknown`);
         }
 
         return this.__setResolutionIfExists(id);

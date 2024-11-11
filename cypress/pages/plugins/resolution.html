@@ -24,6 +24,7 @@
                 "imports": {
                     "three": "/node_modules/three/build/three.module.js",
                     "@photo-sphere-viewer/core": "/dist/core/index.module.js",
+                    "@photo-sphere-viewer/resolution-plugin": "/dist/resolution-plugin/index.module.js",
                     "@photo-sphere-viewer/settings-plugin": "/dist/settings-plugin/index.module.js"
                 }
             }
@@ -31,6 +32,7 @@
 
         <script type="module">
             import { Viewer } from '@photo-sphere-viewer/core';
+            import { ResolutionPlugin } from '@photo-sphere-viewer/resolution-plugin';
             import { SettingsPlugin } from '@photo-sphere-viewer/settings-plugin';
 
             const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
@@ -39,12 +41,24 @@
 
             const viewer = new Viewer({
                 container: 'photosphere',
-                panorama: baseUrl + 'sphere-small.jpg',
-                caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',
-                loadingImg: baseUrl + 'loader.gif',
+                panorama: urlParams.get('withPanorama') ? baseUrl + 'sphere-small.jpg' : null,
                 plugins: [
-                    [SettingsPlugin, {
-                        persist: urlParams.get('persist') === 'true',
+                    SettingsPlugin,
+                    [ResolutionPlugin, {
+                        showBadge: urlParams.get('showBadge') !== 'false',
+                        defaultResolution: urlParams.get('resolution'),
+                        resolutions: [
+                            {
+                                id: 'SD',
+                                label: 'Small',
+                                panorama: baseUrl + 'sphere-small.jpg',
+                            },
+                            {
+                                id: 'HD',
+                                label: 'Normal',
+                                panorama: baseUrl + 'sphere.jpg',
+                            },
+                        ],
                     }],
                 ],
             });
