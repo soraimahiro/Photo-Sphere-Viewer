@@ -43,11 +43,6 @@ import { VPTeamMembers } from 'vitepress/theme'
 const sponsors = [
   // monthly
   {
-    avatar: 'https://avatars.githubusercontent.com/u/1396951?s=200',
-    name: 'Sentry',
-    links: [ { icon: 'github', link: 'https://github.com/getsentry' } ],
-  },
-  {
     avatar: 'https://avatars.githubusercontent.com/u/3709747?s=200',
     name: 'Kevin M. Vuilleumier',
     links: [ { icon: 'github', link: 'https://github.com/vekin03' } ],

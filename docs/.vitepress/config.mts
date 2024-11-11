@@ -87,6 +87,7 @@ export default defineConfig({
             { text: '❤️️ Sponsor', link: 'https://github.com/sponsors/mistic100' },
         ],
         socialLinks: [
+            { icon: 'cypress', link: 'https://psv-cypress-reports.netlify.app' },
             { icon: 'github', link: 'https://github.com/mistic100/Photo-Sphere-Viewer' },
         ],
 
