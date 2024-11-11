@@ -6,7 +6,7 @@
   "cleanOutputDir": false,
   "excludePrivate": true,
   "entryPointStrategy": "packages",
-  "readme": ".typedoc/README.md",
+  "readme": ".tmp/typedoc/README.md",
   "entryPoints": ["packages/*"],
   "exclude": ["packages/shared"],
   "validation": {

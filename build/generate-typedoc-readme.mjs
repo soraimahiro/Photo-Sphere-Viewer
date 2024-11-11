@@ -9,7 +9,7 @@ import { mkdir, readFile, writeFile } from 'fs/promises';
 const PACKAGES_DIR = 'packages';
 const PKG_FILE = 'package.json';
 const TYPEDOC_FILE = 'typedoc.json';
-const DIST_DIR = '.typedoc';
+const DIST_DIR = '.tmp/typedoc';
 const DIST_FILE = 'README.md';
 
 (async () => {

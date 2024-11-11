@@ -20,9 +20,9 @@ export function assetsPlugin(files: Record<string, string | Promise<string>>): P
                 return mkdir(path.resolve(outdir), { recursive: true })
                     .then(() =>
                         Promise.all(
-                            Object.entries(files).map(([filename, content]) => {
+                            Object.entries(files).map(([filename, contentOrPromise]) => {
                                 const outpath = outdir + '/' + filename;
-                                return Promise.resolve(content).then((content) => {
+                                return Promise.resolve(contentOrPromise).then((content) => {
                                     console.log('ASSET', outpath, prettyBytes(content.length));
                                     return writeFile(outpath, content);
                                 });

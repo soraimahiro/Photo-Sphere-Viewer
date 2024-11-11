@@ -3,6 +3,8 @@ name: setup
 inputs:
   turbo-cache:
     default: true
+  cache-readonly:
+    default: false
 
 runs:
   using: composite
@@ -21,21 +23,21 @@ runs:
 
     - name: yarn cache
       uses: actions/cache@v4
-      if: ${{ !startsWith(github.ref_name, 'dependabot') }}
+      if: ${{ !inputs.cache-readonly && !startsWith(github.ref_name, 'dependabot') }}
       with:
         key: yarn-${{ hashFiles('yarn.lock') }}
         path: ${{ env.YARN_CACHE_DIR }}
 
     - name: yarn cache ro
       uses: actions/cache/restore@v4
-      if: ${{ startsWith(github.ref_name, 'dependabot') }}
+      if: ${{ inputs.cache-readonly || startsWith(github.ref_name, 'dependabot') }}
       with:
         key: yarn-${{ hashFiles('yarn.lock') }}
         path: ${{ env.YARN_CACHE_DIR }}
 
     - name: turbo cache
       uses: actions/cache@v4
-      if: ${{ inputs.turbo-cache && !startsWith(github.ref_name, 'dependabot') }}
+      if: ${{ inputs.turbo-cache && !inputs.cache-readonly && !startsWith(github.ref_name, 'dependabot') }}
       with:
         path: .turbo
         key: turbo-${{ github.sha }}
@@ -44,7 +46,7 @@ runs:
 
     - name: turbo cache ro
       uses: actions/cache/restore@v4
-      if: ${{ inputs.turbo-cache && startsWith(github.ref_name, 'dependabot') }}
+      if: ${{ inputs.turbo-cache && (inputs.cache-readonly || startsWith(github.ref_name, 'dependabot')) }}
       with:
         path: .turbo
         key: turbo-${{ github.sha }}

@@ -1,4 +1,5 @@
 import 'cypress-mochawesome-reporter/register';
+import '@cypress/code-coverage/support';
 import { addCompareSnapshotCommand } from 'cypress-visual-regression/dist/command';
 import { NO_LOG } from '../utils/constants';
 

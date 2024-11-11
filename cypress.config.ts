@@ -1,9 +1,12 @@
+
+import fs from 'fs';
+// @ts-ignore
+import cypressOnFix from 'cypress-on-fix';
 import { defineConfig } from 'cypress';
 import { configureVisualRegression } from 'cypress-visual-regression';
+import registerCodeCoverageTasks from '@cypress/code-coverage/task';
 // @ts-ignore
 import  cypressMochawesomeReporterPlugin from 'cypress-mochawesome-reporter/plugin';
-
-const BRANCH_NAME = process.env.GITHUB_REF_NAME ?? 'dev';
 
 export default defineConfig({
     e2e: {
@@ -15,10 +18,14 @@ export default defineConfig({
         env: {
           visualRegressionType: 'regression',
         },
-        setupNodeEvents(on) {
+        setupNodeEvents(on, config) {
+            on = cypressOnFix(on);
+
+            registerCodeCoverageTasks(on, config);
             configureVisualRegression(on);
             cypressMochawesomeReporterPlugin(on);
 
+            // define browser size for screenshots (headless mode)
             on('before:browser:launch', (browser, launchOptions) => {
                 // should be bigger than the largest viewport used + browser UI elements
                 const width = 1600;
@@ -41,6 +48,24 @@ export default defineConfig({
     
                 return launchOptions
             });
+
+            // move lcov html report
+            on('after:run', () => {
+                const ROOT_DIR = 'cypress/reports/';
+
+                console.log(`Move ${ROOT_DIR}lcov-viewer to ${ROOT_DIR}html/coverage`);
+
+                fs.mkdirSync(ROOT_DIR + 'html/coverage', { recursive: true });
+                fs.copyFileSync(ROOT_DIR + 'lcov-viewer/report-data.js', ROOT_DIR + 'html/coverage/report-data.js');
+                
+                const index = fs.readFileSync(ROOT_DIR + 'lcov-viewer/index.html', 'utf-8')
+                    .replace('src="app.js"', 'src="https://cdn.jsdelivr.net/npm/@lcov-viewer/istanbul-report@1/lib/assets/app.js"')
+                    .replace(/<title>.*<\/title>/, '<title>Photo Sphere Viewer - E2E coverage</title>');
+                
+                fs.writeFileSync(ROOT_DIR + 'html/coverage/index.html', index, 'utf-8');
+            });
+
+            return config;
         },
     },
     clientCertificates: [
@@ -59,7 +84,7 @@ export default defineConfig({
         removeJsonsFolderAfterMerge: false,
         cdn: true,
         charts: true,
-        reportPageTitle: 'Photo Sphere Viewer',
-        reportTitle: `Photo Sphere Viewer (${BRANCH_NAME})`,
+        reportTitle: 'Photo Sphere Viewer',
+        reportPageTitle: 'Photo Sphere Viewer - E2E results',
     },
 });

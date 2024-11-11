@@ -1,20 +1,16 @@
+import assert from 'assert';
 import { execSync } from 'child_process';
 import { readFileSync } from 'fs';
 import path from 'path';
-import assert from 'assert';
 
 const testDir = path.join(__dirname, 'fixtures/generate-typedoc-readme');
 
 describe('generate-typedoc-readme', () => {
-    beforeEach(() => {
-        execSync(`git clean -Xdf`, { cwd: testDir });
-    });
-
     it('should generate the readme', () => {
-        execSync(`node ${path.join(__dirname, '../../../build/generate-typedoc-readme.mjs')}`, { cwd: testDir });
+        execSync(`node ${path.join(__dirname, 'generate-typedoc-readme.mjs')}`, { cwd: testDir });
 
         const cases = {
-            '.typedoc/README.md': `
+            '.tmp/typedoc/README.md': `
 # Core
 
 - [Viewer](classes/Core.Viewer.html)
@@ -29,17 +25,17 @@ describe('generate-typedoc-readme', () => {
 
 - [TestAdapter](modules/TestAdapter.html)`,
 
-            'packages/core/.typedoc/README.md': `
+            'packages/core/.tmp/typedoc/README.md': `
 NPM package : [@photo-sphere-viewer/core](https://www.npmjs.com/package/@photo-sphere-viewer/core)
 
 Documentation : https://photo-sphere-viewer.js.org`,
 
-            'packages/test-adapter/.typedoc/README.md': `
+            'packages/test-adapter/.tmp/typedoc/README.md': `
 NPM package : [@photo-sphere-viewer/test-adapter](https://www.npmjs.com/package/@photo-sphere-viewer/test-adapter)
 
 Documentation : https://photo-sphere-viewer.js.org/adapters/test.html`,
 
-            'packages/test-plugin/.typedoc/README.md': `
+            'packages/test-plugin/.tmp/typedoc/README.md': `
 NPM package : [@photo-sphere-viewer/test-plugin](https://www.npmjs.com/package/@photo-sphere-viewer/test-plugin)
 
 Documentation : https://photo-sphere-viewer.js.org/plugins/test.html`,

@@ -4,6 +4,7 @@
     "build/**",
     "tsconfig.json",
     ".eslintrc.json",
+    ".mocharc.json",
     ".stylelintrc.json",
     "packages/shared/*.{ts,scss,glsl}"
   ],
@@ -18,6 +19,12 @@
       "outputs": [
         "dist/**"
       ]
+    },
+    "instrument": {
+      "dependsOn": [
+        "build"
+      ],
+      "cache": false
     },
     "lint": {
       "inputs": [

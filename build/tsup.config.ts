@@ -1,9 +1,11 @@
+import type { Plugin } from 'esbuild';
 import { sassPlugin } from 'esbuild-sass-plugin';
 import { defineConfig } from 'tsup';
 import { assetsPlugin } from './plugins/esbuild-plugin-assets';
+import { budgetPlugin } from './plugins/esbuild-plugin-budget';
+// import { istanbulPlugin } from './plugins/esbuild-plugin-istanbul';
 import { mapFixPlugin } from './plugins/esbuild-plugin-map-fix';
 import { scssBundlePlugin } from './plugins/esbuild-plugin-scss-bundle';
-import { budgetPlugin } from './plugins/esbuild-plugin-budget';
 import { license } from './templates/license';
 import { npmrc } from './templates/npmrc';
 import { packageJson } from './templates/package';
@@ -19,19 +21,41 @@ ${
  */`;
 
     return defineConfig((options) => {
-        const dev = options.watch || options.define?.['config'] === 'dev';
-        const dts = !dev && options.define?.['dts'] !== 'off';
+        const e2e = options.env?.E2E;
+        const dev = e2e || options.watch;
+
+        const plugins: Plugin[] = [
+            sassPlugin(),
+        ];
+
+        if (!e2e) {
+            plugins.push(
+                mapFixPlugin()
+            );
+        }
+
+        if (!dev) {
+            plugins.push(
+                budgetPlugin(pkg.psv.budget),
+                scssBundlePlugin(),
+                assetsPlugin({
+                    'LICENSE': license(),
+                    '.npmrc': npmrc(),
+                    'README.md': readme(pkg),
+                    'package.json': packageJson(pkg),
+                })
+            );
+        }
 
         return {
             entryPoints: [pkg.main],
             outDir: 'dist',
+            clean: true,
             format: dev ? ['esm'] : ['esm', 'cjs'],
-            outExtension({ format }) {
-                return {
-                    js: { cjs: '.cjs', esm: '.module.js', iife: '.js' }[format],
-                };
-            },
-            dts: dts,
+            outExtension: ({ format }) => ({
+                js: { cjs: '.cjs', esm: '.module.js', iife: '.js' }[format],
+            }),
+            dts: !dev,
             sourcemap: true,
             external: ['three'],
             noExternal: [/three\/examples\/.*/],
@@ -39,33 +63,15 @@ ${
             define: {
                 PKG_VERSION: `'${pkg.version}'`,
             },
-            esbuildPlugins: [
-                sassPlugin(),
-                mapFixPlugin(),
-                budgetPlugin(pkg.psv.budget),
-                ...(dev
-                    ? []
-                    : [
-                          scssBundlePlugin(),
-                          assetsPlugin({
-                              'LICENSE': license(),
-                              '.npmrc': npmrc(),
-                              'README.md': readme(pkg),
-                              'package.json': packageJson(pkg),
-                          }),
-                      ]),
-            ],
-            esbuildOptions(options) {
-                options.banner = {
-                    js: banner,
-                    css: banner,
-                };
-                options.loader = {
-                    '.svg': 'text',
-                    '.glsl': 'text',
-                };
+            loader: {
+                '.svg': 'text',
+                '.glsl': 'text',
             },
-            clean: true,
+            banner: {
+                js: banner,
+                css: banner,
+            },
+            esbuildPlugins: plugins,
         };
     });
 }

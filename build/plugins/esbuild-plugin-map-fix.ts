@@ -1,4 +1,5 @@
 import type { Plugin } from 'esbuild';
+import { basename } from 'path';
 
 /**
  * Alters the paths in maps
@@ -14,7 +15,7 @@ export function mapFixPlugin(): Plugin {
                         return;
                     }
 
-                    console.log('MAP', `Fix ${mapFile.path}`);
+                    console.log('MAP', `Fix ${basename(mapFile.path)}`);
 
                     const content = JSON.parse(mapFile.text);
                     content.sources = content.sources.map((src: string) => {
