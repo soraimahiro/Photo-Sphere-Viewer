@@ -35,13 +35,17 @@
 
             const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 
+            const urlParams = new URLSearchParams(window.location.search);
+
             const viewer = new Viewer({
                 container: 'photosphere',
                 panorama: baseUrl + 'sphere-small.jpg',
                 caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',
                 loadingImg: baseUrl + 'loader.gif',
                 plugins: [
-                    SettingsPlugin,
+                    [SettingsPlugin, {
+                        persist: urlParams.get('persist') === 'true',
+                    }],
                 ],
             });
 

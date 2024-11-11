@@ -1,12 +1,12 @@
 
 import fs from 'fs';
+import registerCodeCoverageTasks from '@cypress/code-coverage/task';
+import { defineConfig } from 'cypress';
 // @ts-ignore
 import cypressOnFix from 'cypress-on-fix';
-import { defineConfig } from 'cypress';
 import { configureVisualRegression } from 'cypress-visual-regression';
-import registerCodeCoverageTasks from '@cypress/code-coverage/task';
 // @ts-ignore
-import  cypressMochawesomeReporterPlugin from 'cypress-mochawesome-reporter/plugin';
+import cypressMochawesomeReporterPlugin from 'cypress-mochawesome-reporter/plugin';
 
 export default defineConfig({
     e2e: {
@@ -20,6 +20,8 @@ export default defineConfig({
         },
         setupNodeEvents(on, config) {
             on = cypressOnFix(on);
+
+            fs.rmdirSync('.nyc_output', { recursive: true });
 
             registerCodeCoverageTasks(on, config);
             configureVisualRegression(on);

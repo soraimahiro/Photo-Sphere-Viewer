@@ -11,6 +11,10 @@ describe('plugin: compass', () => {
         // createBaseSnapshot();
     });
 
+    it('should destroy', () => {
+        callViewer('destroy').then(viewer => viewer.destroy());
+    });
+
     it('should have a compass', () => {
         cy.get('.psv-compass')
             .should('be.visible')

@@ -157,7 +157,7 @@ export class GalleryPlugin extends AbstractConfigurablePlugin<
                     throw new PSVError(`Item ${i} has no "id".`);
                 }
                 if (!item.panorama) {
-                    throw new PSVError(`Item ${item.id} has no "panorama".`);
+                    throw new PSVError(`Item "${item.id}" has no "panorama".`);
                 }
             });
         }

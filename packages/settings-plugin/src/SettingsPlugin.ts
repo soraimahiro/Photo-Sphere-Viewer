@@ -98,6 +98,9 @@ export class SettingsPlugin extends AbstractPlugin<SettingsPluginEvents> {
         if (!setting.type) {
             throw new PSVError('Missing setting type');
         }
+        if (this.settings.some((s) => s.id === setting.id)) {
+            throw new PSVError(`Setting "${setting.id}" already exists`);
+        }
 
         if (setting.badge && this.settings.some((s) => s.badge)) {
             utils.logWarn('More than one setting with a badge are declared, the result is unpredictable.');

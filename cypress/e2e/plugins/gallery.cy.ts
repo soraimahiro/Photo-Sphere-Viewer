@@ -1,6 +1,6 @@
 import type { GalleryPlugin } from '@photo-sphere-viewer/gallery-plugin';
 import { callPlugin, callViewer, checkPanorama, setPanorama, waitViewerReady } from '../../utils';
-import { BASE_URL, VIEWPORT_MOBILE } from '../../utils/constants';
+import { BASE_URL, NO_LOG, VIEWPORT_MOBILE } from '../../utils/constants';
 
 describe('plugin: gallery', () => {
     beforeEach(() => {
@@ -15,6 +15,10 @@ describe('plugin: gallery', () => {
         // createBaseSnapshot();
     });
 
+    it('should destroy', () => {
+        callViewer('destroy').then(viewer => viewer.destroy());
+    });
+
     it('should have a gallery', () => {
         cy.get('.psv-gallery')
             .should('be.visible')
@@ -27,12 +31,31 @@ describe('plugin: gallery', () => {
         cy.get('.psv-gallery').should('not.be.visible');
     });
 
+    it('should scroll horizontally', () => {
+        cy.get('.psv-gallery')
+            .trigger('wheel', { deltaY: 1 })
+            .trigger('wheel', { deltaY: 1 })
+            .trigger('wheel', { deltaY: 1 })
+            .trigger('wheel', { deltaY: 1 });
+
+        waitForAllThumbnails();
+
+        cy.get('.psv-gallery').compareScreenshots('scroll-pan');
+    });
+
+    it('should click and drag', () => {
+        cy.get('.psv-gallery')
+            .trigger('mousedown', { clientX: 1200 })
+            .trigger('mousemove', { clientX: 100 })
+            .trigger('mouseup');
+
+        waitForAllThumbnails();
+
+        cy.get('.psv-gallery').compareScreenshots('scroll-pan');
+    });
+
     it('should display fullscreen on mobile', VIEWPORT_MOBILE, () => {
-        cy.waitForResources(
-            'key-biscayne-5-thumb.jpg',
-            'key-biscayne-6-thumb.jpg',
-            'key-biscayne-7-thumb.jpg',
-        );
+        waitForAllThumbnails();
 
         cy.get('.psv-gallery').should(gallery => {
             const { x, y, width, height } = gallery[0].getBoundingClientRect();
@@ -54,6 +77,10 @@ describe('plugin: gallery', () => {
             .should('not.have.class', 'psv-button--active');
 
         cy.get('.psv-gallery').should('not.be.visible');
+
+        cy.get('.psv-gallery-button').click();
+
+        cy.get('.psv-gallery').should('be.visible');
     });
 
     it('should highlight the current item', () => {
@@ -93,11 +120,7 @@ describe('plugin: gallery', () => {
     it('should change thumbnails size', () => {
         callGallery('set thumbnailSize').then(gallery => gallery.setOption('thumbnailSize', { width: 100, height: 100 }));
 
-        cy.waitForResources(
-            'key-biscayne-5-thumb.jpg',
-            'key-biscayne-6-thumb.jpg',
-            'key-biscayne-7-thumb.jpg',
-        );
+        waitForAllThumbnails();
 
         cy.get('.psv-gallery').compareScreenshots('set-thumbnailSize');
     });
@@ -121,6 +144,14 @@ describe('plugin: gallery', () => {
         cy.get('.psv-gallery').compareScreenshots('set-items');
     });
 
+    it('should throw if no "id" or "panorama"', () => {
+        callGallery('set items').then(gallery => {
+            expect(() => gallery.setItems([{ id: null, panorama: 'img.jpg' }])).to.throw('Item 0 has no "id".');
+
+            expect(() => gallery.setItems([{ id: 'id', panorama: null }])).to.throw('Item "id" has no "panorama".');
+        });
+    });
+
     it('should change the items w. custom callback', () => {
         const callback = cy.stub();
 
@@ -138,15 +169,26 @@ describe('plugin: gallery', () => {
             .click()
             .should('have.class', 'psv-gallery-item--active')
             .then(() => {
-                expect(callback.getCall(0)).to.be.calledWith('1');
+                expect(callback).to.be.calledOnceWith('1');
             });
 
         // not changed
         checkPanorama('sphere-small.jpg');
+
+        cy.wrap(callback, NO_LOG).then(() => {
+            cy.log('Reset stub');
+            callback.reset();
+        });
+
+        cy.get('[data-psv-gallery-item=1]')
+            .click()
+            .then(() => {
+                expect(callback).to.not.have.been.called;
+            });
     });
 
     it('should hide the button when no items', () => {
-        callGallery('set items').then(gallery => gallery.setItems([]));
+        callGallery('set items').then(gallery => gallery.setItems(null));
 
         cy.get('.psv-gallery-button').should('not.be.visible');
 
@@ -162,5 +204,13 @@ describe('plugin: gallery', () => {
 
     function callGallery(log: string) {
         return callPlugin<GalleryPlugin>('gallery', log);
+    }
+
+    function waitForAllThumbnails() {
+        cy.waitForResources(
+            'key-biscayne-5-thumb.jpg',
+            'key-biscayne-6-thumb.jpg',
+            'key-biscayne-7-thumb.jpg',
+        );
     }
 });
