@@ -1,6 +1,6 @@
 import { type Navbar } from '@photo-sphere-viewer/core';
 import { callViewer, waitViewerReady } from '../../utils';
-import { VIEWPORT_MOBILE } from '../../utils/constants';
+import { BASE_URL, VIEWPORT_MOBILE } from '../../utils/constants';
 
 describe('core: navbar', () => {
     beforeEach(() => {
@@ -42,8 +42,6 @@ describe('core: navbar', () => {
     });
 
     it('should show the description in the side panel', () => {
-        cy.get('.psv-panel').should('not.be.visible');
-
         cy.get('.psv-description-button').click();
 
         cy.get('.psv-panel')
@@ -51,6 +49,39 @@ describe('core: navbar', () => {
             .should('include.text', 'Parc national du Mercantour © Damien Sorel')
             .should('include.text', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit')
             .compareScreenshots('description');
+
+        cy.get('.psv-description-button').click();
+
+        cy.get('.psv-panel').should('not.be.visible');
+
+        callViewer('clear description').then(viewer => viewer.setOption('description', null));
+
+        cy.get('.psv-description-button').should('not.be.visible');
+    });
+
+    it('should download the panorama', () => {
+        cy.get('.psv-download-button')
+            .should('have.attr', 'href', BASE_URL + 'sphere-small.jpg')
+            .should('have.attr', 'download', 'sphere-small.jpg');
+
+        callViewer('set downloadName/downloadUrl').then(viewer => viewer.setOptions({
+            downloadUrl: 'panorama-download.jpg',
+            downloadName: 'my-panorama.jpg'
+        }));
+
+        cy.get('.psv-download-button')
+            .should('have.attr', 'href', 'panorama-download.jpg')
+            .should('have.attr', 'download', 'my-panorama.jpg');
+
+        const png64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+        callViewer('set downloadUrl base64').then(viewer => viewer.setOptions({
+            downloadUrl: png64,
+            downloadName: null,
+        }));
+
+        cy.get('.psv-download-button')
+            .should('have.attr', 'href', png64)
+            .should('have.attr', 'download', 'panorama.png');
     });
 
     // does not work in headless mode

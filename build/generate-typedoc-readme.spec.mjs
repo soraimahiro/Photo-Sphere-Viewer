@@ -3,11 +3,11 @@ import { execSync } from 'child_process';
 import { readFileSync } from 'fs';
 import path from 'path';
 
-const testDir = path.join(__dirname, 'fixtures/generate-typedoc-readme');
+const testDir = path.join(import.meta.dirname, 'fixtures/generate-typedoc-readme');
 
 describe('generate-typedoc-readme', () => {
     it('should generate the readme', () => {
-        execSync(`node ${path.join(__dirname, 'generate-typedoc-readme.mjs')}`, { cwd: testDir });
+        execSync(`node ${path.join(import.meta.dirname, 'generate-typedoc-readme.mjs')}`, { cwd: testDir });
 
         const cases = {
             '.tmp/typedoc/README.md': `

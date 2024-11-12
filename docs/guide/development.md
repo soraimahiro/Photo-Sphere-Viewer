@@ -6,7 +6,7 @@ The building process is based on [tsup](https://tsup.egoist.dev/) (toolkit based
 The documentation is created with [VitePress](https://vitepress.dev/) and [TypeDoc](https://typedoc.org/).
 Files are linted with [ESLint](https://eslint.org/) and [Stylelint](https://stylelint.io/).
 Tests are executed with [Mocha](https://mochajs.org/) and [Cypress](https://www.cypress.io/).
-You will need [Node.js 18](https://nodejs.org/).
+You will need [Node.js 20](https://nodejs.org/).
 
 ## Commands
 

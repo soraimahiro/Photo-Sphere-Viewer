@@ -2,18 +2,14 @@
  * Generate the release note
  */
 
-import fs from 'fs';
 import { stdin } from 'process';
 
 const FROM_TAG = process.argv[2];
 const TO_TAG = process.argv[3];
 
-const DIST_DIR = 'dist';
-const FILENAME = `${DIST_DIR}/changelog_${TO_TAG}.md`;
-
 if (!FROM_TAG || !TO_TAG || FROM_TAG === TO_TAG) {
-    console.warn('No tags provided or same tags');
-    writeFileAndExit('');
+    process.stderr.write('No tags provided or same tags\n');
+    process.exit(0);
 }
 
 let log = '';
@@ -25,8 +21,8 @@ stdin.on('data', (chunk) => {
 });
 
 stdin.on('error', (e) => {
-    console.error(e);
-    writeFileAndExit('');
+    process.stderr.write(e + '\n');
+    process.exit(0);
 });
 
 stdin.on('end', () => {
@@ -40,12 +36,5 @@ ${log
     .map((line) => `- ${line}`)
     .join('\n')}`;
 
-    console.log(content);
-    writeFileAndExit(content);
+    process.stdout.write(content);
 });
-
-function writeFileAndExit(content) {
-    fs.mkdirSync(DIST_DIR, { recursive: true });
-    fs.writeFileSync(FILENAME, content);
-    process.exit(0);
-}

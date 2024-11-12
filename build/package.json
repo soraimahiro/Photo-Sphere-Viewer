@@ -5,6 +5,6 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --fix",
-    "test": "mocha -r ts-node/register \"**/*.spec.ts\""
+    "test": "mocha \"**/*.spec.mjs\""
   }
 }

@@ -54,4 +54,4 @@ ${Object.entries(values)
     }
 `;
 
-console.log(summary);
+process.stdout.write(summary);

@@ -3,24 +3,27 @@ import { exec } from 'child_process';
 import { readFileSync } from 'fs';
 import path from 'path';
 
-const testDir = path.join(__dirname, 'fixtures/prepare-changelog');
+const testDir = path.join(import.meta.dirname, 'fixtures/generate-changelog');
 
-describe('prepare-changelog', () => {
+describe('generate-changelog', () => {
     it('should generate the changelog', (done) => {
         const gitLog = readFileSync(path.join(testDir, 'git-log.txt'), { encoding: 'utf8' });
 
-        const proc = exec(`node ${path.join(__dirname, 'prepare-changelog.mjs')} 5.7.4 5.8.0`, { cwd: testDir }, (err) => {
+        const proc = exec(`node ${path.join(import.meta.dirname, 'generate-changelog.mjs')} 5.7.4 5.8.0`, { cwd: testDir }, (err) => {
             if (err) {
                 assert.fail(err);
             }
         });
 
-        proc.stdin!.write(gitLog);
-        proc.stdin!.end();
+        let actual = '';
+        proc.stdout.on('data', (data) => {
+            actual += data;
+        });
+
+        proc.stdin.write(gitLog);
+        proc.stdin.end();
 
         proc.on('exit', () => {
-            const actual = readFileSync(path.join(testDir, 'dist/changelog_5.8.0.md'), { encoding: 'utf8' });
-
             const expected = `
 Full changelog: [5.7.4...5.8.0](https://github.com/mistic100/Photo-Sphere-Viewer/compare/5.7.4...5.8.0)
 
