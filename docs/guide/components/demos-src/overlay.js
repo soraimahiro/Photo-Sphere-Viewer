@@ -20,7 +20,6 @@ function showOverlay() {
         image: icon,
         title: 'Lorem ipsum dolor sit amet',
         text: 'Lorem ipsum dolor sit amet',
-        dissmisable: true,
     });
 }
 

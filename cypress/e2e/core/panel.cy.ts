@@ -4,7 +4,7 @@ import { NO_LOG, VIEWPORT_MOBILE } from '../../utils/constants';
 
 describe('core: panel', () => {
     beforeEach(() => {
-        cy.visit('e2e/core/panel.html');
+        cy.visit('e2e/core/base.html');
         waitViewerReady();
         // createBaseSnapshot();
     });
@@ -28,7 +28,7 @@ describe('core: panel', () => {
             .should('not.have.class', 'psv-panel--open');
     });
 
-    it('should close on cross click and esc key', () => {
+    it('should hide on cross click and esc key', () => {
         callPanel('show panel').then(panel => panel.show('content'));
         cy.get('.psv-panel').should('be.visible');
 

@@ -31,6 +31,7 @@ Show the overlay.
 | `title` (required) | `string` | Main message of the overlay.  |
 | `text` | `string` | Secondary message of the overlay. |
 | `image` | `string` | SVG icon or image displayed above the text. |
+| `dismissible` | `boolean` | If the overlay can be hidden by click or Escape key (default: `true`). |
 
 ### `hide([id])`
 
