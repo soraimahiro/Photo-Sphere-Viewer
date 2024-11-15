@@ -3,7 +3,7 @@ export type CubemapFaces = 'left' | 'front' | 'right' | 'back' | 'top' | 'bottom
 /**
  * Object defining a cubemap as separated files
  */
-export type Cubemap = { [K in CubemapFaces]: string };
+export type Cubemap = Record<CubemapFaces, string>;
 
 /**
  * Object defining a cubemap as separated files

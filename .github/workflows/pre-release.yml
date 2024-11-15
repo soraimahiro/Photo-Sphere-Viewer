@@ -13,7 +13,7 @@ on:
 
 jobs:
   release:
-    if: github.repository == 'mistic100/Photo-Sphere-Viewer'
+    if: ${{ github.repository == 'mistic100/Photo-Sphere-Viewer' }}
 
     runs-on: ubuntu-latest
 

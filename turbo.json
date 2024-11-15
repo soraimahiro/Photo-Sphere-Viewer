@@ -1,7 +1,9 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "globalDependencies": [
-    "build/**",
+    "build/*.{ts,mjs}",
+    "build/plugins/*",
+    "build/templates/*",
     "tsconfig.json",
     ".eslintrc.json",
     ".mocharc.json",

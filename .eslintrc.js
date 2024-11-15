@@ -20,7 +20,8 @@ module.exports = {
         '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
         '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
         '@typescript-eslint/class-literal-property-style': 'off',
-        '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }]
+        '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+        '@typescript-eslint/no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
     },
     ignorePatterns: ['**/dist/**/*', '*.js'],
 };

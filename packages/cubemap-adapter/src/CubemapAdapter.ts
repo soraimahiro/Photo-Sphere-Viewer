@@ -267,7 +267,7 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
         const ratio = Math.min(1, SYSTEM.maxCanvasWidth / img.height);
         const tileWidth = Math.floor(img.height * ratio);
 
-        const textures = {} as { [K in CubemapFaces]: Texture };
+        const textures = {} as Record<CubemapFaces, Texture>;
 
         for (let i = 0; i < 6; i++) {
             const buffer = new OffscreenCanvas(tileWidth, tileWidth);

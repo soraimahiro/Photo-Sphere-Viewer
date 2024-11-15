@@ -501,7 +501,7 @@ export class EventsHandler extends AbstractService {
             try {
                 const textureCoords = this.viewer.dataHelper.sphericalCoordsToTextureCoords(data);
                 Object.assign(data, textureCoords);
-            } catch (e) {
+            } catch {
                 // nothing
             }
 

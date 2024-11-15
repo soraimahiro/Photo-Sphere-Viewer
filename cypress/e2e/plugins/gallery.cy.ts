@@ -168,9 +168,7 @@ describe('plugin: gallery', () => {
         cy.get('[data-psv-gallery-item=1]')
             .click()
             .should('have.class', 'psv-gallery-item--active')
-            .then(() => {
-                expect(callback).to.be.calledOnceWith('1');
-            });
+            .then(() => expect(callback).to.be.calledOnceWith('1'));
 
         // not changed
         checkPanorama('sphere-small.jpg');
@@ -182,9 +180,7 @@ describe('plugin: gallery', () => {
 
         cy.get('[data-psv-gallery-item=1]')
             .click()
-            .then(() => {
-                expect(callback).to.not.have.been.called;
-            });
+            .then(() => expect(callback).to.not.have.been.called);
     });
 
     it('should hide the button when no items', () => {

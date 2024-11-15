@@ -1,4 +1,5 @@
 name: comment-issues
+run-name: Comment on issues
 
 on:
   issues:
@@ -10,7 +11,7 @@ permissions:
 
 jobs:
   missing-demo:
-    if: github.event.label.name == 'missing demo'
+    if: ${{ github.event.label.name == 'missing demo' }}
 
     runs-on: ubuntu-latest
 
@@ -21,7 +22,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
-          BODY: >
+          BODY: |
             An isolated working demo is required in order to analyze this issue.
             You can easily create a demo on Codepen/JSFiddle/CodeSandBox by clicking the buttons on the top of every example in the documentation.
 

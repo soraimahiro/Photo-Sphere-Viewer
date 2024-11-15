@@ -627,7 +627,7 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
                     width: 20,
                     height: 20,
                 },
-            }),
+            });
 
             this.__getTooltipContent(link).then((content) => {
                 if (content) {
