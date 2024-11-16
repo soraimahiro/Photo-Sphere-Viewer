@@ -23,7 +23,7 @@
     "doc:serve": "turbo run serve-doc",
     "ci:build": "turbo run lint build test --concurrency=100%",
     "ci:e2e": "turbo run build instrument --concurrency=100% -- --env.E2E && node ./build/start-and-test.mjs \"watch --e2e\" \"e2e:run\"",
-    "ci:version": "set-versions --workspaces",
+    "ci:version": "npm version --workspace packages --workspaces-update false",
     "ci:publish": "turbo run publish-dist --concurrency=1",
     "e2e:open": "cypress open --e2e --browser=electron",
     "e2e:run": "cypress run --e2e --browser=electron",
@@ -45,7 +45,6 @@
     "cypress-visual-regression": "^5.2.2",
     "esbuild-sass-plugin": "^3.3.1",
     "eslint": "^8.57.1",
-    "inquirer": "^12.1.0",
     "mocha": "^10.8.2",
     "mocha-junit-reporter": "^2.2.1",
     "nyc": "^17.1.0",
@@ -54,7 +53,6 @@
     "queue": "^7.0.0",
     "scss-bundle": "^3.1.2",
     "selfsigned": "^2.4.1",
-    "set-versions": "^1.0.3",
     "sort-package-json": "^2.10.1",
     "stylelint": "^16.10.0",
     "stylelint-config-standard-scss": "^13.1.0",
@@ -67,10 +65,8 @@
     "typescript": "^5.6.3"
   },
   "resolutions": {
-    "yargs": "^16.2.0",
-    "nyc": "^17.1.0"
-  },
-  "dependencies": {
-    "yargs": "^17.7.2"
+    "yargs": "^17.7.2",
+    "nyc": "^17.1.0",
+    "mocha/glob": "^10.4.5"
   }
 }

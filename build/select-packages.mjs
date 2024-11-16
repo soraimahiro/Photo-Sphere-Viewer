@@ -3,29 +3,25 @@
  * Returns the '--filter' arguments for Turbo
  */
 
+import enquirer from 'enquirer';
 import fs from 'fs';
-import inquirer from 'inquirer';
 import process from 'process';
 
 const PACKAGES_DIR = 'packages';
 const packages = fs.readdirSync(PACKAGES_DIR).filter((name) => name !== 'shared' && name !== 'core');
 
-const prompt = inquirer.createPromptModule({ output: process.stderr });
+const prompt = new enquirer.MultiSelect({
+    name: 'packages',
+    message: 'Select which packages to build',
+    choices: [{ name: 'core', disabled: true }, ...packages],
+    stdout: process.stderr,
+});
 
-process.stdin.on('data', (key) => {
-    if (key == '\u0003') {
+prompt.run()
+    .then((answers) => {
+        const filters = answers.map((p) => `--filter=@photo-sphere-viewer/${p}`).join(' ');
+        process.stdout.write(`--filter=// --filter=@photo-sphere-viewer/core ${filters}`);
+    })
+    .catch(() => {
         process.stdout.write('--filter=noop');
-    }
-});
-
-prompt([
-    {
-        name: 'packages',
-        message: 'Select which packages to build',
-        type: 'checkbox',
-        choices: [{ value: 'core', checked: true }, ...packages],
-    },
-]).then((answers) => {
-    const filters = answers.packages.map((p) => `--filter=@photo-sphere-viewer/${p}`).join(' ');
-    process.stdout.write(`--filter=// ${filters}`);
-});
+    });

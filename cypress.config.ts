@@ -16,7 +16,7 @@ export default defineConfig({
         scrollBehavior: false,
         screenshotOnRunFailure: false,
         env: {
-          visualRegressionType: 'regression',
+            visualRegressionType: 'regression',
         },
         setupNodeEvents(on, config) {
             on = cypressOnFix(on);
@@ -32,22 +32,22 @@ export default defineConfig({
                 // should be bigger than the largest viewport used + browser UI elements
                 const width = 1600;
                 const height = 1200;
-    
+
                 if (browser.name.startsWith('chrom') && browser.isHeadless) {
                     launchOptions.args.push(`--window-size=${width},${height}`);
                     launchOptions.args.push('--force-device-scale-factor=1');
                 }
-    
+
                 if (browser.name === 'electron' && browser.isHeadless) {
                     launchOptions.preferences.width = width;
                     launchOptions.preferences.height = height;
                 }
-    
+
                 if (browser.name === 'firefox' && browser.isHeadless) {
                     launchOptions.args.push(`--width=${width}`);
                     launchOptions.args.push(`--height=${height}`);
                 }
-    
+
                 return launchOptions
             });
 
@@ -57,14 +57,27 @@ export default defineConfig({
 
                 console.log(`Move ${ROOT_DIR}lcov-viewer to ${ROOT_DIR}html/coverage`);
 
-                fs.mkdirSync(ROOT_DIR + 'html/coverage', { recursive: true });
-                fs.copyFileSync(ROOT_DIR + 'lcov-viewer/report-data.js', ROOT_DIR + 'html/coverage/report-data.js');
-                
-                const index = fs.readFileSync(ROOT_DIR + 'lcov-viewer/index.html', 'utf-8')
+                fs.mkdirSync(`${ROOT_DIR}html/coverage`, { recursive: true });
+                fs.copyFileSync(`${ROOT_DIR}lcov-viewer/report-data.js`, `${ROOT_DIR}html/coverage/report-data.js`);
+
+                let content = fs.readFileSync(`${ROOT_DIR}lcov-viewer/index.html`, 'utf-8')
                     .replace('src="app.js"', 'src="https://cdn.jsdelivr.net/npm/@lcov-viewer/istanbul-report@1/lib/assets/app.js"')
                     .replace(/<title>.*<\/title>/, '<title>Photo Sphere Viewer - E2E coverage</title>');
-                
-                fs.writeFileSync(ROOT_DIR + 'html/coverage/index.html', index, 'utf-8');
+
+                fs.writeFileSync(`${ROOT_DIR}html/coverage/index.html`, content, 'utf-8');
+
+                console.log(`Add link to coverage in ${ROOT_DIR}html/index.html`);
+
+                content = fs.readFileSync(`${ROOT_DIR}html/index.html`, 'utf-8')
+                    .replace('</body>', `<script>
+const list = document.querySelector('[class^="quick-summary--list"]');
+const item = list.firstChild.cloneNode(true);
+item.querySelector('i').innerHTML = '&#xe6c4;';
+item.querySelector('span').innerHTML = '<a href="coverage" style="color:white;text-decoration:underline;">Coverage</a>';
+list.prepend(item);
+</script></body>`);
+
+                fs.writeFileSync(`${ROOT_DIR}html/index.html`, content, 'utf-8');
             });
 
             return config;
