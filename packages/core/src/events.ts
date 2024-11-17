@@ -21,7 +21,7 @@ export class BeforeAnimateEvent extends ViewerEvent {
         /** target position, can be modified */
         public position: Position | undefined,
         /** target zoom level, can be modified */
-        public zoomLevel: number | undefined
+        public zoomLevel: number | undefined,
     ) {
         super(BeforeAnimateEvent.type, true);
     }
@@ -39,7 +39,7 @@ export class BeforeRenderEvent extends ViewerEvent {
         /** time provided by requestAnimationFrame */
         public readonly timestamp: number,
         /**  time elapsed since the previous frame */
-        public readonly elapsed: number
+        public readonly elapsed: number,
     ) {
         super(BeforeRenderEvent.type);
     }
@@ -55,7 +55,7 @@ export class BeforeRotateEvent extends ViewerEvent {
     /** @internal */
     constructor(
         /** target position, can be modified */
-        public position: Position
+        public position: Position,
     ) {
         super(BeforeRotateEvent.type, true);
     }
@@ -90,7 +90,7 @@ export class ConfigChangedEvent extends ViewerEvent {
      * Checks if at least one of the `options` has been modified
      */
     containsOptions(...options: Array<keyof ViewerConfig>): boolean {
-        return options.some((option) => this.options.includes(option));
+        return options.some(option => this.options.includes(option));
     }
 }
 
@@ -169,7 +169,7 @@ export class HideTooltipEvent extends ViewerEvent {
     /** @internal */
     constructor(
         /** Userdata associated to the tooltip */
-        public readonly tooltipData: TooltipConfig['data']
+        public readonly tooltipData: TooltipConfig['data'],
     ) {
         super(HideTooltipEvent.type);
     }
@@ -237,7 +237,7 @@ export class PanoramaErrorEvent extends ViewerEvent {
     /** @internal */
     constructor(
         public readonly panorama: any,
-        public readonly error: Error
+        public readonly error: Error,
     ) {
         super(PanoramaErrorEvent.type);
     }
@@ -359,7 +359,7 @@ export class ShowTooltipEvent extends ViewerEvent {
         /** Instance of the tooltip */
         public readonly tooltip: Tooltip,
         /** Userdata associated to the tooltip */
-        public readonly tooltipData?: TooltipConfig['data']
+        public readonly tooltipData?: TooltipConfig['data'],
     ) {
         super(ShowTooltipEvent.type);
     }
@@ -416,7 +416,7 @@ export abstract class ObjectEvent extends ViewerEvent {
         public readonly originalEvent: MouseEvent,
         public readonly object: Mesh<any, any>,
         public readonly viewerPoint: Point,
-        public readonly userDataKey: string
+        public readonly userDataKey: string,
     ) {
         super(type);
     }

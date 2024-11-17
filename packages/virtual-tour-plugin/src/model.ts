@@ -220,10 +220,10 @@ export type VirtualTourPluginConfig = {
     transitionOptions?:
         | Pick<VirtualTourTransitionOptions, 'showLoader' | 'speed' | 'fadeIn' | 'rotation'>
         | ((
-              toNode: VirtualTourNode,
-              fromNode?: VirtualTourNode,
-              fromLink?: VirtualTourLink
-          ) => VirtualTourTransitionOptions);
+            toNode: VirtualTourNode,
+            fromNode?: VirtualTourNode,
+            fromLink?: VirtualTourLink
+        ) => VirtualTourTransitionOptions);
     /**
      * if the Compass plugin is enabled, displays the links on the compass
      * @default true

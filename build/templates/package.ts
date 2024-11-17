@@ -21,7 +21,7 @@ export const packageJson = (pkg: any) => {
             url: 'git://github.com/mistic100/Photo-Sphere-Viewer.git',
         },
         author: {
-            name: "Damien 'Mistic' Sorel",
+            name: `Damien 'Mistic' Sorel`,
             email: 'contact@git.strangeplanet.fr',
             homepage: 'https://www.strangeplanet.fr',
         },

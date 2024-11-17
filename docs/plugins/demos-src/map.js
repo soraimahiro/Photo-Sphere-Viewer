@@ -1,6 +1,10 @@
+import { Viewer } from '@photo-sphere-viewer/core';
+import { MapPlugin } from '@photo-sphere-viewer/map-plugin';
+import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
+
 const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 
-const viewer = new Viewer({
+new Viewer({
     container: 'viewer',
     panorama: baseUrl + 'sphere.jpg',
     caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',

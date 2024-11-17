@@ -1,7 +1,7 @@
+import { Viewer } from '@photo-sphere-viewer/core';
+import { VisibleRangePlugin } from '@photo-sphere-viewer/visible-range-plugin';
 
 const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
-
-let visibleRangePlugin;
 
 const viewer = new Viewer({
     container: 'viewer',
@@ -48,4 +48,4 @@ const viewer = new Viewer({
     ],
 });
 
-visibleRangePlugin = viewer.getPlugin(VisibleRangePlugin);
+const visibleRangePlugin = viewer.getPlugin(VisibleRangePlugin);

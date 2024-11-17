@@ -29,7 +29,7 @@ type AbstractVideoTextureData = TextureData<VideoTexture>;
 export abstract class AbstractVideoAdapter<
     TPanorama extends AbstractVideoPanorama,
     TData,
-    TMesh extends AbstractVideoMesh
+    TMesh extends AbstractVideoMesh,
 > extends AbstractAdapter<TPanorama, TData, VideoTexture, TMesh> {
     static override readonly supportsDownload = false;
 
@@ -70,12 +70,14 @@ export abstract class AbstractVideoAdapter<
             return Promise.reject(new PSVError('Video adapters require VideoPlugin to be loaded too.'));
         }
 
-        const video = panorama.source instanceof HTMLVideoElement ? panorama.source : createVideo({
-            src: panorama.source,
-            withCredentials: this.viewer.config.withCredentials,
-            muted: this.config.muted,
-            autoplay: false,
-        });
+        const video = panorama.source instanceof HTMLVideoElement
+            ? panorama.source
+            : createVideo({
+                src: panorama.source,
+                withCredentials: this.viewer.config.withCredentials,
+                muted: this.config.muted,
+                autoplay: false,
+            });
 
         await this.__videoLoadPromise(video);
 

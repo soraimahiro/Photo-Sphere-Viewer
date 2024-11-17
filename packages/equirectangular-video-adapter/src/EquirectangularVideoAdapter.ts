@@ -57,7 +57,7 @@ export class EquirectangularVideoAdapter extends AbstractVideoAdapter<
     override async loadTexture(
         panorama: EquirectangularVideoPanorama,
         _?: boolean,
-        newPanoData?: any
+        newPanoData?: any,
     ): Promise<EquirectangularVideoTextureData> {
         const { texture } = await super.loadTexture(panorama);
         const video: HTMLVideoElement = texture.image;

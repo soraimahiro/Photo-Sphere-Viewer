@@ -98,11 +98,11 @@ export class SettingsPlugin extends AbstractPlugin<SettingsPluginEvents> {
         if (!setting.type) {
             throw new PSVError('Missing setting type');
         }
-        if (this.settings.some((s) => s.id === setting.id)) {
+        if (this.settings.some(s => s.id === setting.id)) {
             throw new PSVError(`Setting "${setting.id}" already exists`);
         }
 
-        if (setting.badge && this.settings.some((s) => s.badge)) {
+        if (setting.badge && this.settings.some(s => s.badge)) {
             utils.logWarn('More than one setting with a badge are declared, the result is unpredictable.');
         }
 
@@ -148,7 +148,7 @@ export class SettingsPlugin extends AbstractPlugin<SettingsPluginEvents> {
      * Removes a setting
      */
     removeSetting(id: string) {
-        const idx = this.settings.findIndex((setting) => setting.id === id);
+        const idx = this.settings.findIndex(setting => setting.id === id);
         if (idx !== -1) {
             this.settings.splice(idx, 1);
 
@@ -195,7 +195,7 @@ export class SettingsPlugin extends AbstractPlugin<SettingsPluginEvents> {
     updateButton() {
         const button = this.__getButton();
         if (this.settings.length) {
-            const value = this.settings.find((s) => s.badge)?.badge();
+            const value = this.settings.find(s => s.badge)?.badge();
             button?.show();
             button?.setBadge(value);
         } else {

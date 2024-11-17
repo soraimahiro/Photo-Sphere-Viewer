@@ -30,15 +30,11 @@ This adapter requires to use the [VideoPlugin](../../plugins/video.md).
 title: PSV Cubemap Video Demo
 packages:
     - name: cubemap-video-adapter
-      imports: CubemapVideoAdapter
     - name: video-plugin
-      imports: VideoPlugin
       style: true
     - name: settings-plugin
-      imports: SettingsPlugin
       style: true
     - name: resolution-plugin
-      imports: ResolutionPlugin
 ```
 
 <<< ./demos-src/cubemap-video.js

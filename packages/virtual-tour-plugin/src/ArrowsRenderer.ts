@@ -13,13 +13,12 @@ const ARROW_DATA = 'arrow';
 type ArrowData = {
     yaw: number;
     conflict: boolean;
-}
+};
 
 /**
  * @internal
  */
 export class ArrowsRenderer extends AbstractComponent {
-
     private renderer: CSS3DRenderer | CSS2DRenderer;
     private scene: Scene;
     private camera: PerspectiveCamera;
@@ -43,11 +42,13 @@ export class ArrowsRenderer extends AbstractComponent {
             className: 'psv-virtual-tour-arrows',
         });
 
-        this.renderer = this.is3D ? new CSS3DRenderer({
-            element: this.container,
-        }) : new CSS2DRenderer({
-            element: this.container,
-        });
+        this.renderer = this.is3D
+            ? new CSS3DRenderer({
+                element: this.container,
+            })
+            : new CSS2DRenderer({
+                element: this.container,
+            });
 
         this.camera = this.is3D ? new PerspectiveCamera(30, 1) : null;
         this.scene = new Scene();
@@ -93,7 +94,7 @@ export class ArrowsRenderer extends AbstractComponent {
                 this.__updateCamera();
                 break;
             case events.RenderEvent.type:
-                this.render()
+                this.render();
                 break;
             case events.ClickEvent.type: {
                 if ((e as events.ClickEvent).data.rightclick) {
@@ -143,12 +144,12 @@ export class ArrowsRenderer extends AbstractComponent {
 
         if (this.is3D) {
             const position = this.viewer.getPosition();
-            position.pitch = MathUtils.clamp(position.pitch, - this.arrowsPosition.maxPitch, -this.arrowsPosition.minPitch);
+            position.pitch = MathUtils.clamp(position.pitch, -this.arrowsPosition.maxPitch, -this.arrowsPosition.minPitch);
 
             this.viewer.dataHelper.sphericalCoordsToVector3(
                 position,
                 this.camera.position,
-                size.height * 2
+                size.height * 2,
             ).negate();
 
             this.camera.lookAt(0, 0, 0);
@@ -245,7 +246,7 @@ export class ArrowsRenderer extends AbstractComponent {
             this.viewer.dataHelper.sphericalCoordsToVector3(
                 { yaw: position.yaw, pitch: 0 },
                 object.position,
-                depth * 100
+                depth * 100,
             );
 
             this.scene.add(object);
@@ -258,7 +259,7 @@ export class ArrowsRenderer extends AbstractComponent {
 
             this.viewer.dataHelper.sphericalCoordsToVector3(
                 position,
-                object.position
+                object.position,
             );
 
             this.scene.add(object);
@@ -277,5 +278,4 @@ export class ArrowsRenderer extends AbstractComponent {
             this.container.style.marginBottom = (this.viewer.container.querySelector<HTMLElement>('.psv-gallery').offsetHeight) + 'px';
         }
     }
-
 }

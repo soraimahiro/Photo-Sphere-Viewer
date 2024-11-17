@@ -37,15 +37,12 @@ Do not forget to import Leaflet JS and CSS files.
 title: PSV Plan Demo
 packages:
     - name: plan-plugin
-      imports: PlanPlugin
       style: true
     - name: markers-plugin
-      imports: MarkersPlugin
       style: true
     - name: leaflet
       external: true
       version: 1
-      imports: TileLayer
       style: true
       js: dist/leaflet-src.esm.js
       css: dist/leaflet.css

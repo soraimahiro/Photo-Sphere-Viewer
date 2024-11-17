@@ -97,7 +97,7 @@ export function getMatchingTarget(e: Event, selector: string): HTMLElement | nul
 
         return el.matches(selector);
     }) as HTMLElement;
-} 
+}
 
 /**
  * Gets the position of an element in the viewport without reflow

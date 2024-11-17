@@ -64,11 +64,11 @@ export class DataHelper extends AbstractService {
     getAnimationProperties(
         speed: number | string,
         targetPosition: Position,
-        targetZoom: number
+        targetZoom: number,
     ): {
-        duration: number;
-        properties: AnimationOptions<{ yaw: any; pitch: any; zoom: any }>['properties'];
-    } {
+            duration: number;
+            properties: AnimationOptions<{ yaw: any; pitch: any; zoom: any }>['properties'];
+        } {
         const positionProvided = !isNil(targetPosition);
         const zoomProvided = !isNil(targetZoom);
 
@@ -191,7 +191,7 @@ export class DataHelper extends AbstractService {
     viewerCoordsToVector3(viewerPoint: Point): Vector3 {
         const sphereIntersect = this.viewer.renderer
             .getIntersections(viewerPoint)
-            .filter((i) => i.object.userData[VIEWER_DATA]);
+            .filter(i => i.object.userData[VIEWER_DATA]);
 
         if (sphereIntersect.length) {
             return sphereIntersect[0].point;

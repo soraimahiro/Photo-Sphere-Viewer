@@ -40,7 +40,6 @@ title: PSV Cubemap Tiles Demo
 packages:
     - name: cubemap-adapter
     - name: cubemap-tiles-adapter
-      imports: CubemapTilesAdapter
 ```
 
 <<< ./demos-src/cubemap-tiles.js

@@ -13,8 +13,8 @@ export function checkTilesLevels(levels: Array<{ zoomRange: [number, number] }>)
         }
         if (level.zoomRange[0] >= level.zoomRange[1]
             || level.zoomRange[0] !== previous
-            || i === 0 && level.zoomRange[0] !== 0
-            || i === levels.length - 1 && level.zoomRange[1] !== 100) {
+            || (i === 0 && level.zoomRange[0] !== 0)
+            || (i === levels.length - 1 && level.zoomRange[1] !== 100)) {
             throw new PSVError(`Tiles levels' "zoomRange" are not orderer or are not covering the whole 0-100 range`);
         }
         previous = level.zoomRange[1];
@@ -23,7 +23,7 @@ export function checkTilesLevels(levels: Array<{ zoomRange: [number, number] }>)
 
 export function getTileIndexByZoomLevel<T extends { zoomRange: [number, number] }>(
     levels: T[],
-    zoomLevel: number
+    zoomLevel: number,
 ): number {
     return levels.findIndex((level) => {
         return zoomLevel >= level.zoomRange[0] && zoomLevel <= level.zoomRange[1];

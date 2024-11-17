@@ -25,7 +25,6 @@ const viewer = new Viewer({
 title: PSV Dual fisheye Demo
 packages:
     - name: core
-      imports: DualFisheyeAdapter
 ```
 
 <<< ./demos-src/dual-fisheye.js

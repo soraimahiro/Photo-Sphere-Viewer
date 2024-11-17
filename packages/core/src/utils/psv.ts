@@ -11,7 +11,7 @@ import { clone, firstNonNull, isPlainObject } from './misc';
 export function resolveBoolean(value: boolean | ResolvableBoolean, cb: (val: boolean, init: boolean) => void) {
     if (isPlainObject(value)) {
         cb((value as ResolvableBoolean).initial, true);
-        (value as ResolvableBoolean).promise.then((res) => cb(res, false));
+        (value as ResolvableBoolean).promise.then(res => cb(res, false));
     } else {
         cb(value as boolean, true);
     }
@@ -23,7 +23,7 @@ export function resolveBoolean(value: boolean | ResolvableBoolean, cb: (val: boo
 export function invertResolvableBoolean(value: ResolvableBoolean): ResolvableBoolean {
     return {
         initial: !value.initial,
-        promise: value.promise.then((res) => !res),
+        promise: value.promise.then(res => !res),
     };
 }
 
@@ -124,7 +124,7 @@ export function parsePoint(value: string | Point): Point {
 
     const xFirst = tokens[1] !== 'left' && tokens[1] !== 'right' && tokens[0] !== 'top' && tokens[0] !== 'bottom';
 
-    tokens = tokens.map((token) => CSS_POSITIONS[token] || token);
+    tokens = tokens.map(token => CSS_POSITIONS[token] || token);
 
     if (!xFirst) {
         tokens.reverse();
@@ -154,7 +154,7 @@ export function cleanCssPosition(
     { allowCenter, cssOrder } = {
         allowCenter: true,
         cssOrder: true,
-    }
+    },
 ): [string, string] | null {
     if (!value) {
         return null;
@@ -395,7 +395,7 @@ export type ConfigParser<T, U extends T> = {
  */
 export function getConfigParser<T extends Record<string, any>, U extends T = T>(
     defaults: Required<U>,
-    parsers?: ConfigParsers<T, U>
+    parsers?: ConfigParsers<T, U>,
 ): ConfigParser<T, U> {
     const parser = function (userConfig: T): U {
         const rawConfig: U = clone({
@@ -497,7 +497,7 @@ export function mergePanoData(width: number, height: number, newPanoData?: PanoD
     };
 
     if (!panoData.fullWidth && panoData.fullHeight) {
-        panoData.fullWidth = panoData.fullHeight * 2
+        panoData.fullWidth = panoData.fullHeight * 2;
     } else if (!panoData.fullWidth || !panoData.fullHeight) {
         panoData.fullWidth = panoData.fullWidth ?? width;
         panoData.fullHeight = panoData.fullHeight ?? height;
@@ -507,7 +507,7 @@ export function mergePanoData(width: number, height: number, newPanoData?: PanoD
         logWarn(`Invalid panoData, croppedWidth/croppedHeight is not coherent with the loaded image.
         panoData: ${panoData.croppedWidth}x${panoData.croppedHeight}, image: ${width}x${height}`);
     }
-    
+
     if (Math.abs(panoData.fullWidth - panoData.fullHeight * 2) > 1) {
         logWarn('Invalid panoData, fullWidth should be twice fullHeight');
         panoData.fullHeight = Math.round(panoData.fullWidth / 2);

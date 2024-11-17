@@ -44,9 +44,8 @@ export class DownloadButton extends AbstractButton {
     }
 
     override checkSupported() {
-        const supported =
-            (this.viewer.adapter.constructor as typeof AbstractAdapter).supportsDownload ||
-            this.viewer.config.downloadUrl;
+        const adapter = this.viewer.adapter.constructor as typeof AbstractAdapter;
+        const supported = adapter.supportsDownload || this.viewer.config.downloadUrl;
         if (supported) {
             this.show();
         } else {

@@ -2,9 +2,9 @@ import type { AbstractPlugin, SphericalPosition, Viewer } from '@photo-sphere-vi
 import { BASE_URL, NO_LOG } from './constants';
 
 export function waitViewerReady() {
-    callViewer('wait ready').then(viewer => {
+    callViewer('wait ready').then((viewer) => {
         if (!viewer.state.ready) {
-            return new Promise(resolve => {
+            return new Promise((resolve) => {
                 viewer.addEventListener('ready', () => {
                     setTimeout(resolve, 200);
                 }, { once: true });

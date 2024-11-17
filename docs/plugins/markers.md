@@ -61,7 +61,6 @@ The following example contains all types of markers. Click anywhere on the panor
 title: PSV Markers Demo
 packages:
     - name: markers-plugin
-      imports: MarkersPlugin
       style: true
 ```
 

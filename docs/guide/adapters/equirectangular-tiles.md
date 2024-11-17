@@ -33,7 +33,6 @@ const viewer = new Viewer({
 title: PSV Equirectangular Tiles Demo
 packages:
     - name: equirectangular-tiles-adapter
-      imports: EquirectangularTilesAdapter
 ```
 
 <<< ./demos-src/equirectangular-tiles.js

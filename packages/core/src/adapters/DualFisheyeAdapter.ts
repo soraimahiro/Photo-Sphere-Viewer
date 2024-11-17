@@ -35,7 +35,7 @@ export class DualFisheyeAdapter extends EquirectangularAdapter {
         const geometry = new SphereGeometry(
             SPHERE_RADIUS,
             this.SPHERE_SEGMENTS,
-            this.SPHERE_HORIZONTAL_SEGMENTS
+            this.SPHERE_HORIZONTAL_SEGMENTS,
         )
             .scale(-1, 1, 1)
             .toNonIndexed() as SphereGeometry;
@@ -56,13 +56,13 @@ export class DualFisheyeAdapter extends EquirectangularAdapter {
                     const correction = (x === 0 && z === 0) ? 1 : (Math.acos(y) / Math.sqrt(x * x + z * z)) * (2 / Math.PI);
                     uvs.setXY(index,
                         x * (c / 4) * correction + (1 / 4),
-                        z * (c / 2) * correction + (1 / 2)
+                        z * (c / 2) * correction + (1 / 2),
                     );
                 } else {
                     const correction = (x === 0 && z === 0) ? 1 : (Math.acos(-y) / Math.sqrt(x * x + z * z)) * (2 / Math.PI);
                     uvs.setXY(index,
                         -x * (c / 4) * correction + (3 / 4),
-                        z * (c / 2) * correction + (1 / 2)
+                        z * (c / 2) * correction + (1 / 2),
                     );
                 }
             }
@@ -75,5 +75,4 @@ export class DualFisheyeAdapter extends EquirectangularAdapter {
 
         return new Mesh(geometry, material);
     }
-
 }

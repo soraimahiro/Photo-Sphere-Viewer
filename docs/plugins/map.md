@@ -39,10 +39,8 @@ const viewer = new Viewer({
 title: PSV Map Demo
 packages:
     - name: map-plugin
-      imports: MapPlugin
       style: true
     - name: markers-plugin
-      imports: MarkersPlugin
       style: true
 ```
 

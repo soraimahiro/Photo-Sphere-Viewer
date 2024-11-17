@@ -3,12 +3,11 @@ import { AbstractPlanButton, ButtonPosition } from './AbstractPlanButton';
 import type { PlanComponent } from './PlanComponent';
 
 export class PlanLayersButton extends AbstractPlanButton {
-
     private select: HTMLSelectElement;
 
     constructor(plan: PlanComponent) {
         super(plan, ButtonPosition.VERTICAL);
-        
+
         this.container.innerHTML = layersIcon;
 
         this.select = document.createElement('select');
@@ -21,7 +20,7 @@ export class PlanLayersButton extends AbstractPlanButton {
         this.select.addEventListener('change', () => {
             plan.setLayer(this.select.value);
             this.__setSelected();
-        })
+        });
 
         this.container.appendChild(this.select);
 

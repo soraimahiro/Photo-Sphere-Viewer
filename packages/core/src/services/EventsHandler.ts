@@ -34,7 +34,7 @@ import {
     getPosition,
     getTouchData,
     isEmpty,
-    throttle
+    throttle,
 } from '../utils';
 import { PressHandler } from '../utils/PressHandler';
 import type { Viewer } from '../Viewer';
@@ -48,7 +48,7 @@ class Step {
     private $: number = Step.IDLE;
 
     is(...steps: number[]): boolean {
-        return steps.some((step) => this.$ & step);
+        return steps.some(step => this.$ & step);
     }
 
     set(step: number) {
@@ -150,7 +150,6 @@ export class EventsHandler extends AbstractService {
      * @internal
      */
     handleEvent(evt: Event) {
-        // prettier-ignore
         switch (evt.type) {
             case 'keydown': this.__onKeyDown(evt as KeyboardEvent); break;
             case 'keyup': this.__onKeyUp(); break;
@@ -164,7 +163,6 @@ export class EventsHandler extends AbstractService {
         }
 
         if (!getMatchingTarget(evt, '.' + CAPTURE_EVENTS_CLASS)) {
-            // prettier-ignore
             switch (evt.type) {
                 case 'mousedown': this.__onMouseDown(evt as MouseEvent); break;
                 case 'touchstart': this.__onTouchStart(evt as TouchEvent); break;
@@ -211,7 +209,6 @@ export class EventsHandler extends AbstractService {
                 this.viewer.stopAll();
             }
 
-            // prettier-ignore
             switch (action) {
                 case ACTIONS.ROTATE_UP: this.viewer.dynamics.position.roll({ pitch: false }); break;
                 case ACTIONS.ROTATE_DOWN: this.viewer.dynamics.position.roll({ pitch: true }); break;
@@ -480,7 +477,7 @@ export class EventsHandler extends AbstractService {
         const viewerY = clientY - boundingRect.top;
 
         const intersections = this.viewer.renderer.getIntersections({ x: viewerX, y: viewerY });
-        const sphereIntersection = intersections.find((i) => i.object.userData[VIEWER_DATA]);
+        const sphereIntersection = intersections.find(i => i.object.userData[VIEWER_DATA]);
 
         if (sphereIntersection) {
             const sphericalCoords = this.viewer.dataHelper.vector3ToSphericalCoords(sphereIntersection.point);
@@ -495,7 +492,7 @@ export class EventsHandler extends AbstractService {
                 viewerY,
                 yaw: sphericalCoords.yaw,
                 pitch: sphericalCoords.pitch,
-                objects: intersections.map((i) => i.object).filter((o) => !o.userData[VIEWER_DATA]),
+                objects: intersections.map(i => i.object).filter(o => !o.userData[VIEWER_DATA]),
             };
 
             try {
@@ -545,13 +542,13 @@ export class EventsHandler extends AbstractService {
             const emit = (
                 object: Mesh,
                 key: string,
-                evtCtor: new (e: MouseEvent, o: Mesh, pt: Point, data: any) => ViewerEvents
+                evtCtor: new (e: MouseEvent, o: Mesh, pt: Point, data: any) => ViewerEvents,
             ) => {
                 this.viewer.dispatchEvent(new evtCtor(evt, object, viewerPoint, key));
             };
 
             for (const [key, object] of Object.entries(this.state.objectsObservers) as Array<[string, Mesh | null]>) {
-                const intersection = intersections.find((i) => i.object.userData[key]);
+                const intersection = intersections.find(i => i.object.userData[key]);
 
                 if (intersection) {
                     if (object && intersection.object !== object) {
@@ -584,7 +581,6 @@ export class EventsHandler extends AbstractService {
             this.data.mouseX = clientX;
             this.data.mouseY = clientY;
             this.data.accumulatorFactor = this.config.moveInertia;
-
         } else if (this.step.is(Step.MOVING)) {
             const x = (clientX - this.data.mouseX) * Math.cos(this.state.roll) - (clientY - this.data.mouseY) * Math.sin(this.state.roll);
             const y = (clientY - this.data.mouseY) * Math.cos(this.state.roll) + (clientX - this.data.mouseX) * Math.sin(this.state.roll);

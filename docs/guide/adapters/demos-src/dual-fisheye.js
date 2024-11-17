@@ -1,6 +1,8 @@
+import { Viewer, DualFisheyeAdapter } from '@photo-sphere-viewer/core';
+
 const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 
-const viewer = new Viewer({
+new Viewer({
     container: 'viewer',
     adapter: DualFisheyeAdapter,
     panorama: baseUrl + 'dualfisheye.jpg',

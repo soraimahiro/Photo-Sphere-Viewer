@@ -59,7 +59,7 @@ export class Slider {
         /** direction of the slider */
         private readonly direction: SliderDirection,
         /** callback when the user interacts with the slider */
-        private readonly listener: (data: SliderUpdateData) => void
+        private readonly listener: (data: SliderUpdateData) => void,
     ) {
         this.container.addEventListener('click', this);
         this.container.addEventListener('mousedown', this);
@@ -81,7 +81,6 @@ export class Slider {
      * @internal
      */
     handleEvent(e: Event) {
-        // prettier-ignore
         switch (e.type) {
             case 'click': e.stopPropagation(); break;
             case 'mousedown': this.__onMouseDown(e as MouseEvent); break;

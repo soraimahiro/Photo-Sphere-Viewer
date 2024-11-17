@@ -1,14 +1,15 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "globalDependencies": [
-    "build/*.{ts,mjs}",
+    ".mocharc.json",
+    ".nycrc.json",
+    ".stylelintrc.json",
+    "build/*",
     "build/plugins/*",
     "build/templates/*",
-    "tsconfig.json",
-    ".eslintrc.json",
-    ".mocharc.json",
-    ".stylelintrc.json",
-    "packages/shared/*.{ts,scss,glsl}"
+    "eslint.config.mjs",
+    "packages/shared/*.{ts,scss,glsl}",
+    "tsconfig.json"
   ],
   "tasks": {
     "build": {

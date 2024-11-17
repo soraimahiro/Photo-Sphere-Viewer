@@ -30,7 +30,7 @@ ${
 
         if (!e2e) {
             plugins.push(
-                mapFixPlugin()
+                mapFixPlugin(),
             );
         }
 
@@ -43,7 +43,7 @@ ${
                     '.npmrc': npmrc(),
                     'README.md': readme(pkg),
                     'package.json': packageJson(pkg),
-                })
+                }),
             );
         }
 

@@ -56,7 +56,7 @@ export abstract class Marker {
     constructor(
         protected viewer: Viewer,
         protected plugin: MarkersPlugin,
-        config: MarkerConfig
+        config: MarkerConfig,
     ) {
         if (!config.id) {
             throw new PSVError('missing marker id');

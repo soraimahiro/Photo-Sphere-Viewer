@@ -33,7 +33,6 @@ The following example manually adds two settings.
 title: PSV Settings Demo
 packages:
     - name: settings-plugin
-      imports: SettingsPlugin
       style: true
 ```
 

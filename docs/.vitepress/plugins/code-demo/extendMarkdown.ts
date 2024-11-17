@@ -27,7 +27,7 @@ export default function extendMarkdown(md: MarkdownIt) {
                         break;
                     }
                     if (type === 'fence') {
-                        const lang = info.split(/[{\[]/)[0];
+                        const lang = info.split(/[{[]/)[0];
                         if (lang === 'yaml' || lang === 'yml') {
                             Object.assign(config, parseYaml(content));
                         } else if (src) {

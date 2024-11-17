@@ -53,10 +53,8 @@ The following example provides two resolutions for the panorama, "small" is load
 title: PSV Resolution Demo
 packages:
     - name: settings-plugin
-      imports: SettingsPlugin
       style: true
     - name: resolution-plugin
-      imports: ResolutionPlugin
 ```
 
 <<< ./demos-src/resolution.js

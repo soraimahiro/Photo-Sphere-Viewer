@@ -19,7 +19,7 @@ export function scssBundlePlugin(): Plugin {
             const outpath = outdir + '/index.scss';
 
             build.onEnd((result) => {
-                const scssFile = Object.keys(result.metafile.inputs).find((file) => file.endsWith('.scss'));
+                const scssFile = Object.keys(result.metafile.inputs).find(file => file.endsWith('.scss'));
                 if (!scssFile) {
                     return;
                 }

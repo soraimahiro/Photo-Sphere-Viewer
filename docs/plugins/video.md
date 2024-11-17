@@ -45,17 +45,13 @@ const viewer = new Viewer({
 title: PSV Video Demo
 packages:
     - name: equirectangular-video-adapter
-      imports: EquirectangularVideoAdapter
     - name: video-plugin
       imports: VideoPlugin
       style: true
     - name: autorotate-plugin
-      imports: AutorotatePlugin
     - name: settings-plugin
-      imports: SettingsPlugin
       style: true
     - name: resolution-plugin
-      imports: ResolutionPlugin
 ```
 
 <<< ./demos-src/video.js

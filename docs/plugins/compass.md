@@ -36,10 +36,8 @@ const viewer = new Viewer({
 title: PSV Compass Demo
 packages:
     - name: compass-plugin
-      imports: CompassPlugin
       style: true
     - name: markers-plugin
-      imports: MarkersPlugin
       style: true
 ```
 

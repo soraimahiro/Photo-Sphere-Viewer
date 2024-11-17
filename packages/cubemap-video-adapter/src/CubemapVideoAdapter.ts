@@ -87,7 +87,7 @@ export class CubemapVideoAdapter extends AbstractVideoAdapter<CubemapVideoPanora
 
         /*
           Structure of a frame
-    
+
           1 +---------+---------+---------+
             |         |         |         |
             |  Left   |  Front  |  Right  |
@@ -98,7 +98,7 @@ export class CubemapVideoAdapter extends AbstractVideoAdapter<CubemapVideoPanora
             |         |         |         |
           0 +---------+---------+---------+
             0        1/3       2/3        1
-    
+
            Bottom, Back and Top are rotated 90° clockwise
          */
 

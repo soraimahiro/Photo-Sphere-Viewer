@@ -41,7 +41,6 @@ export const DEFAULTS: Required<ParsedViewerConfig> = {
     canvasBackground: '#000',
     rendererParameters: { alpha: true, antialias: true },
     withCredentials: false,
-    // prettier-ignore
     navbar: [
         'zoom',
         'move',

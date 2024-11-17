@@ -57,7 +57,7 @@ describe('plugin: gallery', () => {
     it('should display fullscreen on mobile', VIEWPORT_MOBILE, () => {
         waitForAllThumbnails();
 
-        cy.get('.psv-gallery').should(gallery => {
+        cy.get('.psv-gallery').should((gallery) => {
             const { x, y, width, height } = gallery[0].getBoundingClientRect();
             expect({ x, y, width, height }).to.deep.eq({ x: 0, y: 0, width: 400, height: 760 });
         });
@@ -126,7 +126,7 @@ describe('plugin: gallery', () => {
     });
 
     it('should change the items', () => {
-        callGallery('set items').then(gallery => {
+        callGallery('set items').then((gallery) => {
             gallery.setItems([
                 {
                     id: 1,
@@ -145,7 +145,7 @@ describe('plugin: gallery', () => {
     });
 
     it('should throw if no "id" or "panorama"', () => {
-        callGallery('set items').then(gallery => {
+        callGallery('set items').then((gallery) => {
             expect(() => gallery.setItems([{ id: null, panorama: 'img.jpg' }])).to.throw('Item 0 has no "id".');
 
             expect(() => gallery.setItems([{ id: 'id', panorama: null }])).to.throw('Item "id" has no "panorama".');
@@ -155,7 +155,7 @@ describe('plugin: gallery', () => {
     it('should change the items w. custom callback', () => {
         const callback = cy.stub();
 
-        callGallery('set items').then(gallery => {
+        callGallery('set items').then((gallery) => {
             gallery.setItems([
                 {
                     id: 1,

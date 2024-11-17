@@ -120,8 +120,6 @@ export const ICONS = {
  * Collection of easing functions
  * @see https://gist.github.com/frederickk/6165768
  */
-// @formatter:off
-// prettier-ignore
 export const EASINGS: Record<string, (t: number) => number> = {
     linear: (t: number) => t,
 
@@ -153,4 +151,3 @@ export const EASINGS: Record<string, (t: number) => number> = {
     outCirc: (t: number) => Math.sqrt(1 - (t - 1) * (t - 1)),
     inOutCirc: (t: number) => (t *= 2) < 1 ? 0.5 - 0.5 * Math.sqrt(1 - t * t) : 0.5 + 0.5 * Math.sqrt(1 - (t -= 2) * t),
 };
-// @formatter:on

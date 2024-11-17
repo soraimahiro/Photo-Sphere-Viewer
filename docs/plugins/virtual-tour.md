@@ -114,13 +114,10 @@ The [Gallery plugin](./gallery.md), [Map plugin](./map.md), [Plan plugin](./plan
 title: PSV Virtual Tour Demo
 packages:
     - name: virtual-tour-plugin
-      imports: VirtualTourPlugin
       style: true
     - name: gallery-plugin
-      imports: GalleryPlugin
       style: true
     - name: markers-plugin
-      imports: MarkersPlugin
       style: true
 ```
 

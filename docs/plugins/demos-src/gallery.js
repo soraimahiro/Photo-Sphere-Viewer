@@ -1,3 +1,6 @@
+import { Viewer } from '@photo-sphere-viewer/core';
+import { GalleryPlugin } from '@photo-sphere-viewer/gallery-plugin';
+
 const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 
 const viewer = new Viewer({

@@ -13,7 +13,7 @@ declare global {
     namespace Cypress {
         // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
         interface Chainable {
-            compareScreenshots(name: string, options?: { errorThreshold?: number, hideViewer?: boolean }): Chainable<JQuery<HTMLElement>>;
+            compareScreenshots(name: string, options?: { errorThreshold?: number; hideViewer?: boolean }): Chainable<JQuery<HTMLElement>>;
 
             waitForResources(...names: string[]);
         }
@@ -53,7 +53,7 @@ Cypress.Commands.add('waitForResources', (...names) => {
 
             const timeout = setTimeout(() => {
                 if (foundResources) {
-                    return
+                    return;
                 }
 
                 clearInterval(interval);
@@ -66,7 +66,7 @@ Cypress.Commands.add('waitForResources', (...names) => {
                 foundResources = names.every((name) => {
                     return win.performance
                         .getEntriesByType('resource')
-                        .find((item) => item.name.endsWith(name));
+                        .find(item => item.name.endsWith(name));
                 });
 
                 if (!foundResources) {

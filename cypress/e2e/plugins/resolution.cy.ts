@@ -2,7 +2,6 @@ import type { ResolutionPlugin } from '@photo-sphere-viewer/resolution-plugin';
 import { callPlugin, callViewer, checkEventHandler, checkPanorama, setPanorama, waitViewerReady } from '../../utils';
 import { BASE_URL } from '../../utils/constants';
 
-
 describe('plugin: resolution', () => {
     beforeEach(() => {
         localStorage.photoSphereViewer_touchSupport = 'false';
@@ -77,7 +76,7 @@ describe('plugin: resolution', () => {
         checkPanorama('sphere.jpg');
         checkEventHandler(resolutionChangeHandler, { resolutionId: 'HD' });
 
-        callResolution('set bad resolution').then(resolution => {
+        callResolution('set bad resolution').then((resolution) => {
             expect(() => resolution.setResolution('MD')).to.throw('Resolution "MD" unknown');
         });
     });
@@ -128,7 +127,7 @@ describe('plugin: resolution', () => {
     });
 
     it('should throw if missing properties', () => {
-        callResolution('set resolutions').then(resolution => {
+        callResolution('set resolutions').then((resolution) => {
             expect(() => resolution.setResolutions([{ id: null, label: 'label', panorama: 'sphere.jpg' }])).to.throw('Missing resolution id');
 
             expect(() => resolution.setResolutions([{ id: 'sd', label: null, panorama: 'sphere.jpg' }])).to.throw('Missing resolution label');
@@ -146,5 +145,4 @@ describe('plugin: resolution', () => {
         callResolution(`listen "${name}"`).then(resolution => resolution.addEventListener(name, handler));
         return handler;
     }
-
 });

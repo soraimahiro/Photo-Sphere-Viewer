@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build-doc": "vitepress build",
+    "lint": "eslint . --fix",
     "serve-doc": "vitepress dev"
   },
   "dependencies": {

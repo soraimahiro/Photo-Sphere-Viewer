@@ -96,9 +96,9 @@ export class OverlaysPlugin extends AbstractConfigurablePlugin<
                 return false;
             }
             const overlay = e.data.objects
-                .map((o) => o.userData[OVERLAY_DATA] as OverlayConfig['id'])
-                .filter((o) => !!o)
-                .map((o) => this.state.overlays[o].config)
+                .map(o => o.userData[OVERLAY_DATA] as OverlayConfig['id'])
+                .filter(o => !!o)
+                .map(o => this.state.overlays[o].config)
                 .sort((a, b) => b.zIndex - a.zIndex)[0];
 
             if (overlay) {

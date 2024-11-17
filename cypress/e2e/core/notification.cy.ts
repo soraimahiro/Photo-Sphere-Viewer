@@ -92,9 +92,8 @@ describe('core: notification', () => {
 
     function checkNotificationVisibleApi(visible: boolean, id?: string) {
         callNotification(`check ${id ? `notification "${id}"` : 'any notification'} ${visible ? 'visible' : 'not visible'}`)
-            .then(notification => {
+            .then((notification) => {
                 expect(notification.isVisible(id)).to.eq(visible);
             });
     }
-
 });

@@ -41,7 +41,6 @@ Alternatively, if `usePanoData` is set to `true`, the visible range is limited t
 title: PSV Visible Range Demo
 packages:
     - name: visible-range-plugin
-      imports: VisibleRangePlugin
 ```
 
 <<< ./demos-src/visible-range.js

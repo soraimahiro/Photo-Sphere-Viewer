@@ -39,7 +39,6 @@ const viewer = new Viewer({
 title: PSV Overlay Demo
 packages:
     - name: overlays-plugin
-      imports: OverlaysPlugin
 ```
 
 <<< ./demos-src/overlays.js

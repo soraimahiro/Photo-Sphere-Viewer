@@ -21,7 +21,7 @@ const getConfig = utils.getConfigParser<GyroscopePluginConfig>(
                 return moveMode;
             }
         },
-    }
+    },
 );
 
 const direction = new Vector3();

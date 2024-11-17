@@ -55,7 +55,7 @@ export class ChromaKeyMaterial extends ShaderMaterial {
                 this.uniforms.color.value.set(
                     chromaKey.color.r / 255,
                     chromaKey.color.g / 255,
-                    chromaKey.color.b / 255
+                    chromaKey.color.b / 255,
                 );
             } else {
                 this.uniforms.color.value.set(chromaKey.color ?? 0x00ff00);

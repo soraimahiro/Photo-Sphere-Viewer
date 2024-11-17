@@ -83,7 +83,7 @@ describe('utils:psv:parseAngle', () => {
                 parseAngle('foobar');
             },
             /Unknown angle "foobar"/,
-            'foobar'
+            'foobar',
         );
 
         assert.throws(
@@ -91,7 +91,7 @@ describe('utils:psv:parseAngle', () => {
                 parseAngle('200gr');
             },
             /Unknown angle unit "gr"/,
-            '200gr'
+            '200gr',
         );
     });
 });
@@ -255,7 +255,7 @@ describe('utils:psv:parseSpeed', () => {
                 parseSpeed('10rpsec');
             },
             /Unknown speed unit "rpsec"/,
-            '10rpsec'
+            '10rpsec',
         );
     });
 
@@ -266,20 +266,20 @@ describe('utils:psv:parseSpeed', () => {
 
 describe('utils:psv:getXMPValue', () => {
     it('should parse XMP data with children', () => {
-        const data =
-            '<rdf:Description rdf:about="" xmlns:GPano="http://ns.google.com/photos/1.0/panorama/">\
-      <GPano:ProjectionType>equirectangular</GPano:ProjectionType>\
-      <GPano:UsePanoramaViewer>True</GPano:UsePanoramaViewer>\
-      <GPano:CroppedAreaImageWidthPixels>5376</GPano:CroppedAreaImageWidthPixels>\
-      <GPano:CroppedAreaImageHeightPixels>2688</GPano:CroppedAreaImageHeightPixels>\
-      <GPano:FullPanoWidthPixels>5376</GPano:FullPanoWidthPixels>\
-      <GPano:FullPanoHeightPixels>2688</GPano:FullPanoHeightPixels>\
-      <GPano:CroppedAreaLeftPixels>0</GPano:CroppedAreaLeftPixels>\
-      <GPano:CroppedAreaTopPixels>0</GPano:CroppedAreaTopPixels>\
-      <GPano:PoseHeadingDegrees>270.0</GPano:PoseHeadingDegrees>\
-      <GPano:PosePitchDegrees>0</GPano:PosePitchDegrees>\
-      <GPano:PoseRollDegrees>0.2</GPano:PoseRollDegrees>\
-    </rdf:Description>';
+        const data = `
+<rdf:Description rdf:about="" xmlns:GPano="http://ns.google.com/photos/1.0/panorama/">
+      <GPano:ProjectionType>equirectangular</GPano:ProjectionType>
+      <GPano:UsePanoramaViewer>True</GPano:UsePanoramaViewer>
+      <GPano:CroppedAreaImageWidthPixels>5376</GPano:CroppedAreaImageWidthPixels>
+      <GPano:CroppedAreaImageHeightPixels>2688</GPano:CroppedAreaImageHeightPixels>
+      <GPano:FullPanoWidthPixels>5376</GPano:FullPanoWidthPixels>
+      <GPano:FullPanoHeightPixels>2688</GPano:FullPanoHeightPixels>
+      <GPano:CroppedAreaLeftPixels>0</GPano:CroppedAreaLeftPixels>
+      <GPano:CroppedAreaTopPixels>0</GPano:CroppedAreaTopPixels>
+      <GPano:PoseHeadingDegrees>270.0</GPano:PoseHeadingDegrees>
+      <GPano:PosePitchDegrees>0</GPano:PosePitchDegrees>
+      <GPano:PoseRollDegrees>0.2</GPano:PoseRollDegrees>
+</rdf:Description>`;
 
         assert.deepStrictEqual(
             [
@@ -293,24 +293,24 @@ describe('utils:psv:getXMPValue', () => {
                 getXMPValue(data, 'PosePitchDegrees'),
                 getXMPValue(data, 'PoseRollDegrees'),
             ],
-            [5376, 2688, 5376, 2688, 0, 0, 270, 0, 0]
+            [5376, 2688, 5376, 2688, 0, 0, 270, 0, 0],
         );
     });
 
     it('should parse XMP data with attributes', () => {
-        const data =
-            '<rdf:Description rdf:about="" xmlns:GPano="http://ns.google.com/photos/1.0/panorama/"\
-      GPano:ProjectionType="equirectangular"\
-      GPano:UsePanoramaViewer="True"\
-      GPano:CroppedAreaImageWidthPixels="5376"\
-      GPano:CroppedAreaImageHeightPixels="2688"\
-      GPano:FullPanoWidthPixels="5376"\
-      GPano:FullPanoHeightPixels="2688"\
-      GPano:CroppedAreaLeftPixels="0"\
-      GPano:CroppedAreaTopPixels="0"\
-      GPano:PoseHeadingDegrees="270"\
-      GPano:PosePitchDegrees="0"\
-      GPano:PoseRollDegrees="0"/>';
+        const data = `
+<rdf:Description rdf:about="" xmlns:GPano="http://ns.google.com/photos/1.0/panorama/"
+    GPano:ProjectionType="equirectangular"
+    GPano:UsePanoramaViewer="True"
+    GPano:CroppedAreaImageWidthPixels="5376"
+    GPano:CroppedAreaImageHeightPixels="2688"
+    GPano:FullPanoWidthPixels="5376"
+    GPano:FullPanoHeightPixels="2688"
+    GPano:CroppedAreaLeftPixels="0"
+    GPano:CroppedAreaTopPixels="0"
+    GPano:PoseHeadingDegrees="270"
+    GPano:PosePitchDegrees="0"
+    GPano:PoseRollDegrees="0"/>`;
 
         assert.deepStrictEqual(
             [
@@ -324,7 +324,7 @@ describe('utils:psv:getXMPValue', () => {
                 getXMPValue(data, 'PosePitchDegrees'),
                 getXMPValue(data, 'PoseRollDegrees'),
             ],
-            [5376, 2688, 5376, 2688, 0, 0, 270, 0, 0]
+            [5376, 2688, 5376, 2688, 0, 0, 270, 0, 0],
         );
     });
 });
@@ -351,7 +351,7 @@ describe('utils:psv:cleanPosition', () => {
         assert.strictEqual(cleanCssPosition('foo bar'), null);
         assert.strictEqual(cleanCssPosition('TOP CENTER'), null);
         assert.strictEqual(cleanCssPosition(''), null);
-        assert.strictEqual(cleanCssPosition(undefined), null);
+        assert.strictEqual(cleanCssPosition(undefined as any), null);
     });
 
     it('should allow XY order', () => {
@@ -562,7 +562,7 @@ describe('utils:psv:mergePanoData', () => {
 
 function assertDeepEqualLenient(actual: any, expected: any) {
     const picked = {} as any;
-    Object.keys(expected).forEach(key => {
+    Object.keys(expected).forEach((key) => {
         picked[key] = actual[key];
     });
     assert.deepStrictEqual(picked, expected);

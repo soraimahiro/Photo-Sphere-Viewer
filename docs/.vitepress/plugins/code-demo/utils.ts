@@ -12,7 +12,6 @@ type Package = {
     external?: boolean;
     js?: string;
     css?: string;
-    imports?: string;
 };
 
 type Params = {
@@ -23,7 +22,7 @@ type Params = {
     packages: Package[];
 };
 
-function buildCdnPath({ name, version, file }: { name: string, version: string, file: string }) {
+function buildCdnPath({ name, version, file }: { name: string; version: string; file: string }) {
     return CDN_BASE + name + '@' + version + '/' + file;
 }
 
@@ -32,15 +31,13 @@ export function getFullPackages(version: string, packages: Package[]) {
     if (!core) {
         core = {
             name: 'core',
-            imports: '',
         } as Package;
         packages.unshift(core);
     }
     core.style = true;
-    core.imports = 'Viewer' + (core.imports ? `, ${core.imports}` : '');
 
     return packages
-        .map((pkg) => ({
+        .map(pkg => ({
             ...pkg,
             name: pkg.external ? pkg.name : ORG + pkg.name,
             version: pkg.external ? (pkg.version || 'latest') : (version || VERSION),
@@ -49,26 +46,14 @@ export function getFullPackages(version: string, packages: Package[]) {
         }));
 }
 
-function getFullJs(js: string, packages: Package[]) {
-    return `
-${packages
-            .filter(({ imports }) => imports)
-            .map(({ name, imports }) => `import { ${imports} } from '${name}';`)
-            .join('\n')}
-
-${js}
-`.trim();
-}
-
 function getFullCss(css: string, packages: Package[], cdnImport: boolean) {
     return `
 ${packages
-            .filter(({ style }) => style)
-            .map(({ name, version, css }) => {
-                return `@import '${cdnImport ? buildCdnPath({ name, version, file: css! }) : `../node_modules/${name}/${css}`
-                    }';`;
-            })
-            .join('\n')}
+    .filter(({ style }) => style)
+    .map(({ name, version, css }) => {
+        return `@import '${cdnImport ? buildCdnPath({ name, version, file: css! }) : `../node_modules/${name}/${css}`}';`;
+    })
+    .join('\n')}
 
 html, body, #viewer {
   width: 100%;
@@ -145,7 +130,7 @@ export function getIframeContent({ title, html, js, css, packages }: Params) {
   ${getFullHtml(html, packages, true)}
 
   <script type="module">
-  ${getFullJs(js, packages)}
+  ${js}
   document.querySelector('#loader').remove();
   </script>
 </body>
@@ -156,7 +141,7 @@ function getJsFiddleValue({ title, js, css, html, packages }: Params) {
     return {
         title: title,
         html: getFullHtml(html, packages, true),
-        js: getFullJs(js, packages),
+        js: js,
         css: getFullCss(css, packages, true),
     };
 }
@@ -167,7 +152,7 @@ function getCodePenValue({ title, js, css, html, packages }: Params) {
             title: title,
             head: '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
             html: getFullHtml(html, packages, true),
-            js: getFullJs(js, packages),
+            js: js,
             css: getFullCss(css, packages, true),
         }),
     };
@@ -217,14 +202,14 @@ function getCodeSandboxValue({ title, js, css, html, packages }: Params) {
                 'src/index.ts': {
                     isBinary: false,
                     content: `import './styles.css';
-${getFullJs(js, packages)}`,
+${js}`,
                 },
                 'src/styles.css': {
                     isBinary: false,
                     content: getFullCss(css, packages, false),
                 },
             },
-        })
+        }),
     };
 }
 
@@ -250,7 +235,7 @@ export function openService(service: Service, params: Params) {
     }
 
     Object.entries(data).forEach(([name, value]) => {
-        const input = document.createElement('input');
+        const input = document.createElement('textarea');
         input.name = name;
         input.value = value;
         form.appendChild(input);

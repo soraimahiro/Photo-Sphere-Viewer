@@ -109,7 +109,6 @@ export class Panel extends AbstractComponent {
      * @internal
      */
     handleEvent(e: Event) {
-        // prettier-ignore
         switch (e.type) {
             case 'mousedown': this.__onMouseDown(e as MouseEvent); break;
             case 'touchstart': this.__onTouchStart(e as TouchEvent); break;

@@ -134,14 +134,15 @@ export class EquirectangularTilesAdapter extends AbstractAdapter<
 
         this.SPHERE_SEGMENTS = this.config.resolution;
         this.SPHERE_HORIZONTAL_SEGMENTS = this.SPHERE_SEGMENTS / 2;
-        this.NB_VERTICES = 2 * this.SPHERE_SEGMENTS * NB_VERTICES_BY_SMALL_FACE
+        this.NB_VERTICES
+            = 2 * this.SPHERE_SEGMENTS * NB_VERTICES_BY_SMALL_FACE
             + (this.SPHERE_HORIZONTAL_SEGMENTS - 2) * this.SPHERE_SEGMENTS * NB_VERTICES_BY_FACE;
         this.NB_GROUPS = this.SPHERE_SEGMENTS * this.SPHERE_HORIZONTAL_SEGMENTS;
 
         if (this.viewer.config.requestHeaders) {
             utils.logWarn(
                 'EquirectangularTilesAdapter fallbacks to file loader because "requestHeaders" where provided. '
-                + 'Consider removing "requestHeaders" if you experience performances issues.'
+                + 'Consider removing "requestHeaders" if you experience performances issues.',
             );
         }
     }
@@ -209,7 +210,7 @@ export class EquirectangularTilesAdapter extends AbstractAdapter<
 
     override async loadTexture(
         panorama: EquirectangularTilesPanorama | EquirectangularMultiTilesPanorama,
-        loader = true
+        loader = true,
     ): Promise<EquirectangularTilesTextureData> {
         checkPanoramaConfig(panorama, this);
 
@@ -240,7 +241,6 @@ export class EquirectangularTilesAdapter extends AbstractAdapter<
                 texture: textureData.texture,
             };
         } else {
-        
             return {
                 panorama,
                 panoData: {
@@ -262,7 +262,7 @@ export class EquirectangularTilesAdapter extends AbstractAdapter<
             CONSTANTS.SPHERE_RADIUS,
             this.SPHERE_SEGMENTS,
             this.SPHERE_HORIZONTAL_SEGMENTS,
-            -Math.PI / 2
+            -Math.PI / 2,
         )
             .scale(-1, 1, 1)
             .toNonIndexed() as SphereGeometry;
@@ -375,7 +375,8 @@ export class EquirectangularTilesAdapter extends AbstractAdapter<
                     segmentIndex = Math.floor((i / 3 - this.SPHERE_SEGMENTS) / 2) + this.SPHERE_SEGMENTS;
                 } else {
                     // last row
-                    segmentIndex = Math.floor((i - this.NB_VERTICES - this.SPHERE_SEGMENTS * NB_VERTICES_BY_SMALL_FACE) / 3)
+                    segmentIndex
+                        = Math.floor((i - this.NB_VERTICES - this.SPHERE_SEGMENTS * NB_VERTICES_BY_SMALL_FACE) / 3)
                         + this.SPHERE_HORIZONTAL_SEGMENTS * (this.SPHERE_SEGMENTS - 1);
                 }
                 const segmentRow = Math.floor(segmentIndex / this.SPHERE_SEGMENTS);
@@ -435,7 +436,7 @@ export class EquirectangularTilesAdapter extends AbstractAdapter<
                 this.queue.setPriority(id, tile.angle);
             } else {
                 this.state.tiles[id] = true;
-                this.queue.enqueue(new Task(id, tile.angle, (task) => this.__loadTile(tile, task)));
+                this.queue.enqueue(new Task(id, tile.angle, task => this.__loadTile(tile, task)));
             }
         });
 
@@ -490,11 +491,13 @@ export class EquirectangularTilesAdapter extends AbstractAdapter<
                 if (isFirstRow) {
                     firstVertex = faceCol * NB_VERTICES_BY_SMALL_FACE;
                 } else if (isLastRow) {
-                    firstVertex = this.NB_VERTICES
+                    firstVertex
+                        = this.NB_VERTICES
                         - this.SPHERE_SEGMENTS * NB_VERTICES_BY_SMALL_FACE
                         + faceCol * NB_VERTICES_BY_SMALL_FACE;
                 } else {
-                    firstVertex = this.SPHERE_SEGMENTS * NB_VERTICES_BY_SMALL_FACE
+                    firstVertex
+                        = this.SPHERE_SEGMENTS * NB_VERTICES_BY_SMALL_FACE
                         + (faceRow - 1) * this.SPHERE_SEGMENTS * NB_VERTICES_BY_FACE
                         + faceCol * NB_VERTICES_BY_FACE;
                 }
@@ -510,7 +513,7 @@ export class EquirectangularTilesAdapter extends AbstractAdapter<
                 this.state.faces[firstVertex] = isError ? ERROR_LEVEL : tile.config.level;
 
                 // swap material
-                const matIndex = this.state.geom.groups.find((g) => g.start === firstVertex).materialIndex;
+                const matIndex = this.state.geom.groups.find(g => g.start === firstVertex).materialIndex;
                 this.state.materials[matIndex] = material;
 
                 // define new uvs

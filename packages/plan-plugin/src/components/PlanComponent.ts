@@ -57,12 +57,12 @@ export class PlanComponent extends AbstractComponent {
 
     constructor(
         viewer: Viewer,
-        private plugin: PlanPlugin
+        private plugin: PlanPlugin,
     ) {
         super(viewer, {
             className: `psv-plan ${CONSTANTS.CAPTURE_EVENTS_CLASS}`,
         });
-        
+
         viewer.addEventListener(events.KeypressEvent.type, this);
         viewer.addEventListener(events.ConfigChangedEvent.type, this);
 
@@ -183,7 +183,7 @@ export class PlanComponent extends AbstractComponent {
     private __configureLeaflet() {
         this.state.layers = this.config.layers.reduce((acc, layer, i) => {
             if (!layer.name) {
-                layer.name = `Layer ${i+1}`;
+                layer.name = `Layer ${i + 1}`;
             }
 
             if (layer.urlTemplate) {
@@ -218,7 +218,7 @@ export class PlanComponent extends AbstractComponent {
             'psv-plan--top-right',
             'psv-plan--top-left',
             'psv-plan--bottom-right',
-            'psv-plan--bottom-left'
+            'psv-plan--bottom-left',
         );
         this.container.classList.add(`psv-plan--${this.config.position.join('-')}`);
 
@@ -364,7 +364,7 @@ export class PlanComponent extends AbstractComponent {
             this.plugin.dispatchEvent(new ViewChanged('maximized'));
         } else {
             this.map.getContainer().blur();
-            
+
             if (this.state.galleryWasVisible) {
                 this.gallery.show();
             }
@@ -515,5 +515,4 @@ export class PlanComponent extends AbstractComponent {
             return;
         }
     }
-
 }

@@ -24,7 +24,7 @@ export class GalleryComponent extends AbstractComponent {
 
     constructor(
         private readonly plugin: GalleryPlugin,
-        viewer: Viewer
+        viewer: Viewer,
     ) {
         super(viewer, {
             className: `psv-gallery ${CONSTANTS.CAPTURE_EVENTS_CLASS}`,
@@ -58,7 +58,7 @@ export class GalleryComponent extends AbstractComponent {
             },
             {
                 root: this.viewer.container,
-            }
+            },
         );
 
         this.items.addEventListener('wheel', this);

@@ -17,7 +17,7 @@ import {
     VirtualTourLink,
     VirtualTourNode,
     VirtualTourPluginConfig,
-    VirtualTourTransitionOptions
+    VirtualTourTransitionOptions,
 } from './model';
 import { checkArrowStyle, gpsToSpherical } from './utils';
 
@@ -109,7 +109,7 @@ const getConfig = utils.getConfigParser<VirtualTourPluginConfig>(
             }
             return map;
         },
-    }
+    },
 );
 
 /**
@@ -176,7 +176,7 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
         if (this.markers?.config.markers) {
             utils.logWarn(
                 'No default markers can be configured on the MarkersPlugin when using the VirtualTourPlugin. '
-                + 'Consider defining `markers` on each tour node.'
+                + 'Consider defining `markers` on each tour node.',
             );
             delete this.markers.config.markers;
         }
@@ -239,7 +239,7 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
      */
     handleEvent(e: Event) {
         if (e instanceof events.ClickEvent) {
-            const link = e.data.objects.find((o) => o.userData[LINK_DATA])?.userData[LINK_DATA];
+            const link = e.data.objects.find(o => o.userData[LINK_DATA])?.userData[LINK_DATA];
             if (link) {
                 this.setCurrentNode(link.nodeId, null, link);
             }
@@ -295,9 +295,9 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
             /**
              * reload the node even if already loaded
              */
-            forceUpdate?: boolean,
+            forceUpdate?: boolean;
         },
-        fromLink?: VirtualTourLink
+        fromLink?: VirtualTourLink,
     ): Promise<boolean> {
         if (nodeId === this.state.currentNode?.id && !options?.forceUpdate) {
             return Promise.resolve(true);
@@ -354,7 +354,7 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
                 if (this.state.loadingNode !== nodeId) {
                     throw utils.getAbortError();
                 }
-                
+
                 this.__hideTooltip();
 
                 this.state.currentNode = node;
@@ -413,7 +413,7 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
                         fromNode,
                         fromLink,
                         fromLinkPosition,
-                    })
+                    }),
                 );
 
                 this.viewer.resetIdleTimer();
@@ -497,7 +497,7 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
     private __setGalleryItems() {
         if (this.gallery) {
             this.gallery.setItems(
-                Object.values(this.datasource.nodes).map((node) => ({
+                Object.values(this.datasource.nodes).map(node => ({
                     id: node.id,
                     panorama: node.panorama,
                     name: node.name,
@@ -505,7 +505,7 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
                 })),
                 (id) => {
                     this.setCurrentNode(id as string);
-                }
+                },
             );
         }
     }
@@ -516,12 +516,12 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
     private __setMapHotspots() {
         if (this.map) {
             this.map.setHotspots(
-                Object.values(this.datasource.nodes).map((node) => ({
+                Object.values(this.datasource.nodes).map(node => ({
                     ...(node.map || {}),
                     ...this.__getNodeMapPosition(node),
                     id: LINK_ID + node.id,
                     tooltip: node.name,
-                }))
+                })),
             );
         }
     }
@@ -532,12 +532,12 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
     private __setPlanHotspots() {
         if (this.plan) {
             this.plan.setHotspots(
-                Object.values(this.datasource.nodes).map((node) => ({
+                Object.values(this.datasource.nodes).map(node => ({
                     ...(node.plan || {}),
                     coordinates: node.gps,
                     id: LINK_ID + node.id,
                     tooltip: node.name,
-                }))
+                })),
             );
         }
     }
@@ -688,7 +688,7 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
         this.state.preload[node.id] = true;
 
         this.state.currentNode.links
-            .filter((link) => !this.state.preload[link.nodeId])
+            .filter(link => !this.state.preload[link.nodeId])
             .filter((link) => {
                 if (typeof this.config.preload === 'function') {
                     return this.config.preload(this.state.currentNode, link);
@@ -729,7 +729,7 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
                             }
                         }
                         return marker;
-                    })
+                    }),
                 );
             } else {
                 utils.logWarn(`Node ${node.id} markers ignored because the plugin is not loaded.`);

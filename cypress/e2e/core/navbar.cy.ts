@@ -66,7 +66,7 @@ describe('core: navbar', () => {
 
         callViewer('set downloadName/downloadUrl').then(viewer => viewer.setOptions({
             downloadUrl: 'panorama-download.jpg',
-            downloadName: 'my-panorama.jpg'
+            downloadName: 'my-panorama.jpg',
         }));
 
         cy.get('.psv-download-button')
@@ -124,7 +124,7 @@ describe('core: navbar', () => {
             '.psv-zoom-range',
             '.psv-download-button',
             '.custom-button:eq(0)',
-        ].forEach(invisible => {
+        ].forEach((invisible) => {
             cy.get(invisible).should('not.be.visible');
         });
 
@@ -135,7 +135,7 @@ describe('core: navbar', () => {
             '.psv-fullscreen-button',
             '.psv-menu-button',
             '.custom-button:eq(1)',
-        ].forEach(visible => {
+        ].forEach((visible) => {
             cy.get(visible).should('be.visible');
         });
 
@@ -221,7 +221,7 @@ describe('core: navbar', () => {
 
     it('should update the buttons', () => {
         function assertButtons(expected: string[]) {
-            cy.get('.psv-button').then($buttons => {
+            cy.get('.psv-button').then(($buttons) => {
                 const titles = $buttons
                     .filter(':visible')
                     .map((i, btn) => btn.getAttribute('title'))
@@ -266,11 +266,11 @@ describe('core: navbar', () => {
     });
 
     it('should display a custom element', () => {
-        cy.document().then(document => {
+        cy.document().then((document) => {
             callNavbar('set custom element').then(navbar => navbar.setButtons([
                 {
                     content: document.createElement('custom-navbar-button'),
-                }
+                },
             ]));
         });
 
@@ -292,7 +292,7 @@ describe('core: navbar', () => {
 
     function checkNavbarVisibleApi(visible: boolean) {
         callNavbar(`check navbar ${visible ? 'visible' : 'not visible'}`)
-            .then(navbar => {
+            .then((navbar) => {
                 expect(navbar.isVisible()).to.eq(visible);
             });
     }

@@ -184,7 +184,7 @@ export type ParsedMapPluginConfig = Omit<MapPluginConfig, 'position' | 'rotation
 export type UpdatableMapPluginConfig = Omit<
     MapPluginConfig,
     | 'imageUrl'
-    | 'visibleOnLoad' 
-    | 'defaultZoom' 
+    | 'visibleOnLoad'
+    | 'defaultZoom'
     | 'buttons'
 >;

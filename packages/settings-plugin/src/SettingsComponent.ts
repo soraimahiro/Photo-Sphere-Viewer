@@ -7,7 +7,7 @@ import type { SettingsPlugin } from './SettingsPlugin';
 export class SettingsComponent extends AbstractComponent {
     constructor(
         private readonly plugin: SettingsPlugin,
-        viewer: Viewer
+        viewer: Viewer,
     ) {
         super(viewer, {
             className: `psv-settings ${CONSTANTS.CAPTURE_EVENTS_CLASS}`,
@@ -100,7 +100,7 @@ export class SettingsComponent extends AbstractComponent {
         const settingId = li.dataset[SETTING_DATA];
         const optionId = li.dataset[OPTION_DATA];
 
-        const setting = this.plugin.settings.find((s) => s.id === settingId);
+        const setting = this.plugin.settings.find(s => s.id === settingId);
 
         switch (optionId) {
             case ID_BACK:

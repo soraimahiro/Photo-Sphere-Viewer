@@ -10,7 +10,7 @@ describe('core: loader', () => {
         cy.get('.psv-loader')
             .should('be.visible')
             .should('include.text', 'Loading...')
-            .should(loader => {
+            .should((loader) => {
                 const { x, y, width, height } = loader[0].getBoundingClientRect();
                 expect({ x, y, width, height }).to.deep.eq({ x: 565, y: 375, width: 150, height: 150 });
             })
@@ -50,5 +50,4 @@ describe('core: loader', () => {
                 cy.get('.psv-loader').compareScreenshots(`progress_${expected}`);
             });
     });
-
 });

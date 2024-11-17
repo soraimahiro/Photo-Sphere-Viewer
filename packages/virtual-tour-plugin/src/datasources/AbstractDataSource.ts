@@ -8,7 +8,7 @@ export abstract class AbstractDatasource {
 
     constructor(
         protected readonly plugin: VirtualTourPlugin,
-        protected readonly viewer: Viewer
+        protected readonly viewer: Viewer,
     ) {}
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -37,7 +37,7 @@ export abstract class AbstractDatasource {
         if (this.plugin.isGps && !(node.gps?.length >= 2)) {
             throw new PSVError(`No GPS position provided for node ${node.id}`);
         }
-        if (!this.plugin.isGps && node.markers?.some((marker) => marker.gps && !marker.position)) {
+        if (!this.plugin.isGps && node.markers?.some(marker => marker.gps && !marker.position)) {
             throw new PSVError(`Cannot use GPS positioning for markers in manual mode`);
         }
         if (!node.links) {

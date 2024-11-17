@@ -115,7 +115,6 @@ export abstract class AbstractAdapter<TPanorama, TData, TTexture, TMesh extends 
     abstract disposeMesh(mesh: TMesh): void;
 }
 
-// prettier-ignore
 export type AdapterConstructor = (new (viewer: Viewer, config?: any) => AbstractAdapter<any, any, any, any>);
 
 /**

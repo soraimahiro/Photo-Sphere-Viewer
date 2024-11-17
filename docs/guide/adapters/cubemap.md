@@ -32,7 +32,6 @@ const viewer = new Viewer({
 title: PSV Cubemap Demo
 packages:
     - name: cubemap-adapter
-      imports: CubemapAdapter
 ```
 
 <<< ./demos-src/cubemap.js

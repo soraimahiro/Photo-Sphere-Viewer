@@ -81,7 +81,7 @@ describe('core: panel', () => {
     it('should show with required with', () => {
         callPanel('show panel').then(panel => panel.show({
             content: 'content',
-            width: '50%'
+            width: '50%',
         }));
 
         checkPanelWidth(640);
@@ -124,7 +124,7 @@ describe('core: panel', () => {
     it('should not be resizable on mobile', VIEWPORT_MOBILE, () => {
         callPanel('show panel').then(panel => panel.show('content'));
 
-        cy.get('.psv-panel').should(panel => {
+        cy.get('.psv-panel').should((panel) => {
             const { x, y, width, height } = panel[0].getBoundingClientRect();
             expect({ x, y, width, height }).to.deep.eq({ x: 0, y: 0, width: 400, height: 760 });
         });
@@ -156,7 +156,7 @@ describe('core: panel', () => {
             .trigger('keydown', { key: 'Enter' });
 
         cy.wrap(clickHandler, NO_LOG)
-            .should('have.been.calledTwice')
+            .should('have.been.calledTwice');
     });
 
     function callPanel(log: string): Cypress.Chainable<Panel> {
@@ -165,16 +165,15 @@ describe('core: panel', () => {
 
     function checkPanelVisibleApi(visible: boolean, id?: string) {
         callPanel(`check ${id ? `panel "${id}"` : 'any panel'} ${visible ? 'visible' : 'not visible'}`)
-            .then(panel => {
+            .then((panel) => {
                 expect(panel.isVisible(id)).to.eq(visible);
             });
     }
 
     function checkPanelWidth(width: number) {
         cy.log(`check panel is ${width}px`);
-        cy.get('.psv-panel').should(element => {
+        cy.get('.psv-panel').should((element) => {
             expect(element[0].offsetWidth).to.be.equal(width);
         });
     }
-
 });

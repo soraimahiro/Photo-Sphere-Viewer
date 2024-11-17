@@ -1,3 +1,6 @@
+import { Viewer } from '@photo-sphere-viewer/core';
+import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
+
 const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 
 const viewer = new Viewer({
@@ -54,7 +57,7 @@ const viewer = new Viewer({
                     // polygon marker
                     id: 'polygon',
                     polygon: [
-                        [6.2208, 0.0906],  [0.0443, 0.1028],  [0.2322, 0.0849], [0.4531, 0.0387],
+                        [6.2208, 0.0906], [0.0443, 0.1028], [0.2322, 0.0849], [0.4531, 0.0387],
                         [0.5022, -0.0056], [0.4587, -0.0396], [0.252, -0.0453], [0.0434, -0.0575],
                         [6.1302, -0.0623], [6.0094, -0.0169], [6.0471, 0.0320], [6.2208, 0.0906],
                     ],

@@ -102,7 +102,7 @@ export class CubemapTilesAdapter extends AbstractAdapter<
         if (this.viewer.config.requestHeaders) {
             utils.logWarn(
                 'CubemapTilesAdapter fallbacks to file loader because "requestHeaders" where provided. '
-                + 'Consider removing "requestHeaders" if you experience performances issues.'
+                + 'Consider removing "requestHeaders" if you experience performances issues.',
             );
         }
     }
@@ -170,7 +170,7 @@ export class CubemapTilesAdapter extends AbstractAdapter<
 
     override async loadTexture(
         panorama: CubemapTilesPanorama | CubemapMultiTilesPanorama,
-        loader = true
+        loader = true,
     ): Promise<CubemapTilesTextureData> {
         checkPanoramaConfig(panorama, { CUBE_SEGMENTS });
 
@@ -368,7 +368,7 @@ export class CubemapTilesAdapter extends AbstractAdapter<
                 this.queue.setPriority(id, tile.angle);
             } else {
                 this.state.tiles[id] = true;
-                this.queue.enqueue(new Task(id, tile.angle, (task) => this.__loadTile(tile, task)));
+                this.queue.enqueue(new Task(id, tile.angle, task => this.__loadTile(tile, task)));
             }
         });
 
@@ -431,7 +431,7 @@ export class CubemapTilesAdapter extends AbstractAdapter<
                 this.state.faces[firstVertex] = isError ? ERROR_LEVEL : tile.config.level;
 
                 // swap material
-                const matIndex = this.state.geom.groups.find((g) => g.start === firstVertex).materialIndex;
+                const matIndex = this.state.geom.groups.find(g => g.start === firstVertex).materialIndex;
                 this.state.materials[matIndex] = material;
 
                 // define new uvs

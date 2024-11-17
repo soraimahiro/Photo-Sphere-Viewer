@@ -1,3 +1,6 @@
+import { Viewer } from '@photo-sphere-viewer/core';
+import { SettingsPlugin } from '@photo-sphere-viewer/settings-plugin';
+
 const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 
 const viewer = new Viewer({
@@ -33,6 +36,6 @@ settings.addSetting({
         { id: 'A', label: 'Option A' },
         { id: 'B', label: 'Option B' },
     ],
-    apply: (option) => (currentOption = option),
+    apply: option => (currentOption = option),
     badge: () => currentOption,
 });

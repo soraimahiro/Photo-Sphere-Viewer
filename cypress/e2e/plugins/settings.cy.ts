@@ -18,7 +18,7 @@ describe('plugin: settings', () => {
         toggleSetting = withToggleSetting();
         optionSetting = withOptionsSetting();
 
-        callSettings('add settings').then(settings => {
+        callSettings('add settings').then((settings) => {
             settings.addSetting(toggleSetting);
             settings.addSetting(optionSetting);
         });
@@ -48,7 +48,7 @@ describe('plugin: settings', () => {
     });
 
     it('should remove settings', () => {
-        callSettings('remove settings').then(settings => {
+        callSettings('remove settings').then((settings) => {
             settings.removeSetting(toggleSetting.id);
             settings.removeSetting(optionSetting.id);
         });
@@ -143,7 +143,7 @@ describe('plugin: settings', () => {
     });
 
     it('should throw if missing properties', () => {
-        callSettings('set settings').then(settings => {
+        callSettings('set settings').then((settings) => {
             expect(() => settings.addSetting({ ...withToggleSetting(), id: null })).to.throw('Missing setting id');
 
             expect(() => settings.addSetting({ ...withToggleSetting(), type: null })).to.throw('Missing setting type');
@@ -156,7 +156,7 @@ describe('plugin: settings', () => {
         cy.visit('e2e/plugins/settings.html?persist=true');
         waitViewerReady();
 
-        callSettings('set settings').then(settings => {
+        callSettings('set settings').then((settings) => {
             settings.addSetting(toggleSetting);
             settings.addSetting(optionSetting);
         });
@@ -174,7 +174,7 @@ describe('plugin: settings', () => {
 
         const settingChangedHandler = listenSettingsEvent('setting-changed');
 
-        callSettings('set settings').then(settings => {
+        callSettings('set settings').then((settings) => {
             settings.addSetting(withToggleSetting());
             settings.addSetting(withOptionsSetting());
         });
@@ -232,7 +232,7 @@ describe('plugin: settings', () => {
     }
 
     function checkLocalStorage(key: string, name: string, value: any) {
-        cy.window().its('localStorage').its(key).should(psvSettings => {
+        cy.window().its('localStorage').its(key).should((psvSettings) => {
             expect(JSON.parse(psvSettings)).to.have.property(name, value);
         });
     }

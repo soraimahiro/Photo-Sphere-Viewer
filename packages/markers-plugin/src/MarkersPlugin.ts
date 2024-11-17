@@ -59,7 +59,7 @@ const getConfig = utils.getConfigParser<MarkersPluginConfig, ParsedMarkersPlugin
                 ...defaultHoverScale,
             };
         },
-    }
+    },
 );
 
 function getMarkerCtor(config: MarkerConfig): typeof Marker {
@@ -452,7 +452,7 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
      * Removes multiple markers
      */
     removeMarkers(markerIds: string[], render = true) {
-        markerIds.forEach((markerId) => this.removeMarker(markerId, false));
+        markerIds.forEach(markerId => this.removeMarker(markerId, false));
 
         if (render) {
             this.__afterChangeMarkers();
@@ -694,8 +694,8 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
             return target2 ? (target2 as any)[MARKER_DATA] : undefined;
         } else if (Array.isArray(target)) {
             return target
-                .map((o) => o.userData[MARKER_DATA] as Marker)
-                .filter((m) => !!m)
+                .map(o => o.userData[MARKER_DATA] as Marker)
+                .filter(m => !!m)
                 .sort((a, b) => b.config.zIndex - a.config.zIndex)[0];
         } else {
             return null;
@@ -828,7 +828,7 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
      * Updates the visiblity of the panel and the buttons
      */
     private __refreshUi() {
-        const nbMarkers = Object.values(this.markers).filter((m) => !m.config.hideList).length;
+        const nbMarkers = Object.values(this.markers).filter(m => !m.config.hideList).length;
 
         if (nbMarkers === 0) {
             if (this.viewer.panel.isVisible(ID_PANEL_MARKERS_LIST) || this.viewer.panel.isVisible(ID_PANEL_MARKER)) {
@@ -850,7 +850,7 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
      * Adds or remove the objects observer if there are 3D markers
      */
     private __checkObjectsObserver() {
-        const has3d = Object.values(this.markers).some((marker) => marker.is3d());
+        const has3d = Object.values(this.markers).some(marker => marker.is3d());
 
         if (has3d) {
             this.viewer.observeObjects(MARKER_DATA);

@@ -201,7 +201,7 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
             delete this.plugins[id];
         }
 
-        this.children.slice().forEach((child) => child.destroy());
+        this.children.slice().forEach(child => child.destroy());
         this.children.length = 0;
 
         this.eventsHandler?.destroy();
@@ -451,7 +451,7 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
                 })
                 .then(
                     () => done(),
-                    (err) => done(err)
+                    err => done(err),
                 );
         } else {
             this.state.loadingPromise = loadingPromise
@@ -465,16 +465,16 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
                 })
                 .then((completed) => {
                     this.state.transitionAnimation = null;
-                
+
                     this.dispatchEvent(new TransitionDoneEvent(completed));
-                    
+
                     if (!completed) {
                         throw getAbortError();
                     }
                 })
                 .then(
                     () => done(),
-                    (err) => done(err)
+                    err => done(err),
                 );
         }
 
@@ -637,7 +637,7 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
 
         const e = new BeforeAnimateEvent(
             positionProvided ? this.dataHelper.cleanPosition(options) : undefined,
-            options.zoom
+            options.zoom,
         );
         this.dispatchEvent(e);
 

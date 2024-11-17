@@ -1,3 +1,7 @@
+import { Viewer } from '@photo-sphere-viewer/core';
+import { AutorotatePlugin } from '@photo-sphere-viewer/autorotate-plugin';
+import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
+
 const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 
 const viewer = new Viewer({
@@ -61,7 +65,7 @@ function randomPoints() {
                 size: { width: 32, height: 32 },
                 anchor: 'bottom center',
             };
-        })
+        }),
     );
 
     autorotatePlugin.setKeypoints(points);

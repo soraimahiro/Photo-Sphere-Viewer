@@ -1,6 +1,9 @@
+import { Viewer } from '@photo-sphere-viewer/core';
+import { EquirectangularTilesAdapter } from '@photo-sphere-viewer/equirectangular-tiles-adapter';
+
 const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 
-const viewer = new Viewer({
+new Viewer({
     container: 'viewer',
     adapter: EquirectangularTilesAdapter,
     panorama: {

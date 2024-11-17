@@ -50,7 +50,6 @@ const viewer = new Viewer({
 title: PSV Gallery Demo
 packages:
     - name: gallery-plugin
-      imports: GalleryPlugin
       style: true
 ```
 

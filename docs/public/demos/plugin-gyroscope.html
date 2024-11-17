@@ -35,7 +35,7 @@
 
             const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 
-            const viewer = new Viewer({
+            new Viewer({
                 container: 'viewer',
                 panorama: baseUrl + 'sphere.jpg',
                 caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',
@@ -44,8 +44,6 @@
                     GyroscopePlugin,
                 ],
             });
-
-            window.viewer = viewer;
         </script>
     </body>
 </html>

@@ -41,11 +41,11 @@ export function getStyle(defaultStyle: MapHotspotStyle, style: MapHotspotStyle, 
         color: isHover
             ? style.hoverColor ?? style.color ?? defaultStyle.hoverColor ?? defaultStyle.color
             : style.color ?? defaultStyle.color,
-        borderColor: isHover 
-            ? style.hoverBorderColor ?? defaultStyle.hoverBorderColor 
+        borderColor: isHover
+            ? style.hoverBorderColor ?? defaultStyle.hoverBorderColor
             : null,
-        borderSize: isHover 
-            ? style.hoverBorderSize ?? defaultStyle.hoverBorderSize 
+        borderSize: isHover
+            ? style.hoverBorderSize ?? defaultStyle.hoverBorderSize
             : null,
     };
 }
@@ -74,7 +74,7 @@ export function canvasShadow(
     offsetX: number,
     offsetY: number,
     blur: number,
-    color = 'black'
+    color = 'black',
 ) {
     context.shadowOffsetX = offsetX * SYSTEM.pixelRatio;
     context.shadowOffsetY = offsetY * SYSTEM.pixelRatio;
@@ -89,14 +89,13 @@ export function drawImageCentered(context: CanvasRenderingContext2D, image: Imag
     const w = image.width;
     const h = image.height;
 
-    // prettier-ignore
     drawImageHighDpi(
         context,
         image,
         -size / 2,
         -((h / w) * size) / 2,
         size,
-        (h / w) * size
+        (h / w) * size,
     );
 }
 
@@ -109,14 +108,14 @@ export function drawImageHighDpi(
     x: number,
     y: number,
     w: number,
-    h: number
+    h: number,
 ) {
     context.drawImage(
         image,
         0, 0,
         image.width, image.height,
         x * SYSTEM.pixelRatio, y * SYSTEM.pixelRatio,
-        w * SYSTEM.pixelRatio, h * SYSTEM.pixelRatio
+        w * SYSTEM.pixelRatio, h * SYSTEM.pixelRatio,
     );
 }
 

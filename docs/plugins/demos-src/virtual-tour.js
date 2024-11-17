@@ -1,3 +1,8 @@
+import { Viewer } from '@photo-sphere-viewer/core';
+import { VirtualTourPlugin } from '@photo-sphere-viewer/virtual-tour-plugin';
+import { GalleryPlugin } from '@photo-sphere-viewer/gallery-plugin';
+import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
+
 const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 const caption = 'Cape Florida Light, Key Biscayne <b>&copy; Pixexid</b>';
 
@@ -85,7 +90,7 @@ const nodes = [
     },
 ];
 
-const viewer = new Viewer({
+new Viewer({
     container: 'viewer',
     loadingImg: baseUrl + 'loader.gif',
     touchmoveTwoFingers: true,

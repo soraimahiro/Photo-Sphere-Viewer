@@ -30,7 +30,7 @@ export abstract class AbstractComponent {
 
     constructor(
         protected readonly parent: Viewer | AbstractComponent,
-        config: { className?: string, tagName?: string }
+        config: { className?: string; tagName?: string },
     ) {
         this.viewer = parent instanceof AbstractComponent ? parent.viewer : parent;
 
@@ -52,7 +52,7 @@ export abstract class AbstractComponent {
             this.parent.children.splice(childIdx, 1);
         }
 
-        this.children.slice().forEach((child) => child.destroy());
+        this.children.slice().forEach(child => child.destroy());
         this.children.length = 0;
     }
 

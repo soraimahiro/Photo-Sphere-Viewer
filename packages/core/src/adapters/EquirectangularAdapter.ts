@@ -66,7 +66,7 @@ const getConfig = getConfigParser<EquirectangularAdapterConfig>(
             }
             return false;
         },
-    }
+    },
 );
 
 /**
@@ -137,7 +137,7 @@ export class EquirectangularAdapter extends AbstractAdapter<string | Equirectang
         panorama: string | EquirectangularPanorama,
         loader = true,
         newPanoData?: PanoData | PanoDataProvider,
-        useXmpPanoData = this.config.useXmpData
+        useXmpPanoData = this.config.useXmpData,
     ): Promise<EquirectangularTextureData> {
         if (typeof panorama !== 'string' && (typeof panorama !== 'object' || !panorama.path)) {
             return Promise.reject(new PSVError('Invalid panorama url, are you using the right adapter?'));
@@ -158,8 +158,8 @@ export class EquirectangularAdapter extends AbstractAdapter<string | Equirectang
 
         const blob = await this.viewer.textureLoader.loadFile(
             cleanPanorama.path,
-            loader ? (p) => this.viewer.loader.setProgress(p) : null,
-            cleanPanorama.path
+            loader ? p => this.viewer.loader.setProgress(p) : null,
+            cleanPanorama.path,
         );
         const xmpPanoData = useXmpPanoData ? await this.loadXMP(blob) : null;
         const img = await this.viewer.textureLoader.blobToImage(blob);
@@ -266,7 +266,7 @@ export class EquirectangularAdapter extends AbstractAdapter<string | Equirectang
             -Math.PI / 2 + hStart,
             hLength,
             vStart,
-            vLength
+            vLength,
         ).scale(-1, 1, 1);
 
         const material = new MeshBasicMaterial({ depthTest: false, depthWrite: false });
@@ -291,5 +291,4 @@ export class EquirectangularAdapter extends AbstractAdapter<string | Equirectang
         mesh.geometry.dispose();
         mesh.material.dispose();
     }
-
 }

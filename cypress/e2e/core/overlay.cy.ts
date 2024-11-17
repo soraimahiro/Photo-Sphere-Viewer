@@ -89,7 +89,7 @@ describe('core: overlay', () => {
         callOverlay('show overlay').then(overlay => overlay.show({
             title: 'Welcome',
             text: 'This is a demo',
-            image: '<img src=https://photo-sphere-viewer.js.org/favicon.png>'
+            image: '<img src=https://photo-sphere-viewer.js.org/favicon.png>',
         }));
 
         cy.waitForResources('favicon.png');
@@ -107,9 +107,8 @@ describe('core: overlay', () => {
 
     function checkOverlayVisibleApi(visible: boolean, id?: string) {
         callOverlay(`check ${id ? `overlay "${id}"` : 'any overlay'} ${visible ? 'visible' : 'not visible'}`)
-            .then(overlay => {
+            .then((overlay) => {
                 expect(overlay.isVisible(id)).to.eq(visible);
             });
     }
-
 });

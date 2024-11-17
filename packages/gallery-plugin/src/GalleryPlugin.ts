@@ -100,7 +100,7 @@ export class GalleryPlugin extends AbstractConfigurablePlugin<
      */
     handleEvent(e: Event) {
         if (e instanceof events.PanoramaLoadedEvent) {
-            const item = this.items.find((i) => utils.deepEqual(i.panorama, e.data.panorama));
+            const item = this.items.find(i => utils.deepEqual(i.panorama, e.data.panorama));
             this.currentId = item?.id;
             this.gallery.setActive(this.currentId);
         } else if (e instanceof events.ShowPanelEvent) {
@@ -114,7 +114,7 @@ export class GalleryPlugin extends AbstractConfigurablePlugin<
     show() {
         this.map?.minimize();
         this.plan?.minimize();
-        
+
         this.dispatchEvent(new ShowGalleryEvent(!this.gallery.isAboveBreakpoint));
         return this.gallery.show();
     }
@@ -163,7 +163,7 @@ export class GalleryPlugin extends AbstractConfigurablePlugin<
         }
 
         this.handler = handler;
-        this.items = items.map((item) => ({
+        this.items = items.map(item => ({
             ...item,
             id: `${item.id}`,
         }));
@@ -171,7 +171,7 @@ export class GalleryPlugin extends AbstractConfigurablePlugin<
         this.gallery.setItems(this.items);
 
         if (this.currentId) {
-            const item = this.items.find((i) => i.id === this.currentId);
+            const item = this.items.find(i => i.id === this.currentId);
             this.currentId = item?.id;
             this.gallery.setActive(this.currentId);
         }
@@ -194,7 +194,7 @@ export class GalleryPlugin extends AbstractConfigurablePlugin<
         if (this.handler) {
             this.handler(id);
         } else {
-            const item = this.items.find((i) => i.id === id);
+            const item = this.items.find(i => i.id === id);
             this.viewer.setPanorama(item.panorama, {
                 caption: item.name,
                 ...item.options,

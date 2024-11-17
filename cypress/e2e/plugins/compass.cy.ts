@@ -48,11 +48,11 @@ describe('plugin: compass', () => {
     it('should show navigation cone', () => {
         withCompassPosition(({ element, x, y, width, height }) => {
             // center-right
-            const enterPoint = { clientX: x + width, clientY: y + height * .5 };
+            const enterPoint = { clientX: x + width, clientY: y + height * 0.5 };
             // above bottom-center
-            const clickPoint = { clientX: x + width * .5, clientY: y + height * .75 };
+            const clickPoint = { clientX: x + width * 0.5, clientY: y + height * 0.75 };
             // bottom-center
-            const leavePoint = { clientX: x + width * .5, clientY: y + height };
+            const leavePoint = { clientX: x + width * 0.5, clientY: y + height };
 
             element
                 .trigger('mouseenter', enterPoint)
@@ -72,7 +72,7 @@ describe('plugin: compass', () => {
         callCompass('disable navigation').then(compass => compass.setOption('navigation', false));
 
         withCompassPosition(({ element, x, y, width, height }) => {
-            const point = { clientX: x + width * .5, clientY: y + height * .75 };
+            const point = { clientX: x + width * 0.5, clientY: y + height * 0.75 };
 
             element
                 .trigger('mouseenter', point)
@@ -91,7 +91,7 @@ describe('plugin: compass', () => {
             .wait(200);
 
         withCompassPosition(({ element, x, y, width, height }) => {
-            const point = { clientX: x + width * .75, clientY: y + height * .5 };
+            const point = { clientX: x + width * 0.75, clientY: y + height * 0.5 };
 
             element
                 .trigger('mousedown', point)
@@ -103,7 +103,7 @@ describe('plugin: compass', () => {
         callCompass('set resetPitch').then(compass => compass.setOption('resetPitch', true));
 
         withCompassPosition(({ element, x, y, width, height }) => {
-            const point = { clientX: x + width * .5, clientY: y + height * .75 };
+            const point = { clientX: x + width * 0.5, clientY: y + height * 0.75 };
 
             element
                 .trigger('mousedown', point)
@@ -117,7 +117,7 @@ describe('plugin: compass', () => {
         callCompass('set navigationColor').then(compass => compass.setOption('navigationColor', 'rgba(0, 255, 0, 0.5)'));
 
         withCompassPosition(({ element, x, y, width, height }) => {
-            const point = { clientX: x + width * .5, clientY: y + height * .75 };
+            const point = { clientX: x + width * 0.5, clientY: y + height * 0.75 };
 
             element
                 .trigger('mousemove', point)
@@ -165,7 +165,7 @@ describe('plugin: compass', () => {
             callCompass(`set position ${position}`).then(compass => compass.setOption('position', position));
 
             cy.get('.psv-compass')
-                .should(compass => {
+                .should((compass) => {
                     const { x, y } = compass[0].getBoundingClientRect();
                     expect({ x, y }).to.deep.eq(coords);
                 });
@@ -183,7 +183,7 @@ describe('plugin: compass', () => {
             callCompass(`set position ${position}`).then(compass => compass.setOption('position', position));
 
             cy.get('.psv-compass')
-                .then(element => {
+                .then((element) => {
                     const { x, y } = element[0].getBoundingClientRect();
                     return { x, y } satisfies Point;
                 })
@@ -192,7 +192,7 @@ describe('plugin: compass', () => {
     });
 
     it('should show hotspots', () => {
-        callCompass('set hotspots').then(compass => {
+        callCompass('set hotspots').then((compass) => {
             compass.setHotspots([
                 // @ts-ignore missing pitch
                 { yaw: 0 },
@@ -206,8 +206,8 @@ describe('plugin: compass', () => {
     });
 
     it('should set hotspots color', () => {
-        callCompass('set hotspots').then(compass => {
-            compass.setOption('hotspotColor', 'green')
+        callCompass('set hotspots').then((compass) => {
+            compass.setOption('hotspotColor', 'green');
 
             compass.setHotspots([
                 { yaw: 0, pitch: 0 },
@@ -221,7 +221,7 @@ describe('plugin: compass', () => {
     });
 
     it('should display markers', () => {
-        callMarkers('set markers').then(markers => {
+        callMarkers('set markers').then((markers) => {
             markers.setMarkers([
                 {
                     id: 'image',
@@ -252,7 +252,7 @@ describe('plugin: compass', () => {
                         [709 / 3, 1669 / 3], [301 / 3, 1519 / 3], [94 / 3, 1399 / 3], [34 / 3, 1356 / 3],
                     ],
                     data: { compass: 'rgba(80, 150, 50, 0.8)' },
-                }
+                },
             ]);
         });
 
@@ -260,13 +260,13 @@ describe('plugin: compass', () => {
     });
 
     function withCompassPosition(cb: (res: {
-        element: Cypress.Chainable<JQuery<HTMLElement>>,
-        x: number,
-        y: number,
-        width: number,
-        height: number,
+        element: Cypress.Chainable<JQuery<HTMLElement>>;
+        x: number;
+        y: number;
+        width: number;
+        height: number;
     }) => void) {
-        cy.get('.psv-compass').then(element => {
+        cy.get('.psv-compass').then((element) => {
             const { x, y, width, height } = element[0].getBoundingClientRect();
 
             cb({
@@ -283,5 +283,4 @@ describe('plugin: compass', () => {
     function callMarkers(log: string) {
         return callPlugin<MarkersPlugin>('markers', log);
     }
-
 });

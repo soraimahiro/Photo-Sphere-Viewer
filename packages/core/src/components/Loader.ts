@@ -82,8 +82,8 @@ export class Loader extends AbstractComponent {
         const endY = -Math.cos(angle) * radius + halfSize;
         const largeArc = value > 50 ? '1' : '0';
 
-        this.canvas.querySelector('path').setAttributeNS(null, 'd', 
-            `M ${startX} ${startY} A ${radius} ${radius} 0 ${largeArc} 1 ${endX} ${endY}`
+        this.canvas.querySelector('path').setAttributeNS(null, 'd',
+            `M ${startX} ${startY} A ${radius} ${radius} 0 ${largeArc} 1 ${endX} ${endY}`,
         );
 
         this.viewer.dispatchEvent(new LoadProgressEvent(Math.round(value)));

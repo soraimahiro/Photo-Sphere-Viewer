@@ -96,7 +96,7 @@ export class Renderer extends AbstractService {
         // mesh used to detect clicks on the viewer
         const raycasterMesh = new Mesh(
             new SphereGeometry(SPHERE_RADIUS).scale(-1, 1, 1),
-            new MeshBasicMaterial({ opacity: 0, transparent: true, depthTest: false, depthWrite: false })
+            new MeshBasicMaterial({ opacity: 0, transparent: true, depthTest: false, depthWrite: false }),
         );
         raycasterMesh.userData = { [VIEWER_DATA]: true };
         this.scene.add(raycasterMesh);
@@ -123,7 +123,7 @@ export class Renderer extends AbstractService {
      */
     init() {
         this.show();
-        this.renderer.setAnimationLoop((t) => this.__renderLoop(t));
+        this.renderer.setAnimationLoop(t => this.__renderLoop(t));
     }
 
     /**
@@ -151,7 +151,6 @@ export class Renderer extends AbstractService {
      * @internal
      */
     handleEvent(e: Event) {
-        // prettier-ignore
         switch (e.type) {
             case SizeUpdatedEvent.type: this.__onSizeUpdated(); break;
             case ZoomUpdatedEvent.type: this.__onZoomUpdated(); break;
@@ -275,7 +274,7 @@ export class Renderer extends AbstractService {
         this.mesh = this.viewer.adapter.createMesh(textureData.panoData);
         this.viewer.adapter.setTexture(this.mesh, textureData, false);
         this.meshContainer.add(this.mesh);
-        
+
         this.state.textureData = textureData;
 
         this.viewer.needsUpdate();
@@ -331,7 +330,7 @@ export class Renderer extends AbstractService {
 
         const e = new BeforeAnimateEvent(
             positionProvided ? this.viewer.dataHelper.cleanPosition(options.position) : undefined,
-            options.zoom
+            options.zoom,
         );
         this.viewer.dispatchEvent(e);
 
@@ -366,7 +365,7 @@ export class Renderer extends AbstractService {
         const { duration, properties } = this.viewer.dataHelper.getAnimationProperties(
             options.speed,
             options.transition === true ? e.position : null,
-            e.zoomLevel
+            e.zoomLevel,
         );
 
         const animation = new Animation({
@@ -435,8 +434,8 @@ export class Renderer extends AbstractService {
 
         const intersections = this.raycaster
             .intersectObjects(this.scene.children, true)
-            .filter((i) => i.object.visible)
-            .filter((i) => (i.object as Mesh).isMesh && !!i.object.userData) as Array<Intersection<Mesh>>;
+            .filter(i => i.object.visible)
+            .filter(i => (i.object as Mesh).isMesh && !!i.object.userData) as Array<Intersection<Mesh>>;
 
         if (this.customRenderer?.getIntersections) {
             intersections.push(...this.customRenderer.getIntersections(this.raycaster, vector2));

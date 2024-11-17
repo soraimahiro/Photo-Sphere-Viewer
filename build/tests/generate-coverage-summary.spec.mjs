@@ -18,6 +18,6 @@ describe('generate-coverage-summary', () => {
 | **shared** | 1/26 | \${\\textsf{\\color{#d3343c}3.9\\\\%}}$ | 0/8 | \${\\textsf{\\color{#d3343c}0.0\\\\%}}$ | 0/17 | \${\\textsf{\\color{#d3343c}0.0\\\\%}}$ |
 `;
 
-        assert.strictEqual(result.trim(), expected.trim());;
+        assert.strictEqual(result.trim(), expected.trim());
     });
 });

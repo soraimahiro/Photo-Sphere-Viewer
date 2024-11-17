@@ -76,7 +76,6 @@ const viewer = new Viewer({
 title: PSV Autorotate Demo
 packages:
     - name: autorotate-plugin
-      imports: AutorotatePlugin
 ```
 
 <<< ./demos-src/autorotate.js

@@ -35,9 +35,9 @@ export class ResolutionPlugin extends AbstractPlugin<ResolutionPluginEvents> {
 
         if (this.config.defaultResolution && this.viewer.config.panorama) {
             utils.logWarn(
-                'ResolutionPlugin, a defaultResolution was provided ' +
-                    'but a panorama is already configured on the viewer, ' +
-                    'the defaultResolution will be ignored.'
+                'ResolutionPlugin, a defaultResolution was provided '
+                + 'but a panorama is already configured on the viewer, '
+                + 'the defaultResolution will be ignored.',
             );
         }
     }
@@ -60,7 +60,7 @@ export class ResolutionPlugin extends AbstractPlugin<ResolutionPluginEvents> {
             label: ResolutionPlugin.id,
             current: () => this.state.resolution,
             options: () => this.resolutions,
-            apply: (resolution) => this.__setResolutionIfExists(resolution),
+            apply: resolution => this.__setResolutionIfExists(resolution),
             badge: !this.config.showBadge ? null : () => this.state.resolution,
         } as OptionsSetting);
 
@@ -69,7 +69,7 @@ export class ResolutionPlugin extends AbstractPlugin<ResolutionPluginEvents> {
         if (this.config.resolutions) {
             this.setResolutions(
                 this.config.resolutions,
-                this.viewer.config.panorama ? null : this.config.defaultResolution
+                this.viewer.config.panorama ? null : this.config.defaultResolution,
             );
             delete this.config.resolutions;
             delete this.config.defaultResolution;
@@ -122,7 +122,7 @@ export class ResolutionPlugin extends AbstractPlugin<ResolutionPluginEvents> {
         // pick first resolution if no default provided and cannot find match with current panorama
         if (!defaultResolution) {
             if (this.viewer.config.panorama) {
-                const resolution = this.resolutions.find((r) => utils.deepEqual(this.viewer.config.panorama, r.panorama));
+                const resolution = this.resolutions.find(r => utils.deepEqual(this.viewer.config.panorama, r.panorama));
                 if (!resolution) {
                     defaultResolution = resolutions[0].id;
                 }
@@ -134,7 +134,7 @@ export class ResolutionPlugin extends AbstractPlugin<ResolutionPluginEvents> {
         if (defaultResolution) {
             this.setResolution(defaultResolution);
         }
-        
+
         this.__refreshResolution();
     }
 
@@ -173,7 +173,7 @@ export class ResolutionPlugin extends AbstractPlugin<ResolutionPluginEvents> {
      * Updates current resolution on panorama load
      */
     private __refreshResolution() {
-        const resolution = this.resolutions.find((r) => utils.deepEqual(this.viewer.config.panorama, r.panorama));
+        const resolution = this.resolutions.find(r => utils.deepEqual(this.viewer.config.panorama, r.panorama));
         if (this.state.resolution !== resolution?.id) {
             this.state.resolution = resolution?.id;
             this.settings?.updateButton();

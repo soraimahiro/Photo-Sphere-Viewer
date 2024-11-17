@@ -1,6 +1,12 @@
+import { Viewer } from '@photo-sphere-viewer/core';
+import { CubemapVideoAdapter } from '@photo-sphere-viewer/cubemap-video-adapter';
+import { VideoPlugin } from '@photo-sphere-viewer/video-plugin';
+import { SettingsPlugin } from '@photo-sphere-viewer/settings-plugin';
+import { ResolutionPlugin } from '@photo-sphere-viewer/resolution-plugin';
+
 const baseUrl = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 
-const viewer = new Viewer({
+new Viewer({
     container: 'viewer',
     adapter: [CubemapVideoAdapter, {
         muted: true,

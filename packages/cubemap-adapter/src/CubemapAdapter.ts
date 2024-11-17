@@ -207,11 +207,17 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
             } else {
                 promises.push(
                     this.viewer.textureLoader
-                        .loadImage(paths[i], loader ? (p) => {
-                            progress[i] = p;
-                            this.viewer.loader.setProgress(utils.sum(progress) / 6);
-                        } : null, cacheKey)
-                        .then((img) => this.createCubemapTexture(img))
+                        .loadImage(
+                            paths[i],
+                            loader
+                                ? (p) => {
+                                        progress[i] = p;
+                                        this.viewer.loader.setProgress(utils.sum(progress) / 6);
+                                    }
+                                : null,
+                            cacheKey,
+                        )
+                        .then(img => this.createCubemapTexture(img)),
                 );
             }
         }
@@ -256,8 +262,8 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
         const cacheKey = panorama.path;
         const img = await this.viewer.textureLoader.loadImage(
             panorama.path,
-            loader ? (p) => this.viewer.loader.setProgress(p) : null,
-            cacheKey
+            loader ? p => this.viewer.loader.setProgress(p) : null,
+            cacheKey,
         );
 
         if (img.width !== img.height * 6) {
@@ -283,7 +289,7 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
                 img.height * i, 0,
                 img.height, img.height,
                 0, 0,
-                tileWidth, tileWidth
+                tileWidth, tileWidth,
             );
 
             textures[panorama.order[i]] = utils.createTexture(buffer);
@@ -300,8 +306,8 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
         const cacheKey = panorama.path;
         const img = await this.viewer.textureLoader.loadImage(
             panorama.path,
-            loader ? (p) => this.viewer.loader.setProgress(p) : null,
-            cacheKey
+            loader ? p => this.viewer.loader.setProgress(p) : null,
+            cacheKey,
         );
 
         if (img.width / 4 !== img.height / 3) {
@@ -336,7 +342,7 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
                 img.width * pts[i][0], img.height * pts[i][1],
                 img.width / 4, img.height / 3,
                 0, 0,
-                tileWidth, tileWidth
+                tileWidth, tileWidth,
             );
 
             textures[i] = utils.createTexture(buffer);

@@ -65,8 +65,8 @@ async function listFilesWithHashes(dir, exclude, hashfn) {
         results: [],
     });
 
-    files.forEach(file => {
-        queue.push(cb => {
+    files.forEach((file) => {
+        queue.push((cb) => {
             const input = createReadStream(file);
 
             const hash = createHash(hashfn);
@@ -126,7 +126,6 @@ async function createDeploy(files, functions) {
         console.log(`Created deploy #${deploy.id} (${deploy.deploy_ssl_url}). ${deploy.required.length} new files.`);
 
         return deploy;
-
     } catch {
         console.error('Cannot create deploy');
         process.exit(1);
@@ -141,7 +140,7 @@ async function publishDeploy(deploy) {
         await retryFetch(`https://api.netlify.com/api/v1/sites/${process.env.NETLIFY_SITE_ID}/deploys/${deploy.id}/restore`, {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + process.env.NETLIFY_AUTH_TOKEN,
+                Authorization: 'Bearer ' + process.env.NETLIFY_AUTH_TOKEN,
             },
         });
 
@@ -159,7 +158,7 @@ async function cancelDeploy(deploy) {
         await retryFetch(`https://api.netlify.com/api/v1/deploys/${deploy.id}/cancel`, {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + process.env.NETLIFY_AUTH_TOKEN,
+                Authorization: 'Bearer ' + process.env.NETLIFY_AUTH_TOKEN,
             },
         });
 
@@ -185,8 +184,8 @@ async function uploadFiles(dir, files, deploy) {
         results: [],
     });
 
-    deploy.required.forEach(hash => {
-        queue.push(cb => {
+    deploy.required.forEach((hash) => {
+        queue.push((cb) => {
             const file = fileByHash[hash];
 
             console.log(`Upload ${file}`);
@@ -221,6 +220,7 @@ async function uploadFiles(dir, files, deploy) {
 /**
  * Upload new functions to Netlify
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function uploadFunctions(dir, functions, deploy) {
     if (!deploy.required_functions.length) {
         return;
@@ -234,8 +234,8 @@ async function uploadFunctions(dir, functions, deploy) {
         results: [],
     });
 
-    deploy.required_functions.forEach(hash => {
-        queue.push(cb => {
+    deploy.required_functions.forEach((hash) => {
+        queue.push((cb) => {
             const fctn = functionsByHash[hash];
 
             fetch(`https://api.netlify.com/api/v1/deploys/${deploy.id}/functions/${fctn.replace('.zip', '')}`, {

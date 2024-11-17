@@ -27,7 +27,7 @@ function listFiles(dir) {
 
 function getFiles(dir) {
     const absoluteDir = posixJoin(__dirname, '..', dir);
-    return listFiles(absoluteDir).map((f) => f.substr(absoluteDir.length + 1));
+    return listFiles(absoluteDir).map(f => f.substr(absoluteDir.length + 1));
 }
 
 const externals = {
@@ -68,7 +68,7 @@ export default defineConfig({
                 appId: '5AVMW192FM',
                 apiKey: 'd443b6c08ed5353575f503b7a57f5bbf',
                 indexName: 'photo-sphere-viewer',
-            }
+            },
         },
 
         nav: [
@@ -97,25 +97,25 @@ export default defineConfig({
                     text: 'Guide',
                     base: '/guide',
                     items: [
-                        { text: 'Getting started', link: '/', },
-                        { text: 'Configuration', link: '/config', },
-                        { text: 'Methods', link: '/methods', },
-                        { text: 'Events', link: '/events', },
-                        { text: 'Navbar customization', link: '/navbar', },
-                        { text: 'Style', link: '/style', },
+                        { text: 'Getting started', link: '/' },
+                        { text: 'Configuration', link: '/config' },
+                        { text: 'Methods', link: '/methods' },
+                        { text: 'Events', link: '/events' },
+                        { text: 'Navbar customization', link: '/navbar' },
+                        { text: 'Style', link: '/style' },
                         {
                             text: 'Adapters',
                             link: '/',
                             base: '/guide/adapters',
                             collapsed: true,
                             items: [
-                                { text: 'Equirectangular', link: '/equirectangular', },
-                                { text: 'Equirectangular tiles', link: '/equirectangular-tiles', },
-                                { text: 'Equirectangular video', link: '/equirectangular-video', },
-                                { text: 'Cubemap', link: '/cubemap', },
-                                { text: 'Cubemap tiles', link: '/cubemap-tiles', },
-                                { text: 'Cubemap video', link: '/cubemap-video', },
-                                { text: 'Dual fisheye', link: '/dual-fisheye', },
+                                { text: 'Equirectangular', link: '/equirectangular' },
+                                { text: 'Equirectangular tiles', link: '/equirectangular-tiles' },
+                                { text: 'Equirectangular video', link: '/equirectangular-video' },
+                                { text: 'Cubemap', link: '/cubemap' },
+                                { text: 'Cubemap tiles', link: '/cubemap-tiles' },
+                                { text: 'Cubemap video', link: '/cubemap-video' },
+                                { text: 'Dual fisheye', link: '/dual-fisheye' },
                             ],
                         },
                         {
@@ -124,16 +124,16 @@ export default defineConfig({
                             base: '/guide/components',
                             collapsed: true,
                             items: [
-                                { text: 'Panel', link: '/panel', },
-                                { text: 'Notification', link: '/notification', },
-                                { text: 'Overlay', link: '/overlay', },
-                                { text: 'Tooltip', link: '/tooltip', },
+                                { text: 'Panel', link: '/panel' },
+                                { text: 'Notification', link: '/notification' },
+                                { text: 'Overlay', link: '/overlay' },
+                                { text: 'Tooltip', link: '/tooltip' },
                             ],
                         },
-                        { text: 'Frameworks', link: '/frameworks', },
-                        { text: 'Changelog', link: '/changelog', },
-                        { text: 'Development', link: '/development', },
-                        { text: 'Migration from v4', link: '/migration', },
+                        { text: 'Frameworks', link: '/frameworks' },
+                        { text: 'Changelog', link: '/changelog' },
+                        { text: 'Development', link: '/development' },
+                        { text: 'Migration from v4', link: '/migration' },
                     ],
                 },
             ],
@@ -142,9 +142,9 @@ export default defineConfig({
                     text: 'Plugins',
                     base: '/plugins',
                     items: [
-                        { text: 'Introduction to plugins', link: '/', },
-                        { text: 'Writing a plugin', link: '/writing-a-plugin', },
-                        { text: 'Third party plugins', link: '/third-party', },
+                        { text: 'Introduction to plugins', link: '/' },
+                        { text: 'Writing a plugin', link: '/writing-a-plugin' },
+                        { text: 'Third party plugins', link: '/third-party' },
                     ],
                 },
                 {
@@ -154,7 +154,7 @@ export default defineConfig({
                         .filter((f) => {
                             return f.endsWith('.md') && f !== 'index.md' && f !== 'writing-a-plugin.md' && f !== 'third-party.md';
                         })
-                        .map((f) => ({
+                        .map(f => ({
                             text: startCase(f.replace('.md', '')),
                             link: '/' + f,
                         })),
@@ -166,8 +166,8 @@ export default defineConfig({
                     base: '/demos',
                     items: (() => {
                         const demoFiles: Record<string, string[]> = getFiles('demos')
-                            .map((f) => f.split('/'))
-                            .filter((f) => f.length === 2)
+                            .map(f => f.split('/'))
+                            .filter(f => f.length === 2)
                             .reduce((groups, [dir, file]) => {
                                 (groups[dir] = groups[dir] ?? []).push(file);
                                 return groups;
@@ -176,7 +176,7 @@ export default defineConfig({
                         return Object.entries(demoFiles)
                             .map(([group, files]) => ({
                                 text: capitalize(group),
-                                items: files.map((f) => ({
+                                items: files.map(f => ({
                                     text: startCase(f.replace('.md', '')).replace('0 Config', 'Zero config'),
                                     link: `/${group}/${f}`,
                                 })),

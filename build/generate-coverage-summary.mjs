@@ -14,7 +14,7 @@ script.runInContext(context);
 const values = Object.values(context.window.COVERAGE_DATA)
     .reduce((result, { metrics, path }) => {
         const module = path.split('/').shift();
-        [TOTAL, module].forEach(key => {
+        [TOTAL, module].forEach((key) => {
             const moduleMetrics = result[key] ?? {
                 branches: { total: 0, covered: 0 },
                 functions: { total: 0, covered: 0 },
@@ -51,7 +51,7 @@ ${Object.entries(values)
             return `| **${name}** | ${entry(lines)} | ${entry(functions)} | ${entry(branches)} |`;
         })
         .join('\n')
-    }
+}
 `;
 
 process.stdout.write(summary);

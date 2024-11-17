@@ -26,8 +26,8 @@ export function assetsPlugin(files: Record<string, string | Promise<string>>): P
                                     console.log('ASSET', outpath, prettyBytes(content.length));
                                     return writeFile(outpath, content);
                                 });
-                            })
-                        )
+                            }),
+                        ),
                     )
                     .then(() => undefined);
             });

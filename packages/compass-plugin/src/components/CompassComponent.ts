@@ -23,7 +23,7 @@ export class CompassComponent extends AbstractComponent {
 
     constructor(
         viewer: Viewer,
-        private plugin: CompassPlugin
+        private plugin: CompassPlugin,
     ) {
         super(viewer, {});
 
@@ -232,12 +232,11 @@ export class CompassComponent extends AbstractComponent {
         const r = Math.max(2, this.canvas.width * HOTSPOT_SIZE_RATIO);
 
         context.beginPath();
-        // prettier-ignore
         context.ellipse(
-            c + Math.cos(a) * c * d, c + Math.sin(a) * c * d, 
+            c + Math.cos(a) * c * d, c + Math.sin(a) * c * d,
             r, r,
             0, 0,
-            Math.PI * 2
+            Math.PI * 2,
         );
         context.fillStyle = color;
         context.fill();

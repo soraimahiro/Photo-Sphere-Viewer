@@ -80,7 +80,7 @@ export class MapComponent extends AbstractComponent {
 
     constructor(
         viewer: Viewer,
-        private plugin: MapPlugin
+        private plugin: MapPlugin,
     ) {
         super(viewer, {
             className: `psv-map ${CONSTANTS.CAPTURE_EVENTS_CLASS}`,
@@ -309,7 +309,8 @@ export class MapComponent extends AbstractComponent {
         this.container.style.width = this.config.size;
         this.container.style.height = this.config.size;
 
-        this.overlay.innerHTML = this.config.overlayImage === null ? ''
+        this.overlay.innerHTML = this.config.overlayImage === null
+            ? ''
             : getImageHtml(this.config.overlayImage ?? (this.config.shape === 'square' ? overlaySquare : overlayRound));
 
         this.resetButton?.applyConfig();
@@ -524,14 +525,13 @@ export class MapComponent extends AbstractComponent {
         context.rotate(-yawAndRotation);
         context.scale(zoom, zoom);
         canvasShadow(context, 0, 0, MAP_SHADOW_BLUR);
-        // prettier-ignore
         drawImageHighDpi(
             context,
             mapImage,
             -center.x - offset.x,
             -center.y - offset.y,
             mapW,
-            mapH
+            mapH,
         );
         context.restore();
 
@@ -648,7 +648,7 @@ export class MapComponent extends AbstractComponent {
                 y: this.state.mouseY - clientY,
             },
             this.config.static ? 0 : yaw + this.config.rotation,
-            zoom
+            zoom,
         );
 
         this.state.offset.x += move.x;
@@ -811,7 +811,6 @@ export class MapComponent extends AbstractComponent {
         let y = 0;
         let z = 0;
 
-        // prettier-ignore
         switch (key) {
             case CONSTANTS.KEY_CODES.ArrowUp: y = 1; break;
             case CONSTANTS.KEY_CODES.ArrowDown: y = -1; break;

@@ -53,7 +53,7 @@ const getConfig = utils.getConfigParser<AutorotatePluginConfig, ParsedAutorotate
             }
             return null;
         },
-    }
+    },
 );
 
 const NUM_STEPS = 16;
@@ -330,7 +330,7 @@ export class AutorotatePlugin extends AbstractConfigurablePlugin<
                     {
                         yaw: this.config.autorotateSpeed < 0,
                     },
-                    Math.abs(this.config.autorotateSpeed / this.viewer.config.moveSpeed)
+                    Math.abs(this.config.autorotateSpeed / this.viewer.config.moveSpeed),
                 );
 
                 if (!utils.isNil(this.config.autorotatePitch)) {
@@ -338,7 +338,7 @@ export class AutorotatePlugin extends AbstractConfigurablePlugin<
                         {
                             pitch: this.config.autorotatePitch,
                         },
-                        Math.abs(this.config.autorotateSpeed / this.viewer.config.moveSpeed)
+                        Math.abs(this.config.autorotateSpeed / this.viewer.config.moveSpeed),
                     );
                 }
             }
@@ -366,7 +366,7 @@ export class AutorotatePlugin extends AbstractConfigurablePlugin<
      */
     private __beforeRender(timestamp: number) {
         if (
-            (this.state.initialStart || this.config.autostartOnIdle && !this.state.disableOnIdle)
+            (this.state.initialStart || (this.config.autostartOnIdle && !this.state.disableOnIdle))
             && this.viewer.state.idleTime > 0
             && timestamp - this.viewer.state.idleTime > this.config.autostartDelay
         ) {
@@ -443,19 +443,17 @@ export class AutorotatePlugin extends AbstractConfigurablePlugin<
         const workPoints = [];
         if (this.state.idx === -1) {
             const currentPosition = serializePt(this.viewer.getPosition());
-            // prettier-ignore
             workPoints.push(
                 currentPosition,
                 currentPosition,
                 this.keypoints[0].position,
-                this.keypoints[1].position
+                this.keypoints[1].position,
             );
         } else {
             for (let i = -1; i < 3; i++) {
-                const keypoint =
-                    this.state.idx + i < 0
-                        ? this.keypoints[this.keypoints.length - 1]
-                        : this.keypoints[(this.state.idx + i) % this.keypoints.length];
+                const keypoint = this.state.idx + i < 0
+                    ? this.keypoints[this.keypoints.length - 1]
+                    : this.keypoints[(this.state.idx + i) % this.keypoints.length];
                 workPoints.push(keypoint.position);
             }
         }
@@ -483,7 +481,7 @@ export class AutorotatePlugin extends AbstractConfigurablePlugin<
 
         const curve: Array<[number, number]> = new SplineCurve(workVectors)
             .getPoints(NUM_STEPS * 3)
-            .map((p) => [p.x, p.y]);
+            .map(p => [p.x, p.y]);
 
         // debugCurve(this.markers, curve, NUM_STEPS);
 
