@@ -84,8 +84,8 @@ jobs:
       - name: setup
         uses: ./.github/workflows/shared/setup
         with:
-          cache-readonly: true
-          turbo-cache: false
+          cache-readonly: 'true'
+          turbo-cache: 'false'
 
       - name: e2e
         run: yarn ci:e2e
@@ -134,8 +134,8 @@ jobs:
       - name: setup
         uses: ./.github/workflows/shared/setup
         with:
-          cache-readonly: true
-          turbo-cache: false
+          cache-readonly: 'true'
+          turbo-cache: 'false'
 
       - name: build
         run: yarn doc:build

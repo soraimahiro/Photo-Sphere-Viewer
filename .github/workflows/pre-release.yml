@@ -23,7 +23,7 @@ jobs:
       - name: setup
         uses: ./.github/workflows/shared/setup
         with:
-          turbo-cache: false
+          turbo-cache: 'false'
 
       - name: build
         run: |
