@@ -9,11 +9,6 @@ import zoomIn from '../icons/zoom-in.svg';
 import zoomOut from '../icons/zoom-out.svg';
 
 /**
- * Default duration of the transition between panoramas
- */
-export const DEFAULT_TRANSITION = 1500;
-
-/**
  *  Minimum duration of the animations created with {@link Viewer#animate}
  */
 export const ANIMATION_MIN_DURATION = 500;

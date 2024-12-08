@@ -151,10 +151,9 @@ export type PanoramaOptions = {
      * enable transition (rotation + fading) between old and new panorama
      * @default true
      */
-    transition?: boolean | 'fade-only';
+    transition?: boolean | 'fade-only' | TransitionOptions;
     /**
-     * speed or duration of the transition between old and new panorama
-     * @default 1500
+     * @deprecated Use `transition.speed`
      */
     speed?: string | number;
     /**
@@ -170,6 +169,15 @@ export type PanoramaOptions = {
      * new data used for this panorama
      */
     panoData?: PanoData | PanoDataProvider;
+};
+
+export type TransitionOptions = {
+    /** @default 1500 */
+    speed?: string | number;
+    /** @default true */
+    rotation?: boolean;
+    /** @default 'fade' */
+    effect?: 'fade' | 'black' | 'white';
 };
 
 /**
@@ -367,6 +375,8 @@ export type ViewerConfig = {
     requestHeaders?: Record<string, string> | ((url: string) => Record<string, string>);
     /** @default '#000' */
     canvasBackground?: string;
+    /** @default '{ speed: 1500, rotation: true, effect: "fade" }' */
+    defaultTransition?: TransitionOptions;
     /** @default '{ alpha: true, antialias: true }' */
     rendererParameters?: WebGLRendererParameters;
     /** @default false */

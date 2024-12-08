@@ -33,7 +33,7 @@ const getConfig = utils.getConfigParser<VirtualTourPluginConfig>(
         transitionOptions: {
             showLoader: true,
             speed: '20rpm',
-            fadeIn: true,
+            effect: 'fade',
             rotation: true,
         },
         linksOnCompass: true,
@@ -338,7 +338,26 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
                     ...options,
                 };
 
-                if (transitionOptions.rotation && !transitionOptions.fadeIn) {
+                if ('fadeIn' in transitionOptions) {
+                    utils.logWarn('VirtualTourTransitionOptions.fadeIn is deprecated, use "effect" instead.');
+                    transitionOptions.effect = transitionOptions.fadeIn ? 'fade' : 'none';
+                }
+                if (!transitionOptions.effect) {
+                    transitionOptions.effect = 'none';
+                }
+
+                this.__hideTooltip();
+
+                this.arrowsRenderer.clear();
+
+                if (this.gallery?.config.hideOnClick) {
+                    this.gallery.hide();
+                }
+
+                this.map?.minimize();
+                this.plan?.minimize();
+
+                if (transitionOptions.rotation && transitionOptions.effect === 'none') {
                     return this.viewer
                         .animate({
                             ...transitionOptions.rotateTo,
@@ -355,24 +374,11 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
                     throw utils.getAbortError();
                 }
 
-                this.__hideTooltip();
-
-                this.state.currentNode = node;
-
-                this.arrowsRenderer.clear();
-
-                if (this.gallery?.config.hideOnClick) {
-                    this.gallery.hide();
-                }
-
                 this.markers?.clearMarkers();
 
                 if (this.config.linksOnCompass) {
                     this.compass?.clearHotspots();
                 }
-
-                this.map?.minimize();
-                this.plan?.minimize();
 
                 return this.viewer
                     .setPanorama(node.panorama, {
@@ -380,24 +386,31 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
                         description: node.description,
                         panoData: node.panoData,
                         sphereCorrection: node.sphereCorrection,
-                        transition: !transitionOptions.fadeIn ? false : transitionOptions.rotation ? true : 'fade-only',
                         showLoader: transitionOptions.showLoader,
-                        speed: transitionOptions.speed,
                         position: transitionOptions.rotateTo,
                         zoom: transitionOptions.zoomTo,
+                        transition: transitionOptions.effect === 'none'
+                            ? false
+                            : {
+                                    effect: transitionOptions.effect,
+                                    rotation: transitionOptions.rotation,
+                                    speed: transitionOptions.speed,
+                                },
                     })
                     .then((completed) => {
                         if (!completed) {
                             throw utils.getAbortError();
                         }
+
+                        return node;
                     });
             })
-            .then(() => {
+            .then((node) => {
                 if (this.state.loadingNode !== nodeId) {
                     throw utils.getAbortError();
                 }
 
-                const node = this.state.currentNode;
+                this.state.currentNode = node;
 
                 this.map?.setCenter(this.__getNodeMapPosition(node));
                 this.plan?.setCoordinates(node.gps);

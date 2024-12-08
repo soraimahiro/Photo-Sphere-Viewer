@@ -6,6 +6,8 @@ import {
     Group,
     Intersection,
     LinearSRGBColorSpace,
+    LinearToneMapping,
+    MathUtils,
     Matrix4,
     Mesh,
     MeshBasicMaterial,
@@ -32,7 +34,14 @@ import {
     SizeUpdatedEvent,
     ZoomUpdatedEvent,
 } from '../events';
-import { PanoData, PanoramaOptions, Point, SphereCorrection, TextureData } from '../model';
+import {
+    PanoData,
+    PanoramaOptions,
+    Point,
+    SphereCorrection,
+    TextureData,
+    TransitionOptions,
+} from '../model';
 import { Animation, isNil, logWarn } from '../utils';
 import { Viewer } from '../Viewer';
 import { AbstractService } from './AbstractService';
@@ -85,6 +94,7 @@ export class Renderer extends AbstractService {
         this.renderer.setPixelRatio(SYSTEM.pixelRatio);
         // https://discourse.threejs.org/t/updates-to-color-management-in-three-js-r152/50791
         this.renderer.outputColorSpace = LinearSRGBColorSpace;
+        this.renderer.toneMapping = LinearToneMapping;
         this.renderer.domElement.className = 'psv-canvas';
         this.renderer.domElement.style.background = this.config.canvasBackground;
 
@@ -324,7 +334,10 @@ export class Renderer extends AbstractService {
      * Performs transition between the current and a new texture
      * @internal
      */
-    transition(textureData: TextureData, options: PanoramaOptions): Animation<any> {
+    transition(textureData: TextureData, options: PanoramaOptions, transition: TransitionOptions): Animation<any> {
+        // do not animate zoom in black/white transition without rotation
+        const zoomTransition = transition.effect === 'fade' || transition.rotation;
+
         const positionProvided = !isNil(options.position);
         const zoomProvided = !isNil(options.zoom);
 
@@ -334,28 +347,28 @@ export class Renderer extends AbstractService {
         );
         this.viewer.dispatchEvent(e);
 
-        const meshContainer = new Group();
-        const mesh = this.viewer.adapter.createMesh(textureData.panoData);
-        this.viewer.adapter.setTexture(mesh, textureData, true);
-        this.viewer.adapter.setTextureOpacity(mesh, 0);
-        this.setPanoramaPose(textureData.panoData, mesh);
-        this.setSphereCorrection(options.sphereCorrection, meshContainer);
+        const tempContainer = new Group();
+        const newMesh = this.viewer.adapter.createMesh(textureData.panoData);
+        this.viewer.adapter.setTexture(newMesh, textureData, true);
+        this.viewer.adapter.setTextureOpacity(newMesh, 0);
+        this.setPanoramaPose(textureData.panoData, newMesh);
+        this.setSphereCorrection(options.sphereCorrection, tempContainer);
 
         // rotate the new sphere to make the target position face the camera
-        if (positionProvided && options.transition === 'fade-only') {
+        if (positionProvided && !transition.rotation) {
             const currentPosition = this.viewer.getPosition();
 
             // rotation along the vertical axis
             const verticalAxis = new Vector3(0, 1, 0);
-            meshContainer.rotateOnWorldAxis(verticalAxis, e.position.yaw - currentPosition.yaw);
+            tempContainer.rotateOnWorldAxis(verticalAxis, e.position.yaw - currentPosition.yaw);
 
             // rotation along the camera horizontal axis
             const horizontalAxis = new Vector3(0, 1, 0).cross(this.camera.getWorldDirection(new Vector3())).normalize();
-            meshContainer.rotateOnWorldAxis(horizontalAxis, e.position.pitch - currentPosition.pitch);
+            tempContainer.rotateOnWorldAxis(horizontalAxis, e.position.pitch - currentPosition.pitch);
         }
 
-        meshContainer.add(mesh);
-        this.scene.add(meshContainer);
+        tempContainer.add(newMesh);
+        this.scene.add(tempContainer);
 
         // make sure the new texture is transfered to the GPU before starting the animation
         this.renderer.setRenderTarget(new WebGLRenderTarget<any>());
@@ -363,9 +376,9 @@ export class Renderer extends AbstractService {
         this.renderer.setRenderTarget(null);
 
         const { duration, properties } = this.viewer.dataHelper.getAnimationProperties(
-            options.speed,
-            options.transition === true ? e.position : null,
-            e.zoomLevel,
+            transition.speed,
+            transition.rotation ? e.position : null,
+            zoomTransition ? e.zoomLevel : null,
         );
 
         const animation = new Animation({
@@ -376,15 +389,38 @@ export class Renderer extends AbstractService {
             duration: duration,
             easing: 'inOutCubic',
             onTick: (props) => {
-                this.viewer.adapter.setTextureOpacity(mesh, props.opacity);
+                switch (transition.effect) {
+                    case 'fade':
+                        this.viewer.adapter.setTextureOpacity(newMesh, props.opacity);
+                        break;
+                    case 'black':
+                    case 'white':
+                        if (props.opacity < 0.5) {
+                            this.renderer.toneMappingExposure = transition.effect === 'black'
+                                ? MathUtils.mapLinear(props.opacity, 0, 0.5, 1, 0)
+                                : MathUtils.mapLinear(props.opacity, 0, 0.5, 1, 4);
+                        } else {
+                            this.renderer.toneMappingExposure = transition.effect === 'black'
+                                ? MathUtils.mapLinear(props.opacity, 0.5, 1, 0, 1)
+                                : MathUtils.mapLinear(props.opacity, 0.5, 1, 4, 1);
 
-                if (positionProvided && options.transition === true) {
+                            this.mesh.visible = false;
+                            this.viewer.adapter.setTextureOpacity(newMesh, 1);
+
+                            if (zoomProvided && !zoomTransition) {
+                                this.viewer.dynamics.zoom.setValue(e.zoomLevel);
+                            }
+                        }
+                        break;
+                }
+
+                if (positionProvided && transition.rotation) {
                     this.viewer.dynamics.position.setValue({
                         yaw: props.yaw,
                         pitch: props.pitch,
                     });
                 }
-                if (zoomProvided) {
+                if (zoomProvided && zoomTransition) {
                     this.viewer.dynamics.zoom.setValue(props.zoom);
                 }
 
@@ -393,8 +429,8 @@ export class Renderer extends AbstractService {
         });
 
         animation.then((completed) => {
-            meshContainer.remove(mesh);
-            this.scene.remove(meshContainer);
+            tempContainer.remove(newMesh);
+            this.scene.remove(tempContainer);
 
             if (completed) {
                 // remove old texture and mesh
@@ -403,20 +439,20 @@ export class Renderer extends AbstractService {
                 this.viewer.adapter.disposeMesh(this.mesh);
 
                 // promote new texture and mesh
-                this.mesh = mesh;
-                this.meshContainer.add(mesh);
+                this.mesh = newMesh;
+                this.meshContainer.add(newMesh);
                 this.state.textureData = textureData;
 
                 // apply rotations
                 this.setPanoramaPose(textureData.panoData);
                 this.setSphereCorrection(options.sphereCorrection);
 
-                if (positionProvided && options.transition === 'fade-only') {
+                if (positionProvided && !transition.rotation) {
                     this.viewer.rotate(options.position);
                 }
             } else {
                 this.viewer.adapter.disposeTexture(textureData);
-                this.viewer.adapter.disposeMesh(mesh);
+                this.viewer.adapter.disposeMesh(newMesh);
             }
         });
 

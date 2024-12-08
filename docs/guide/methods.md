@@ -99,8 +99,6 @@ viewer.setOptions({
 
 Change the panorama image with an optional transition animation (enabled by default). See all options in the [API Documentation](/api/types/Core.PanoramaOptions.html){target=_blank}.
 
-The `speed` option is either a duration in milliseconds or a string containing the speed in revolutions per minute (`2rpm`).
-
 The method returns a Promise resolved when the new panorama has finished loading.
 
 ```js
@@ -110,9 +108,12 @@ viewer.setPanorama('image.jpg')
 viewer.setPanorama('image.jpg', { transition: false });
 
 viewer.setPanorama('image.jpg', {
-  speed: '20rpm',
-  position: { yaw: 0, pitch: 0 },
   caption: 'The new caption',
+  position: { yaw: 0, pitch: 0 },
+  transition: {
+    rotation: false,
+    effect: 'black',
+  },
   // more options in the API doc
 });
 ```

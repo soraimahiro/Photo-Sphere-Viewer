@@ -214,7 +214,7 @@ Allows to fix the panorama orientation.
 
 #### `panoData`
 
--   type: `object | function<Image, PanoData, PanoData>`
+-   type: `PanoData | function<Image, PanoData, PanoData>`
 
 Overrides XMP data found in the panorama file.
 All parameters are optional.
@@ -242,6 +242,16 @@ panoData: (image, xmpData) => ({
     croppedY: Math.round((image.width / 2 - image.height) / 2),
 });
 ```
+
+#### `defaultTransition`
+
+-   type: `TransitionOptions`
+-   default: `{ speed: 1500, rotation: true, effect: "fade" }`
+
+Configures the default transition between panoramas. All parameters can be changed when calling `setPanorama()` method.
+
+Possible `effect` are `fade, black, white`.  
+The `speed` is either a duration in milliseconds or a string containing the speed in revolutions per minute (`2rpm`).
 
 #### `moveSpeed`
 

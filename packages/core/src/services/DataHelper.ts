@@ -2,7 +2,16 @@ import { Euler, MathUtils, Vector3 } from 'three';
 import { PSVError } from '../PSVError';
 import type { Viewer } from '../Viewer';
 import { ANIMATION_MIN_DURATION, SPHERE_RADIUS, VIEWER_DATA } from '../data/constants';
-import { ExtendedPosition, PanoData, PanoramaOptions, PanoramaPosition, Point, Position, SphereCorrection } from '../model';
+import {
+    ExtendedPosition,
+    PanoData,
+    PanoramaOptions,
+    PanoramaPosition,
+    Point,
+    Position,
+    SphereCorrection,
+    TransitionOptions,
+} from '../model';
 import {
     AnimationOptions,
     applyEulerInverse,
@@ -10,10 +19,12 @@ import {
     getShortestArc,
     isExtendedPosition,
     isNil,
+    logWarn,
     parseAngle,
     speedToDuration,
 } from '../utils';
 import { AbstractService } from './AbstractService';
+import { DEFAULTS } from '../data/config';
 
 const vector3 = new Vector3();
 const EULER_ZERO = new Euler(0, 0, 0, 'ZXY');
@@ -111,6 +122,44 @@ export class DataHelper extends AbstractService {
         }
 
         return { duration, properties };
+    }
+
+    /**
+     * @internal
+     */
+    getTransitionOptions(options: PanoramaOptions): TransitionOptions {
+        let transition: TransitionOptions;
+        const defaultTransition = this.config.defaultTransition ?? DEFAULTS.defaultTransition;
+
+        if (options.transition === false || options.transition === null) {
+            transition = null;
+        } else if (options.transition === true) {
+            transition = {
+                ...defaultTransition,
+            };
+        } else if (options.transition === 'fade-only') {
+            logWarn(`PanoramaOptions transition "fade-only" value is deprecated, set transition.rotation=false instead.`);
+            transition = {
+                ...defaultTransition,
+                rotation: false,
+            };
+        } else if (typeof options.transition === 'object') {
+            transition = {
+                ...defaultTransition,
+                ...options.transition,
+            };
+        } else {
+            transition = this.config.defaultTransition;
+        }
+
+        if ('speed' in options) {
+            logWarn(`PanoramaOptions speed is deprecated, set transition.speed instead.`);
+            if (transition) {
+                transition.speed = options.speed;
+            }
+        }
+
+        return transition;
     }
 
     /**

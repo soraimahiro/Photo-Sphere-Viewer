@@ -10,7 +10,7 @@ import { Panel } from './components/Panel';
 import { Tooltip, TooltipConfig } from './components/Tooltip';
 import { Cache } from './data/cache';
 import { CONFIG_PARSERS, DEFAULTS, getViewerConfig, READONLY_OPTIONS } from './data/config';
-import { DEFAULT_TRANSITION, IDS, VIEWER_DATA } from './data/constants';
+import { IDS, VIEWER_DATA } from './data/constants';
 import { SYSTEM } from './data/system';
 import {
     BeforeAnimateEvent,
@@ -181,7 +181,10 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
         // load panorama
         if (!this.state.loadingPromise) {
             if (this.config.panorama) {
-                this.setPanorama(this.config.panorama);
+                this.setPanorama(this.config.panorama, {
+                    sphereCorrection: this.config.sphereCorrection,
+                    panoData: this.config.panoData,
+                });
             } else {
                 this.loader.show();
             }
@@ -346,22 +349,8 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
         this.textureLoader.abortLoading();
         this.state.transitionAnimation?.cancel();
 
-        // apply default parameters on first load
-        if (!this.state.ready) {
-            ['sphereCorrection', 'panoData'].forEach((opt) => {
-                if (!(opt in options)) {
-                    // @ts-ignore
-                    options[opt] = this.config[opt];
-                }
-            });
-        }
+        const transition = this.dataHelper.getTransitionOptions(options);
 
-        if (options.transition === undefined) {
-            options.transition = true;
-        }
-        if (options.speed === undefined) {
-            options.speed = DEFAULT_TRANSITION;
-        }
         if (options.showLoader === undefined) {
             options.showLoader = true;
         }
@@ -381,6 +370,7 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
         this.config.panorama = path;
         this.config.caption = options.caption;
         this.config.description = options.description;
+        this.config.sphereCorrection = options.sphereCorrection;
 
         const done = (err?: Error) => {
             if (isAbortError(err)) {
@@ -428,7 +418,7 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
             };
         });
 
-        if (!options.transition || !this.state.ready || !this.adapter.supportsTransition(this.config.panorama)) {
+        if (!transition || !this.state.ready || !this.adapter.supportsTransition(this.config.panorama)) {
             this.state.loadingPromise = loadingPromise
                 .then(({ textureData, cleanOptions }) => {
                     this.renderer.show();
@@ -460,7 +450,7 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
 
                     this.dispatchEvent(new PanoramaLoadedEvent(textureData));
 
-                    this.state.transitionAnimation = this.renderer.transition(textureData, cleanOptions);
+                    this.state.transitionAnimation = this.renderer.transition(textureData, cleanOptions, transition);
                     return this.state.transitionAnimation;
                 })
                 .then((completed) => {

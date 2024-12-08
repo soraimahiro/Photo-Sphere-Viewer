@@ -289,7 +289,7 @@ Enable the preloading of linked nodes, can be a function that returns true or fa
 #### `transitionOptions`
 
 -   type: `object | function`
--   default: `{ showLoader: true, speed: '20rpm', fadeIn: true, rotation: true }`
+-   default: `{ showLoader: true, speed: '20rpm', effect: 'fade', rotation: true }`
 -   updatable: no
 
 Configuration of the transition between nodes. Can be a callback.
@@ -310,15 +310,15 @@ The default behaviour is to rotate the view to face the direction of the link an
      */
     showLoader?: boolean;
     /**
+     * Enable transition between nodes
+     * @default 'fade'
+     */
+    effect?: 'none' | 'fade' | 'black' | 'white';
+    /**
      * Speed or duration of the transition between nodes
      * @default '20rpm'
      */
     speed?: string | number;
-    /**
-     * Enable fade-in between nodes
-     * @default true
-     */
-    fadeIn?: boolean;
     /**
      * Enable rotation in the direction of the next node
      * @default true
@@ -332,8 +332,8 @@ The default behaviour is to rotate the view to face the direction of the link an
 ```ts
 (toNode: Node, fromNode?: Node, fromLink?: NodeLink) => ({
     showLoader?: boolean;
+    effect?: 'none' | 'fade' | 'black' | 'white';
     speed?: string | number;
-    fadeIn?: boolean;
     rotation?: boolean;
     /**
      * Define where to rotate the current panorama before switching to the next

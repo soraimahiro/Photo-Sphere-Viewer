@@ -39,6 +39,11 @@ export const DEFAULTS: Required<ParsedViewerConfig> = {
     panoData: null,
     requestHeaders: null,
     canvasBackground: '#000',
+    defaultTransition: {
+        speed: 1500,
+        rotation: true,
+        effect: 'fade',
+    },
     rendererParameters: { alpha: true, antialias: true },
     withCredentials: false,
     navbar: [
@@ -200,6 +205,13 @@ export const CONFIG_PARSERS: ConfigParsers<ViewerConfig, ParsedViewerConfig> = {
             return requestHeaders;
         }
         return null;
+    },
+    defaultTransition: (defaultTransition, { defValue }) => {
+        if (defaultTransition === null || defaultTransition.speed === 0) {
+            return null;
+        } else {
+            return { ...defValue, ...defaultTransition };
+        }
     },
     rendererParameters: (rendererParameters, { defValue }) => ({
         ...rendererParameters,

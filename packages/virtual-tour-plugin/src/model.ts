@@ -6,6 +6,7 @@ import type {
     Position,
     Size,
     SphereCorrection,
+    TransitionOptions,
 } from '@photo-sphere-viewer/core';
 import type { MapHotspot } from '@photo-sphere-viewer/map-plugin';
 import type { MarkerConfig } from '@photo-sphere-viewer/markers-plugin';
@@ -64,13 +65,17 @@ export type VirtualTourTransitionOptions = {
      */
     showLoader?: boolean;
     /**
+     * Enable transition between nodes
+     * @default 'fade'
+     */
+    effect?: 'none' | TransitionOptions['effect'];
+    /**
      * Speed or duration of the transition between nodes
      * @default '20rpm'
      */
     speed?: string | number;
     /**
-     * Enable fade-in between nodes
-     * @default true
+     * @deprecated Use `effect` instead
      */
     fadeIn?: boolean;
     /**
@@ -218,7 +223,7 @@ export type VirtualTourPluginConfig = {
      * @default `{ showLoader: true, speed: '20rpm', fadeIn: true, rotation: true }`
      */
     transitionOptions?:
-        | Pick<VirtualTourTransitionOptions, 'showLoader' | 'speed' | 'fadeIn' | 'rotation'>
+        | Pick<VirtualTourTransitionOptions, 'showLoader' | 'speed' | 'effect' | 'fadeIn' | 'rotation'>
         | ((
             toNode: VirtualTourNode,
             fromNode?: VirtualTourNode,
