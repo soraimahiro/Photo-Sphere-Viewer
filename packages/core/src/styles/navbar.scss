@@ -61,6 +61,15 @@
     margin-left: -$psv-buttons-padding;
 }
 
+.psv-download-button {
+    color: $psv-buttons-color !important;
+    text-decoration: none !important;
+
+    &::before, &::after {
+        display: none !important;
+    }
+}
+
 .psv-custom-button {
     width: auto;
     min-width: $psv-buttons-height;
