@@ -12,12 +12,12 @@ export const packageJson = (pkg: any) => {
         exports: {
             '.': {
                 import: {
+                    types: './index.d.mts',
                     default: './index.module.js',
-                    type: './index.d.mts',
                 },
                 require: {
+                    types: './index.d.ts',
                     default: './index.cjs',
-                    type: './index.d.ts',
                 },
             },
         },
