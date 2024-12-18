@@ -11,8 +11,14 @@ export const packageJson = (pkg: any) => {
         types: 'index.d.ts',
         exports: {
             '.': {
-                import: './index.module.js',
-                require: './index.cjs',
+                import: {
+                    default: './index.module.js',
+                    type: './index.d.mts',
+                },
+                require: {
+                    default: './index.cjs',
+                    type: './index.d.ts',
+                },
             },
         },
         license: 'MIT',
@@ -34,6 +40,8 @@ export const packageJson = (pkg: any) => {
     if (pkg.psv.style) {
         content.style = 'index.css';
         content.sass = 'index.scss';
+        content.exports['./index.css'] = './index.css';
+        content.exports['./index.scss'] = './index.scss';
     }
 
     if (pkg.name === '@photo-sphere-viewer/core') {
