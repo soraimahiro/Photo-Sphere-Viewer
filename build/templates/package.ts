@@ -27,7 +27,8 @@ export const packageJson = (pkg: any) => {
         },
         keywords: ['photosphere', 'panorama', 'threejs', ...(pkg.keywords || [])],
         dependencies: _.pickBy(pkg.dependencies, (val, key) => !key.startsWith('@photo-sphere-viewer')),
-        peerDependencies: _.pickBy(pkg.dependencies, (val, key) => key.startsWith('@photo-sphere-viewer')),
+        // "npm version" does not update inter-dependencies https://github.com/npm/cli/pull/7903
+        peerDependencies: _.mapValues(_.pickBy(pkg.dependencies, (val, key) => key.startsWith('@photo-sphere-viewer')), () => pkg.version),
     };
 
     if (pkg.psv.style) {
