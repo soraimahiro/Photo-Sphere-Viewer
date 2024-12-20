@@ -1,4 +1,3 @@
-import { getParameters } from 'codesandbox-import-utils/lib/api/define';
 import { Service, SERVICES } from './constants';
 
 const ORG = '@photo-sphere-viewer/';
@@ -51,7 +50,7 @@ function getFullCss(css: string, packages: Package[], cdnImport: boolean) {
 ${packages
     .filter(({ style }) => style)
     .map(({ name, version, css }) => {
-        return `@import '${cdnImport ? buildCdnPath({ name, version, file: css! }) : `../node_modules/${name}/${css}`}';`;
+        return `@import '${cdnImport ? buildCdnPath({ name, version, file: css! }) : `${name}/${css}`}';`;
     })
     .join('\n')}
 
@@ -158,32 +157,18 @@ function getCodePenValue({ title, js, css, html, packages }: Params) {
     };
 }
 
-function getCodeSandboxValue({ title, js, css, html, packages }: Params) {
+function getStackBlitzValue({ title, js, css, html, packages }: Params) {
     return {
-        parameters: getParameters({
-            files: {
-                'package.json': {
-                    isBinary: false,
-                    content: JSON.stringify({
-                        description: title,
-                        main: 'index.html',
-                        scripts: {
-                            start: 'parcel index.html --open',
-                            build: 'parcel build index.html',
-                        },
-                        dependencies: packages.reduce((deps, { name, version }) => {
-                            deps[name] = `${version}`;
-                            return deps;
-                        }, {}),
-                        devDependencies: {
-                            parcel: '^2.9.0',
-                            typescript: '^5.2.0',
-                        },
-                    }),
-                },
-                'index.html': {
-                    isBinary: false,
-                    content: `<!DOCTYPE html>
+        'project[template]': 'typescript',
+        'project[title]': title,
+        'project[dependencies]': JSON.stringify(packages.reduce((deps, { name, version }) => {
+            deps[name] = `${version}`;
+            return deps;
+        }, {})),
+        'project[files][index.ts]': `import './styles.css';
+${js}`,
+        'project[files][styles.css]': getFullCss(css, packages, false),
+        'project[files][index.html]': `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -194,22 +179,8 @@ function getCodeSandboxValue({ title, js, css, html, packages }: Params) {
 
 <body>
     ${getFullHtml(html, packages, false)}
-
-    <script src="src/index.ts"></script>
 </body>
 </html>`,
-                },
-                'src/index.ts': {
-                    isBinary: false,
-                    content: `import './styles.css';
-${js}`,
-                },
-                'src/styles.css': {
-                    isBinary: false,
-                    content: getFullCss(css, packages, false),
-                },
-            },
-        }),
     };
 }
 
@@ -229,8 +200,8 @@ export function openService(service: Service, params: Params) {
             data = getJsFiddleValue(params);
             break;
 
-        case 'codesandbox':
-            data = getCodeSandboxValue(params);
+        case 'stackblitz':
+            data = getStackBlitzValue(params);
             break;
     }
 

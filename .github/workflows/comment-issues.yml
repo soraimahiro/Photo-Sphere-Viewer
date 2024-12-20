@@ -24,7 +24,7 @@ jobs:
           NUMBER: ${{ github.event.issue.number }}
           BODY: |
             An isolated working demo is required in order to analyze this issue.
-            You can easily create a demo on Codepen/JSFiddle/CodeSandBox by clicking the buttons on the top of every example in the documentation.
+            You can easily create a demo on Codepen/JSFiddle/StackBlitz by clicking the buttons on the top of every example in the documentation.
 
             **Why this is important:**
             - I do not have the time to reproduce every test case from scratch
