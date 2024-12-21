@@ -450,6 +450,35 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
     }
 
     /**
+     * Rotate the view to face the link
+     */
+    async gotoLink(nodeId: string, speed: string | number = '8rpm'): Promise<void> {
+        const position = this.getLinkPosition(nodeId);
+
+        if (!speed) {
+            this.viewer.rotate(position);
+        } else {
+            await this.viewer.animate({
+                ...position,
+                speed,
+            });
+        }
+    }
+
+    /**
+     * Returns the position of a link in the viewer
+     */
+    getLinkPosition(nodeId: string): Position {
+        const link = this.state.currentNode?.links.find(link => link.nodeId === nodeId);
+
+        if (!link) {
+            throw new PSVError(`Cannot find link "${nodeId}"`);
+        }
+
+        return this.__getLinkPosition(this.state.currentNode, link);
+    }
+
+    /**
      * Updates a node (client mode only)
      * All properties but "id" are optional, the new config will be merged with the previous
      * @throws {@link PSVError} if not in client mode

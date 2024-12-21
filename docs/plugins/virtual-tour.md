@@ -507,9 +507,22 @@ virtualTourPlugin.updateNode({
 
 Changes the current node. `options` allows to override the default `transitionOptions`.
 
+#### `gotoLink(nodeId, [speed]): Promise`
+
+Moves the view to face a specific link. Default speed is `8rpm`, set it to `0` for an immediate rotation.
+
+```js
+virtualTourPlugin.gotoLink('2', '4rpm')
+  .then(() => /* animation complete */);
+```
+
 #### `getCurrentNode()`
 
 Returns the current node.
+
+#### `getLinkPosition(nodeId): Position`
+
+Returns the position of a link in the viewer.
 
 ## Events
 

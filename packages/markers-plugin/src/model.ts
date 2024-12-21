@@ -228,7 +228,7 @@ export type MarkersPluginConfig = {
      */
     markers?: MarkerConfig[];
     /**
-     * Default animation speed for {@link MarkersPlugin#gotoMarker}
+     * Default animation speed for {@link MarkersPlugin#gotoMarker} and when a marker in clicked in the list/map
      * @default '8rpm'
      */
     gotoMarkerSpeed?: string | number;

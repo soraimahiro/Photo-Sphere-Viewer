@@ -714,9 +714,9 @@ Removes all markers.
 
 Returns the last marker clicked by the user.
 
-#### `gotoMarker(id[, speed]): Animation`
+#### `gotoMarker(id, [speed]): Promise`
 
-Moves the view to face a specific marker.
+Moves the view to face a specific marker. Default speed is `8rpm`, set it to `0` for an immediate rotation.
 
 ```js
 markersPlugin.gotoMarker('marker-1', '4rpm')
