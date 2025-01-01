@@ -135,22 +135,31 @@ function isTouchEnabled(): ResolvableBoolean {
 /**
  * Gets max canvas width supported by the browser.
  * We only test powers of 2 and height = width / 2 because that's what we need to generate WebGL textures
+ * Adapted from https://github.com/jhildenbiddle/canvas-size
  */
 function getMaxCanvasWidth(maxWidth: number): number {
     let width = maxWidth;
     let pass = false;
 
-    while (width > 1024 && !pass) {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = width;
-        canvas.height = width / 2;
+    // use 1x1 canvas to reduce the time for getImageData to complete
+    const cropCanvas = document.createElement('canvas');
+    const cropCtx = cropCanvas.getContext('2d');
+    cropCanvas.width = 1;
+    cropCanvas.height = 1;
 
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, 1, 1);
+    while (width > 1024 && !pass) {
+        const testCanvas = document.createElement('canvas');
+        const testCtx = testCanvas.getContext('2d');
+        testCanvas.width = width;
+        testCanvas.height = width / 2;
 
         try {
-            if (ctx.getImageData(0, 0, 1, 1).data[0] > 0) {
+            testCtx.fillStyle = 'white';
+            testCtx.fillRect(width - 1, width / 2 - 1, 1, 1);
+
+            cropCtx.drawImage(testCanvas, width - 1, width / 2 - 1, 1, 1, 0, 0, 1, 1);
+
+            if (cropCtx.getImageData(0, 0, 1, 1).data[0] > 0) {
                 pass = true;
             }
         } catch {
@@ -159,8 +168,8 @@ function getMaxCanvasWidth(maxWidth: number): number {
 
         // Release canvas elements (Safari memory usage fix)
         // https://stackoverflow.com/questions/52532614/total-canvas-memory-use-exceeds-the-maximum-limit-safari-12
-        canvas.width = 0;
-        canvas.height = 0;
+        testCanvas.width = 0;
+        testCanvas.height = 0;
 
         if (!pass) {
             width /= 2;
