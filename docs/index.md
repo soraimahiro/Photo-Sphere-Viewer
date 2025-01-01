@@ -47,6 +47,11 @@ const sponsors = [
     name: 'Kevin M. Vuilleumier',
     links: [ { icon: 'github', link: 'https://github.com/vekin03' } ],
   },
+  {
+    avatar: 'https://avatars.githubusercontent.com/u/6279770?s=200',
+    name: 'Sachin Sancheti',
+    links: [ { icon: 'github', link: 'https://github.com/sachinsancheti1' } ],
+  },
   // one time
   {
     avatar: 'https://avatars.githubusercontent.com/u/24359?s=200',
