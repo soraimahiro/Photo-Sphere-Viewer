@@ -38,32 +38,51 @@ I forked the original Photo Sphere Viewer [by Jérémy Heleine](http://jeremyhel
 ## Sponsors
 
 <script setup>
-import { VPTeamMembers } from 'vitepress/theme'
+import { VPTeamMembers } from 'vitepress/theme';
 
 const sponsors = [
   // monthly
   {
+    avatar: 'https://avatars.githubusercontent.com/u/8026440?s=200',
+    name: 'Katapult',
+    links: [
+      { icon: 'github', link: 'https://github.com/KatapultDevelopment' },
+      { icon: 'googlehome', link: 'https://www.katapultengineering.com' },
+    ],
+  },
+  {
     avatar: 'https://avatars.githubusercontent.com/u/3709747?s=200',
     name: 'Kevin M. Vuilleumier',
-    links: [ { icon: 'github', link: 'https://github.com/vekin03' } ],
+    links: [
+      { icon: 'github', link: 'https://github.com/vekin03' },
+      { icon: 'googlehome', link: 'https://kevinvuilleumier.net' },
+    ],
   },
   {
     avatar: 'https://avatars.githubusercontent.com/u/6279770?s=200',
     name: 'Sachin Sancheti',
-    links: [ { icon: 'github', link: 'https://github.com/sachinsancheti1' } ],
+    links: [
+      { icon: 'github', link: 'https://github.com/sachinsancheti1' },
+      { icon: 'googlehome', link: 'https://www.sachin.ninja' },
+    ],
   },
   // one time
   {
     avatar: 'https://avatars.githubusercontent.com/u/24359?s=200',
     name: 'Jeffrey Warren',
-    links: [ { icon: 'github', link: 'https://github.com/jywarren' } ],
+    links: [
+      { icon: 'github', link: 'https://github.com/jywarren' },
+      { icon: 'googlehome', link: 'https://unterbahn.com' },
+    ],
   },
   {
     avatar: 'https://avatars.githubusercontent.com/u/2023869?s=200',
     name: 'Rai-Rai',
-    links: [ { icon: 'github', link: 'https://github.com/Rai-Rai' } ],
+    links: [
+      { icon: 'github', link: 'https://github.com/Rai-Rai' },
+    ],
   },
-]
+];
 </script>
 
 <VPTeamMembers size="small" :members="sponsors" />
