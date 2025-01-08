@@ -119,6 +119,8 @@ export class Renderer extends AbstractService {
         this.container.appendChild(this.renderer.domElement);
         this.viewer.container.appendChild(this.container);
 
+        this.container.addEventListener('contextmenu', e => e.preventDefault());
+
         this.viewer.addEventListener(SizeUpdatedEvent.type, this);
         this.viewer.addEventListener(ZoomUpdatedEvent.type, this);
         this.viewer.addEventListener(PositionUpdatedEvent.type, this);

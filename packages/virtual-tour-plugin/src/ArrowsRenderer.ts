@@ -62,6 +62,8 @@ export class ArrowsRenderer extends AbstractComponent {
         this.container.addEventListener('mouseenter', this, true);
         this.container.addEventListener('mouseleave', this, true);
         this.container.addEventListener('mousemove', this, true);
+
+        this.container.addEventListener('contextmenu', e => e.preventDefault());
     }
 
     init() {

@@ -130,6 +130,8 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
         this.container.className = 'psv-markers';
         this.viewer.container.appendChild(this.container);
 
+        this.container.addEventListener('contextmenu', e => e.preventDefault());
+
         this.svgContainer = document.createElementNS(SVG_NS, 'svg');
         this.svgContainer.setAttribute('class', 'psv-markers-svg-container');
         this.container.appendChild(this.svgContainer);
@@ -141,7 +143,6 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
         this.container.addEventListener('mouseenter', this, true);
         this.container.addEventListener('mouseleave', this, true);
         this.container.addEventListener('mousemove', this, true);
-        this.container.addEventListener('contextmenu', this);
     }
 
     /**
@@ -252,10 +253,6 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
                 this.__onHoverMarker(e as MouseEvent, marker);
                 break;
             }
-
-            case 'contextmenu':
-                e.preventDefault();
-                break;
         }
     }
 
