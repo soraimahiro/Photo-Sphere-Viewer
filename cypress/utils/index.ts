@@ -37,6 +37,11 @@ export function checkPosition(position: SphericalPosition) {
         .then(viewer => expect(viewer.getPosition()).to.deep.eq(position));
 }
 
+export function checkZoom(zoom: number) {
+    callViewer('check zoom')
+        .then(viewer => expect(viewer.getZoomLevel()).to.eq(zoom));
+}
+
 export function checkPanorama(name: string) {
     callViewer('check panorama')
         .then(viewer => expect(viewer.config.panorama as string).to.eq(BASE_URL + name));

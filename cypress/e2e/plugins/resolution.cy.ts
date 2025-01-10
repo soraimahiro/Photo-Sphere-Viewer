@@ -47,7 +47,7 @@ describe('plugin: resolution', () => {
     it('should use the default resolution', () => {
         cy.visit('e2e/plugins/resolution.html?resolution=HD');
 
-        checkPanorama('sphere.jpg');
+        checkPanorama('sphere-small.jpg?hd');
     });
 
     it('should ignore default resolution with initial panorama', () => {
@@ -63,7 +63,7 @@ describe('plugin: resolution', () => {
         cy.get('[data-setting-id="resolution"]').click();
         cy.get('[data-option-id="HD"]').click();
 
-        checkPanorama('sphere.jpg');
+        checkPanorama('sphere-small.jpg?hd');
         checkEventHandler(resolutionChangeHandler, { resolutionId: 'HD' });
         cy.get('.psv-settings-button').compareScreenshots('button-hd');
     });
@@ -73,7 +73,7 @@ describe('plugin: resolution', () => {
 
         callResolution('set resolution').then(resolution => resolution.setResolution('HD'));
 
-        checkPanorama('sphere.jpg');
+        checkPanorama('sphere-small.jpg?hd');
         checkEventHandler(resolutionChangeHandler, { resolutionId: 'HD' });
 
         callResolution('set bad resolution').then((resolution) => {
@@ -84,7 +84,7 @@ describe('plugin: resolution', () => {
     it('should update resolution on panorama change', () => {
         const resolutionChangeHandler = listenResolutionEvent('resolution-changed');
 
-        setPanorama('sphere.jpg');
+        setPanorama('sphere-small.jpg?hd');
 
         checkEventHandler(resolutionChangeHandler, { resolutionId: 'HD' });
     });
@@ -94,7 +94,7 @@ describe('plugin: resolution', () => {
 
         // the current panorama is found in the new list
         callResolution('set resolutions w.o. default').then(resolution => resolution.setResolutions([
-            { id: 'large', label: 'large', panorama: BASE_URL + 'sphere.jpg' },
+            { id: 'large', label: 'large', panorama: BASE_URL + 'sphere-small.jpg?hd' },
             { id: 'small', label: 'small', panorama: BASE_URL + 'sphere-small.jpg' },
         ]));
 
@@ -104,12 +104,12 @@ describe('plugin: resolution', () => {
 
         // a default value is provided
         callResolution('set resolutions w. default').then(resolution => resolution.setResolutions([
-            { id: 'large', label: 'large', panorama: BASE_URL + 'sphere.jpg' },
+            { id: 'large', label: 'large', panorama: BASE_URL + 'sphere-small.jpg?hd' },
             { id: 'small', label: 'small', panorama: BASE_URL + 'sphere-small.jpg' },
         ], 'large'));
         cy.wait(200);
 
-        checkPanorama('sphere.jpg');
+        checkPanorama('sphere-small.jpg?hd');
         checkEventHandler(resolutionChangeHandler, { resolutionId: 'large' });
 
         resolutionChangeHandler.reset();
@@ -118,7 +118,7 @@ describe('plugin: resolution', () => {
         setPanorama('sphere-test.jpg');
         callResolution('set resolutions w.o. default no match').then(resolution => resolution.setResolutions([
             { id: 'small', label: 'small', panorama: BASE_URL + 'sphere-small.jpg' },
-            { id: 'large', label: 'large', panorama: BASE_URL + 'sphere.jpg' },
+            { id: 'large', label: 'large', panorama: BASE_URL + 'sphere-small.jpg?hd' },
         ]));
         cy.wait(200);
 

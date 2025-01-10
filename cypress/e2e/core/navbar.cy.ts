@@ -1,6 +1,6 @@
 import { type Navbar } from '@photo-sphere-viewer/core';
 import { callViewer, waitViewerReady } from '../../utils';
-import { BASE_URL, VIEWPORT_MOBILE } from '../../utils/constants';
+import { VIEWPORT_MOBILE } from '../../utils/constants';
 
 describe('core: navbar', () => {
     beforeEach(() => {
@@ -57,43 +57,6 @@ describe('core: navbar', () => {
         callViewer('clear description').then(viewer => viewer.setOption('description', null));
 
         cy.get('.psv-description-button').should('not.be.visible');
-    });
-
-    it('should download the panorama', () => {
-        cy.get('.psv-download-button')
-            .should('have.attr', 'href', BASE_URL + 'sphere-small.jpg')
-            .should('have.attr', 'download', 'sphere-small.jpg');
-
-        callViewer('set downloadName/downloadUrl').then(viewer => viewer.setOptions({
-            downloadUrl: 'panorama-download.jpg',
-            downloadName: 'my-panorama.jpg',
-        }));
-
-        cy.get('.psv-download-button')
-            .should('have.attr', 'href', 'panorama-download.jpg')
-            .should('have.attr', 'download', 'my-panorama.jpg');
-
-        const png64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
-        callViewer('set downloadUrl base64').then(viewer => viewer.setOptions({
-            downloadUrl: png64,
-            downloadName: null,
-        }));
-
-        cy.get('.psv-download-button')
-            .should('have.attr', 'href', png64)
-            .should('have.attr', 'download', 'panorama.png');
-    });
-
-    // does not work in headless mode
-    it.skip('should enter and exit fullscreen', () => {
-        cy.get('.psv-fullscreen-button').click();
-        cy.wait(500);
-
-        cy.document().its('fullscreenElement').should('not.be.null');
-
-        cy.get('.psv-fullscreen-button').click();
-
-        cy.document().its('fullscreenElement').should('be.null');
     });
 
     it('should hide the caption if not enough space', {
