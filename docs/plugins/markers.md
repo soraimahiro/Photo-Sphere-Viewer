@@ -208,7 +208,7 @@ Existing DOM element.
 
 #### `polygon`
 
--   type: `number[2][] | number[2][][] | string[2][] | string[2][][]`
+-   type: `Array<number[2] | string[2] | SphericalPosition> | Array<Array<...>>`
 
 Array of points defining the polygon in spherical coordinates (degrees or radians).  
 The polygon can have one or more holes by defined them in a nested array (the syntax is [similar to GeoJSON](https://geojson.readthedocs.io/en/latest/#polygon)).
@@ -230,20 +230,31 @@ The polygon can have one or more holes by defined them in a nested array (the sy
 
 #### `polygonPixels`
 
--   type: `number[2][] | number[2][][]`
+-   type: `Array<number[2] | PanoramaPosition> | Array<Array<...>>`
 
-Same as `polygon` but in pixel coordinates on the panorama image.
+Same as `polygon` but in pixel coordinates on the panorama image.  
+The object syntax can be used to define the panorama face when using a cubemap.  
+Holes are also supported (see above).
 
-```js{3}
+```js{3,9-11}
 {
     id: 'marker-1',
     polygonPixels: [[100, 200], [150, 300], [300, 200]],
+}
+
+{
+    id: 'marker-2',
+    polygonPixels: [
+        { textureFace: 'front', textureX: 100, textureY: 200 },
+        { textureFace: 'front', textureX: 150, textureY: 300 },
+        { textureFace: 'front', textureX: 300, textureY: 200 },
+    ],
 }
 ```
 
 #### `polyline`
 
--   type: `number[2][] | string[2][]`
+-   type: `Array<number[2] | string[2] | SphericalPosition>`
 
 Same as `polygon` but generates a polyline.
 
@@ -256,7 +267,7 @@ Same as `polygon` but generates a polyline.
 
 #### `polylinePixels`
 
--   type: `number[2][] | string[2][]`
+-   type: `Array<number[2] | PanoramaPosition>`
 
 Same as `polygonPixels` but generates a polyline.
 

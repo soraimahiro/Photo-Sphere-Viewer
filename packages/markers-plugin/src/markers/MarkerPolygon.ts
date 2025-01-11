@@ -1,4 +1,12 @@
-import { PSVError, Point, Viewer, utils } from '@photo-sphere-viewer/core';
+import {
+    PSVError,
+    PanoramaPosition,
+    Point,
+    Position,
+    SphericalPosition,
+    Viewer,
+    utils,
+} from '@photo-sphere-viewer/core';
 import { Vector3 } from 'three';
 import { MarkerType } from '../MarkerType';
 import { MarkersPlugin } from '../MarkersPlugin';
@@ -105,9 +113,9 @@ export class MarkerPolygon extends AbstractDomMarker {
         }
 
         try {
-            // fold arrays: [1,2,3,4] => [[1,2],[3,4]]
+            // (retrocompat) fold arrays: [1,2,3,4] => [[1,2],[3,4]]
             let actualPoly: any = this.config[this.type];
-            if (!Array.isArray(actualPoly[0])) {
+            if (!Array.isArray(actualPoly[0]) && typeof actualPoly[0] !== 'object') {
                 for (let i = 0; i < actualPoly.length; i++) {
                     // @ts-ignore
                     actualPoly.splice(i, 2, [actualPoly[i], actualPoly[i + 1]]);
@@ -115,7 +123,7 @@ export class MarkerPolygon extends AbstractDomMarker {
             }
 
             // make nested array for holes
-            if (!Array.isArray(actualPoly[0][0])) {
+            if (!Array.isArray(actualPoly[0][0]) && typeof actualPoly[0][0] !== 'object') {
                 actualPoly = [actualPoly];
             }
 
@@ -125,20 +133,34 @@ export class MarkerPolygon extends AbstractDomMarker {
 
             if (this.isPixels) {
                 // convert texture coordinates to spherical coordinates
-                this.definition = (actualPoly as Array<Array<[number, number]>>).map((coords) => {
+                this.definition = (actualPoly as Array<Array<[number, number] | PanoramaPosition>>).map((coords) => {
                     return coords.map((coord) => {
-                        const sphericalCoords = this.viewer.dataHelper.textureCoordsToSphericalCoords({
-                            textureX: coord[0],
-                            textureY: coord[1],
-                        });
-                        return [sphericalCoords.yaw, sphericalCoords.pitch];
+                        let sphericalCoord: Position;
+                        if (utils.isExtendedPosition(coord)) {
+                            sphericalCoord = this.viewer.dataHelper.cleanPosition(coord);
+                        } else {
+                            sphericalCoord = this.viewer.dataHelper.textureCoordsToSphericalCoords({
+                                textureX: coord[0],
+                                textureY: coord[1],
+                            });
+                        }
+                        return [sphericalCoord.yaw, sphericalCoord.pitch];
                     });
                 });
             } else {
                 // clean angles
-                this.definition = (actualPoly as Array<Array<[number, number]>> | Array<Array<[string, string]>>).map((coords) => {
+                this.definition = (actualPoly as Array<Array<[number, number] | [string, string] | SphericalPosition>>).map((coords) => {
                     return coords.map((coord) => {
-                        return [utils.parseAngle(coord[0]), utils.parseAngle(coord[1], true)];
+                        let sphericalCoord: Position;
+                        if (utils.isExtendedPosition(coord)) {
+                            sphericalCoord = this.viewer.dataHelper.cleanPosition(coord);
+                        } else {
+                            sphericalCoord = this.viewer.dataHelper.cleanPosition({
+                                yaw: coord[0],
+                                pitch: coord[1],
+                            });
+                        }
+                        return [sphericalCoord.yaw, sphericalCoord.pitch];
                     });
                 });
             }

@@ -1,4 +1,4 @@
-import type { ExtendedPosition, Point, Position, Size } from '@photo-sphere-viewer/core';
+import type { ExtendedPosition, PanoramaPosition, Point, Position, Size, SphericalPosition } from '@photo-sphere-viewer/core';
 import { ColorRepresentation } from 'three';
 import type { Marker } from './markers/Marker';
 
@@ -66,32 +66,37 @@ export type MarkerConfig = {
     path?: string;
     /**
      * Array of points defining the polygon in spherical coordinates
+     * Nested arrays are used to define holes
      */
     polygon?:
         | Array<[number, number]>
         | Array<Array<[number, number]>>
         | Array<[string, string]>
-        | Array<Array<[string, string]>>;
+        | Array<Array<[string, string]>>
+        | SphericalPosition[]
+        | SphericalPosition[][];
     /**
      * Array of points defining the polygon in pixel coordinates on the panorama image
+     * Nested arrays are used to define holes
      */
     polygonPixels?:
         | Array<[number, number]>
-        | Array<Array<[number, number]>>;
+        | Array<Array<[number, number]>>
+        | PanoramaPosition[]
+        | PanoramaPosition[][];
     /**
      * Array of points defining the polyline in spherical coordinates
      */
     polyline?:
         | Array<[number, number]>
         | Array<[string, string]>
-        | number[]
-        | string[];
+        | SphericalPosition[];
     /**
      * Array of points defining the polyline in pixel coordinates on the panorama image
      */
     polylinePixels?:
         | Array<[number, number]>
-        | number[];
+        | PanoramaPosition[];
 
     /**
      * Unique identifier of the marker
