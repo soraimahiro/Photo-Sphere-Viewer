@@ -375,7 +375,7 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
             this.state.loadingPromise = null;
 
             if (err) {
-                this.navbar.setCaption('');
+                this.navbar.setCaption(null);
                 this.showError(this.config.lang.loadError);
                 console.error(err);
                 this.dispatchEvent(new PanoramaErrorEvent(path, err));
@@ -758,7 +758,7 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
     /**
      * Changes the global mouse cursor
      */
-    setCursor(cursor: string) {
+    setCursor(cursor: string | null) {
         this.state.cursorOverride = cursor;
         if (!cursor) {
             this.container.style.cursor = this.config.mousemove ? 'move' : 'default';

@@ -103,7 +103,7 @@ export class ResolutionPlugin extends AbstractPlugin<ResolutionPluginEvents> {
      * @throws {@link PSVError} if the configuration is invalid
      */
     setResolutions(resolutions: Resolution[], defaultResolution?: string) {
-        this.resolutions = resolutions || [];
+        this.resolutions = resolutions;
         this.resolutionsById = {};
 
         resolutions.forEach((resolution) => {

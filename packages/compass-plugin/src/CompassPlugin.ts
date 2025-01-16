@@ -124,7 +124,7 @@ export class CompassPlugin extends AbstractConfigurablePlugin<
     /**
      * Changes the hotspots on the compass
      */
-    setHotspots(hotspots: CompassHotspot[]) {
+    setHotspots(hotspots: CompassHotspot[] | null) {
         this.config.hotspots = hotspots;
         this.component.update();
     }

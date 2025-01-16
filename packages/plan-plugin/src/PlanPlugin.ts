@@ -221,7 +221,7 @@ export class PlanPlugin extends AbstractConfigurablePlugin<
     /**
      * Changes the hotspots on the map
      */
-    setHotspots(hotspots: PlanHotspot[]) {
+    setHotspots(hotspots: PlanHotspot[] | null) {
         const ids: string[] = [];
         let i = 1;
 
@@ -250,7 +250,7 @@ export class PlanPlugin extends AbstractConfigurablePlugin<
     /**
      * Changes the highlighted hotspot
      */
-    setActiveHotspot(hotspotId: string) {
+    setActiveHotspot(hotspotId: string | null) {
         this.component.setActiveHotspot(hotspotId);
     }
 

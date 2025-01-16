@@ -167,7 +167,7 @@ export class Navbar extends AbstractComponent {
     /**
      * Changes the navbar caption
      */
-    setCaption(html: string) {
+    setCaption(html: string | null) {
         this.children.some((item) => {
             if (item instanceof NavbarCaption) {
                 item.setCaption(html);

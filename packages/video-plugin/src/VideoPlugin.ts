@@ -294,7 +294,7 @@ export class VideoPlugin extends AbstractConfigurablePlugin<
      * Changes the keypoints
      * @throws {@link PSVError} if the configuration is invalid
      */
-    setKeypoints(keypoints?: VideoKeypoint[]) {
+    setKeypoints(keypoints?: VideoKeypoint[] | null) {
         if (!this.autorotate) {
             throw new PSVError('Video keypoints required the AutorotatePlugin');
         }

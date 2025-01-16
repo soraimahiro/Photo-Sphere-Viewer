@@ -245,7 +245,7 @@ export class MapPlugin extends AbstractConfigurablePlugin<
     /**
      * Changes the hotspots on the map
      */
-    setHotspots(hotspots: MapHotspot[], render = true) {
+    setHotspots(hotspots: MapHotspot[] | null, render = true) {
         const ids: string[] = [];
         let i = 1;
 
@@ -276,7 +276,7 @@ export class MapPlugin extends AbstractConfigurablePlugin<
     /**
      * Changes the highlighted hotspot
      */
-    setActiveHotspot(hotspotId: string) {
+    setActiveHotspot(hotspotId: string | null) {
         this.component.setActiveHotspot(hotspotId);
     }
 

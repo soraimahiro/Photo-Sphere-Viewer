@@ -174,7 +174,7 @@ export class AutorotatePlugin extends AbstractConfigurablePlugin<
      * Changes the keypoints
      * @throws {@link PSVError} if the configuration is invalid
      */
-    setKeypoints(keypoints: AutorotateKeypoint[]) {
+    setKeypoints(keypoints: AutorotateKeypoint[] | null) {
         if (!keypoints) {
             this.keypoints = null;
         } else {

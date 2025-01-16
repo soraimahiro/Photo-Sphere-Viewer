@@ -459,7 +459,7 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
     /**
      * Replaces all markers
      */
-    setMarkers(markers: MarkerConfig[], render = true) {
+    setMarkers(markers: MarkerConfig[] | null, render = true) {
         this.clearMarkers(false);
 
         markers?.forEach((marker) => {

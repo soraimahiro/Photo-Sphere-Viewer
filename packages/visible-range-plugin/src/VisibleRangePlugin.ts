@@ -127,7 +127,7 @@ export class VisibleRangePlugin extends AbstractConfigurablePlugin<
     /**
      * Changes the vertical range
      */
-    setVerticalRange(range?: Range) {
+    setVerticalRange(range: Range | null) {
         // range must have two values
         if (range && range.length !== 2) {
             utils.logWarn('vertical range must have exactly two elements');
@@ -154,7 +154,7 @@ export class VisibleRangePlugin extends AbstractConfigurablePlugin<
     /**
      * Changes the horizontal range
      */
-    setHorizontalRange(range?: Range) {
+    setHorizontalRange(range: Range | null) {
         // horizontal range must have two values
         if (range && range.length !== 2) {
             utils.logWarn('horizontal range must have exactly two elements');

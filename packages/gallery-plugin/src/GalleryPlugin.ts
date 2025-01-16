@@ -148,7 +148,7 @@ export class GalleryPlugin extends AbstractConfigurablePlugin<
      * @param [handler] function that will be called when an item is clicked instead of the default behavior
      * @throws {@link PSVError} if the configuration is invalid
      */
-    setItems(items: GalleryItem[], handler?: (id: GalleryItem['id']) => void) {
+    setItems(items: GalleryItem[] | null, handler?: (id: GalleryItem['id']) => void) {
         if (!items) {
             items = [];
         } else {

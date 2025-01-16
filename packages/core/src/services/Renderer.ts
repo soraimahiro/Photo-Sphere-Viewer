@@ -195,7 +195,7 @@ export class Renderer extends AbstractService {
     /**
      * Resets or replaces the THREE renderer by a custom one
      */
-    setCustomRenderer(factory: (renderer: WebGLRenderer) => CustomRenderer) {
+    setCustomRenderer(factory: ((renderer: WebGLRenderer) => CustomRenderer) | null) {
         if (factory) {
             this.customRenderer = factory(this.renderer);
         } else {
