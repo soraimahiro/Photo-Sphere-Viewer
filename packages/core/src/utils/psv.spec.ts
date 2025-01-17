@@ -1,6 +1,24 @@
 import assert from 'assert';
-import { cleanCssPosition, getXMPValue, mergePanoData, parseAngle, parsePoint, parseSpeed, speedToDuration } from './psv';
 import { PanoData } from '../model';
+import { cleanCssPosition, getConfigParser, getXMPValue, isExtendedPosition, mergePanoData, parseAngle, parsePoint, parseSpeed, speedToDuration } from './psv';
+
+describe('utils:psv:isExtendedPosition', () => {
+    it('should pass', () => {
+        assert.strictEqual(isExtendedPosition({ pitch: 0, yaw: 0 }), true);
+        assert.strictEqual(isExtendedPosition({ textureX: 0, textureY: 0 }), true);
+        assert.strictEqual(isExtendedPosition({ pitch: 0, yaw: 0, textureX: 0, textureY: 0 }), true);
+        assert.strictEqual(isExtendedPosition({ textureX: 0, textureY: 0, textureFace: 'front' }), true);
+        assert.strictEqual(isExtendedPosition({ pitch: 0, yaw: 0, foo: { bar: 'baz' } }), true);
+    });
+
+    it('should not pass', () => {
+        assert.strictEqual(isExtendedPosition(null), false);
+        assert.strictEqual(isExtendedPosition({}), false);
+        assert.strictEqual(isExtendedPosition([]), false);
+        assert.strictEqual(isExtendedPosition({ pitch: 0 }), false);
+        assert.strictEqual(isExtendedPosition({ textureX: 0 }), false);
+    });
+});
 
 describe('utils:psv:parseAngle', () => {
     it('should normalize number', () => {
@@ -96,7 +114,7 @@ describe('utils:psv:parseAngle', () => {
     });
 });
 
-describe('utils:psv:parsePosition', () => {
+describe('utils:psv:parsePoint', () => {
     it('should parse 2 keywords', () => {
         const values: Record<string, { x: number; y: number }> = {
             'top left': { x: 0, y: 0 },
@@ -356,10 +374,7 @@ describe('utils:psv:cleanPosition', () => {
 
     it('should allow XY order', () => {
         assert.deepStrictEqual(cleanCssPosition('right top', { allowCenter: true, cssOrder: false }), ['right', 'top']);
-        assert.deepStrictEqual(cleanCssPosition(['top', 'right'], { allowCenter: true, cssOrder: false }), [
-            'top',
-            'right',
-        ]);
+        assert.deepStrictEqual(cleanCssPosition(['top', 'right'], { allowCenter: true, cssOrder: false }), ['top', 'right']);
     });
 
     it('should always order with center', () => {
@@ -556,6 +571,99 @@ describe('utils:psv:mergePanoData', () => {
             croppedHeight: 1000,
             croppedX: 500,
             croppedY: 0,
+        });
+    });
+});
+
+describe.only('utils:psv:getConfigParser', () => {
+    type Myconfig = {
+        field1?: string;
+        field2?: number;
+        field3?: boolean;
+    };
+
+    const parser = getConfigParser<Myconfig>({
+        field1: 'default1',
+        field2: 100,
+        field3: true,
+    });
+
+    const parserWithParsers = getConfigParser<Myconfig>({
+        field1: 'default1',
+        field2: 100,
+        field3: true,
+    }, {
+        field1(val, _) {
+            return val.toUpperCase();
+        },
+        field2(val, opts) {
+            return val + opts.defValue;
+        },
+        field3(_, opts) {
+            return opts.rawConfig.field1 === 'foo';
+        },
+    });
+
+    it('should expose defaults', () => {
+        assert.deepStrictEqual(parser.defaults, {
+            field1: 'default1',
+            field2: 100,
+            field3: true,
+        });
+    });
+
+    it('should apply default values', () => {
+        assert.deepStrictEqual(parser(null), {
+            field1: 'default1',
+            field2: 100,
+            field3: true,
+        });
+    });
+
+    it('should define values', () => {
+        assert.deepStrictEqual(parser({
+            field1: 'value1',
+            field2: 0,
+            field3: false,
+        }), {
+            field1: 'value1',
+            field2: 0,
+            field3: false,
+        });
+    });
+
+    it('should define nulls', () => {
+        assert.deepStrictEqual(parser({
+            field1: null,
+            field2: null,
+            field3: null,
+        }), {
+            field1: null,
+            field2: null,
+            field3: null,
+        });
+    });
+
+    it('should ignore unknown fields', () => {
+        assert.deepStrictEqual(parser({
+            // @ts-ignore
+            newField: 'foobar',
+        }), {
+            field1: 'default1',
+            field2: 100,
+            field3: true,
+        });
+    });
+
+    it('should apply parsers', () => {
+        assert.deepStrictEqual(parserWithParsers({
+            field1: 'foo',
+            field2: 50,
+            field3: false,
+        }), {
+            field1: 'FOO',
+            field2: 150,
+            field3: true,
         });
     });
 });

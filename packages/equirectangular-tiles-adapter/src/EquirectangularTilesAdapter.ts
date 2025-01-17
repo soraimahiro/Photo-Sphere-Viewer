@@ -135,7 +135,7 @@ export class EquirectangularTilesAdapter extends AbstractAdapter<
         this.SPHERE_HORIZONTAL_SEGMENTS = this.SPHERE_SEGMENTS / 2;
         this.NB_VERTICES
             = 2 * this.SPHERE_SEGMENTS * NB_VERTICES_BY_SMALL_FACE
-            + (this.SPHERE_HORIZONTAL_SEGMENTS - 2) * this.SPHERE_SEGMENTS * NB_VERTICES_BY_FACE;
+                + (this.SPHERE_HORIZONTAL_SEGMENTS - 2) * this.SPHERE_SEGMENTS * NB_VERTICES_BY_FACE;
         this.NB_GROUPS = this.SPHERE_SEGMENTS * this.SPHERE_HORIZONTAL_SEGMENTS;
 
         if (this.viewer.config.requestHeaders) {
@@ -376,7 +376,7 @@ export class EquirectangularTilesAdapter extends AbstractAdapter<
                     // last row
                     segmentIndex
                         = Math.floor((i - this.NB_VERTICES - this.SPHERE_SEGMENTS * NB_VERTICES_BY_SMALL_FACE) / 3)
-                        + this.SPHERE_HORIZONTAL_SEGMENTS * (this.SPHERE_SEGMENTS - 1);
+                            + this.SPHERE_HORIZONTAL_SEGMENTS * (this.SPHERE_SEGMENTS - 1);
                 }
                 const segmentRow = Math.floor(segmentIndex / this.SPHERE_SEGMENTS);
                 const segmentCol = segmentIndex - segmentRow * this.SPHERE_SEGMENTS;
@@ -492,13 +492,13 @@ export class EquirectangularTilesAdapter extends AbstractAdapter<
                 } else if (isLastRow) {
                     firstVertex
                         = this.NB_VERTICES
-                        - this.SPHERE_SEGMENTS * NB_VERTICES_BY_SMALL_FACE
-                        + faceCol * NB_VERTICES_BY_SMALL_FACE;
+                            - this.SPHERE_SEGMENTS * NB_VERTICES_BY_SMALL_FACE
+                            + faceCol * NB_VERTICES_BY_SMALL_FACE;
                 } else {
                     firstVertex
                         = this.SPHERE_SEGMENTS * NB_VERTICES_BY_SMALL_FACE
-                        + (faceRow - 1) * this.SPHERE_SEGMENTS * NB_VERTICES_BY_FACE
-                        + faceCol * NB_VERTICES_BY_FACE;
+                            + (faceRow - 1) * this.SPHERE_SEGMENTS * NB_VERTICES_BY_FACE
+                            + faceCol * NB_VERTICES_BY_FACE;
                 }
 
                 // in case of error, skip the face if already showing valid data

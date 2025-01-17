@@ -61,7 +61,6 @@ import {
     logWarn,
     requestFullscreen,
     resolveBoolean,
-    throttle,
     toggleClass,
 } from './utils';
 
@@ -96,8 +95,6 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
 
     /** @internal */
     readonly children: AbstractComponent[] = [];
-
-    private readonly onResize = throttle(() => this.navbar.autoSize(), 500);
 
     constructor(config: ViewerConfig) {
         super();
@@ -135,7 +132,6 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
 
         Cache.init();
 
-        // @ts-ignore
         this.adapter = new this.config.adapter[0](this, this.config.adapter[1]);
 
         this.renderer = new Renderer(this);
@@ -328,7 +324,7 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
             this.state.hFov = this.dataHelper.vFovToHFov(this.state.vFov);
 
             this.dispatchEvent(new SizeUpdatedEvent(this.getSize()));
-            this.onResize();
+            this.navbar.autoSize();
         }
     }
 
@@ -691,14 +687,13 @@ export class Viewer extends TypedEventTarget<ViewerEvents> {
         this.autoSize();
     }
 
-    private __setSize(size: CssSize) {
-        const s = size as any;
+    private __setSize(size?: CssSize) {
         (['width', 'height'] as Array<'width' | 'height'>).forEach((dim) => {
-            if (size && s[dim]) {
-                if (/^[0-9.]+$/.test(s[dim])) {
-                    s[dim] += 'px';
+            if (size?.[dim]) {
+                if (/^[0-9.]+$/.test(size[dim])) {
+                    size[dim] += 'px';
                 }
-                this.parent.style[dim] = s[dim];
+                this.parent.style[dim] = size[dim];
             }
         });
     }
