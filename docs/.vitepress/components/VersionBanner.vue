@@ -13,24 +13,25 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vitepress';
-import { onMounted, ref } from 'vue';
+import { ref, watch } from 'vue';
+import { usePsvDocData } from '../theme/data';
 
 const router = useRouter();
-const latestVersion = ref(null);
+const latestVersion = usePsvDocData().latestVersion;
 const open = ref(false);
 
-onMounted(async () => {
-    const response = await fetch('https://registry.npmjs.org/@photo-sphere-viewer%2Fcore');
-    if (response.ok) {
-        const data = await response.json();
-        latestVersion.value = data['dist-tags']['latest'];
-        if (!localStorage.version && localStorage.announcementsCache) {
-            localStorage.version = latestVersion.value;
-        } else if (latestVersion.value !== localStorage.version) {
+onVersion(latestVersion.value);
+watch(latestVersion, onVersion);
+
+function onVersion(version: string) {
+    if (version) {
+        if (!localStorage.version) {
+            localStorage.version = version;
+        } else if (version !== localStorage.version) {
             open.value = true;
         }
     }
-});
+}
 
 function changelog() {
     close();

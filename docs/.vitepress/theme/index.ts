@@ -1,6 +1,6 @@
 import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
-import { h } from 'vue';
+import { h, ref } from 'vue';
 import { createVuetify } from 'vuetify';
 import {
     VBtn,
@@ -39,6 +39,7 @@ import Announcements from '../components/Announcements.vue';
 import ApiButton from '../components/ApiButton.vue';
 import Badges from '../components/Badges.vue';
 import HomeBackground from '../components/HomeBackground.vue';
+import HomeVersion from '../components/HomeVersion.vue';
 import ThemeProvider from '../components/ThemeProvider.vue';
 import VersionBanner from '../components/VersionBanner.vue';
 import codeDemo from '../plugins/code-demo/enhanceApp';
@@ -46,6 +47,7 @@ import dialog from '../plugins/dialog/enhanceApp';
 import gallery from '../plugins/gallery/enhanceApp';
 import tabs from '../plugins/tabs/enhanceApp';
 
+import { DataSymbol, PsvDocData } from './data';
 import './style.scss';
 
 const vuetify = createVuetify({
@@ -142,6 +144,7 @@ export default {
     Layout: () => {
         return h(ThemeProvider, h(DefaultTheme.Layout, null, {
             'home-hero-before': () => h(HomeBackground),
+            'home-hero-actions-after': () => h(HomeVersion),
             'home-features-after': () => h(Announcements),
             'layout-bottom': () => h(VersionBanner),
         }));
@@ -154,5 +157,16 @@ export default {
         dialog(app);
         gallery(app);
         tabs(app);
+
+        const latestVersion = ref<string>('');
+        app.provide(DataSymbol, { latestVersion } satisfies PsvDocData);
+
+        (async () => {
+            const response = await fetch('https://registry.npmjs.org/@photo-sphere-viewer%2Fcore');
+            if (response.ok) {
+                const data = await response.json();
+                latestVersion.value = data['dist-tags']['latest'];
+            }
+        })();
     },
 } satisfies Theme;
