@@ -575,7 +575,7 @@ describe('utils:psv:mergePanoData', () => {
     });
 });
 
-describe.only('utils:psv:getConfigParser', () => {
+describe('utils:psv:getConfigParser', () => {
     type Myconfig = {
         field1?: string;
         field2?: number;
