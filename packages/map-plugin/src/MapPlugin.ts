@@ -25,6 +25,8 @@ const getConfig = utils.getConfigParser<MapPluginConfig, ParsedMapPluginConfig>(
             size: 15,
             image: null,
             color: 'white',
+            borderSize: 0,
+            borderColor: null,
             hoverSize: null,
             hoverImage: null,
             hoverColor: null,

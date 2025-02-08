@@ -26,10 +26,10 @@ export function getStyle(defaultStyle: PlanHotspotStyle, style: PlanHotspotStyle
             ? style.hoverColor ?? style.color ?? defaultStyle.hoverColor ?? defaultStyle.color
             : style.color ?? defaultStyle.color,
         borderColor: isHover
-            ? style.hoverBorderColor ?? defaultStyle.hoverBorderColor
-            : 'transparent',
+            ? style.hoverBorderColor ?? style.borderColor ?? defaultStyle.hoverBorderColor ?? defaultStyle.borderColor
+            : style.borderColor ?? defaultStyle.borderColor ?? 'transparent',
         borderSize: isHover
             ? style.hoverBorderSize ?? defaultStyle.hoverBorderSize
-            : 0,
+            : style.borderSize ?? defaultStyle.borderSize,
     };
 }

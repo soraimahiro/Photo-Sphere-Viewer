@@ -178,6 +178,8 @@
                 spotStyle: {
                     size: plan.config.spotStyle.size,
                     color: plan.config.spotStyle.color,
+                    borderSize: plan.config.spotStyle.borderSize,
+                    borderColor: plan.config.spotStyle.borderColor ?? plan.config.spotStyle.hoverBorderColor,
                     hoverSize: plan.config.spotStyle.hoverSize ?? plan.config.spotStyle.size,
                     hoverColor: plan.config.spotStyle.hoverColor ?? plan.config.spotStyle.color,
                     hoverBorderSize: plan.config.spotStyle.hoverBorderSize,
@@ -204,6 +206,8 @@
             const hotspot = gui.addFolder('Hotstpots (spotStyle)');
             hotspot.add(config.spotStyle, 'size', 5, 50, 1);
             addColorPicker(hotspot, config.spotStyle, 'color', true);
+            hotspot.add(config.spotStyle, 'borderSize', 0, 20, 1);
+            addColorPicker(hotspot, config.spotStyle, 'borderColor', true);
             hotspot.add(config.spotStyle, 'hoverSize', 5, 50, 1);
             addColorPicker(hotspot, config.spotStyle, 'hoverColor', true);
             hotspot.add(config.spotStyle, 'hoverBorderSize', 0, 20, 1);

@@ -190,6 +190,8 @@
                 spotStyle: {
                     size: map.config.spotStyle.size,
                     color: map.config.spotStyle.color,
+                    borderSize: map.config.spotStyle.borderSize,
+                    borderColor: map.config.spotStyle.borderColor ?? map.config.spotStyle.hoverBorderColor,
                     hoverSize: map.config.spotStyle.hoverSize ?? map.config.spotStyle.size,
                     hoverColor: map.config.spotStyle.hoverColor ?? map.config.spotStyle.color,
                     hoverBorderSize: map.config.spotStyle.hoverBorderSize,
@@ -222,6 +224,8 @@
             const hotspot = gui.addFolder('Hotstpots (spotStyle)');
             hotspot.add(config.spotStyle, 'size', 5, 50, 1);
             addColorPicker(hotspot, config.spotStyle, 'color', true);
+            hotspot.add(config.spotStyle, 'borderSize', 0, 20, 1);
+            addColorPicker(hotspot, config.spotStyle, 'borderColor', true);
             hotspot.add(config.spotStyle, 'hoverSize', 5, 50, 1);
             addColorPicker(hotspot, config.spotStyle, 'hoverColor', true);
             hotspot.add(config.spotStyle, 'hoverBorderSize', 0, 20, 1);

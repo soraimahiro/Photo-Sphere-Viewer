@@ -22,6 +22,16 @@ export type PlanHotspotStyle = {
      */
     color?: string;
     /**
+     * Size of the border
+     * @default 0
+     */
+    borderSize?: number;
+    /**
+     * Color of the border
+     * @default null
+     */
+    borderColor?: string;
+    /**
      * Size on mouse hover
      * @default null
      */
@@ -37,12 +47,12 @@ export type PlanHotspotStyle = {
      */
     hoverColor?: string;
     /**
-     * Size of the border shown on mouse hover
+     * Size of the border on mouse hover
      * @default 4
      */
     hoverBorderSize?: number;
     /**
-     * Color of the border shown on mouse hover
+     * Color of the border on mouse hover
      * @default 'rgba(255, 255, 255, 0.8)'
      */
     hoverBorderColor?: string;

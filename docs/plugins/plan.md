@@ -180,6 +180,16 @@ The hotspots are represented by a circle with configurable size and color, but c
      */
     color?: string;
     /**
+     * Size of the border
+     * @default 0
+     */
+    borderSize?: number;
+    /**
+     * Color of the border
+     * @default null
+     */
+    borderColor?: string;
+    /**
      * Size on mouse hover
      * @default null
      */
@@ -195,12 +205,12 @@ The hotspots are represented by a circle with configurable size and color, but c
      */
     hoverColor?: string;
     /**
-     * Size of the border shown on mouse hover
+     * Size of the border on mouse hover
      * @default 4
      */
     hoverBorderSize?: number;
     /**
-     * Color of the border shown on mouse hover
+     * Color of the border on mouse hover
      * @default 'rgba(255, 255, 255, 0.8)'
      */
     hoverBorderColor?: string;

@@ -42,11 +42,11 @@ export function getStyle(defaultStyle: MapHotspotStyle, style: MapHotspotStyle, 
             ? style.hoverColor ?? style.color ?? defaultStyle.hoverColor ?? defaultStyle.color
             : style.color ?? defaultStyle.color,
         borderColor: isHover
-            ? style.hoverBorderColor ?? defaultStyle.hoverBorderColor
-            : null,
+            ? style.hoverBorderColor ?? style.borderColor ?? defaultStyle.hoverBorderColor ?? defaultStyle.borderColor
+            : style.borderColor ?? defaultStyle.borderColor,
         borderSize: isHover
-            ? style.hoverBorderSize ?? defaultStyle.hoverBorderSize
-            : null,
+            ? style.hoverBorderSize ?? style.borderSize ?? defaultStyle.hoverBorderSize ?? defaultStyle.borderSize
+            : style.borderSize ?? defaultStyle.borderSize,
     };
 }
 
