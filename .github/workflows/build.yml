@@ -74,7 +74,7 @@ jobs:
   e2e:
     needs: [changes, build]
 
-    if: ${{ always() && !contains(needs.*.result, 'failure') && !startsWith(github.head_ref, 'dependabot') && (needs.changes.outputs.build == 'true' || needs.changes.outputs.e2e == 'true') }}
+    if: ${{ always() && !contains(needs.*.result, 'failure') && !startsWith(github.head_ref, 'dependabot') && (needs.changes.outputs.build == 'true' || needs.changes.outputs.src == 'true' || needs.changes.outputs.e2e == 'true') }}
 
     runs-on: ubuntu-latest
 
