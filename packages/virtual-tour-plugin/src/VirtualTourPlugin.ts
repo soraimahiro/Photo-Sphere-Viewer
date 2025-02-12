@@ -71,7 +71,7 @@ const getConfig = utils.getConfigParser<VirtualTourPluginConfig>(
             return { ...defValue, ...arrowsPosition };
         },
         arrowStyle(arrowStyle, { defValue }) {
-            return { ...defValue, arrowStyle };
+            return { ...defValue, ...arrowStyle };
         },
         map(map, { rawConfig }) {
             if (map) {
