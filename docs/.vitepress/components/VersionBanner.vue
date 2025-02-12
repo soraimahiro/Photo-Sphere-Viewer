@@ -28,6 +28,8 @@ function onVersion(version: string) {
         if (!localStorage.version) {
             localStorage.version = version;
         } else if (version !== localStorage.version) {
+            delete localStorage.releasesCache;
+            delete localStorage.announcementsCache;
             open.value = true;
         }
     }

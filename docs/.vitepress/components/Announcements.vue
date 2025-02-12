@@ -34,10 +34,11 @@ onMounted(async () => {
 });
 
 async function fetchAnnouncements(): Promise<any[]> {
+    const cache = localStorage.announcementsCache;
     const cacheDate = localStorage.announcementsCacheDate;
 
-    if (cacheDate && (new Date().getTime() - new Date(cacheDate).getTime() < 1000 * 3600)) {
-        return JSON.parse(localStorage.announcementsCache);
+    if (cache && cacheDate && (new Date().getTime() - new Date(cacheDate).getTime() < 1000 * 3600)) {
+        return JSON.parse(cache);
     } else {
         const response = await fetch('/.netlify/functions/announcements');
         if (response.ok) {
