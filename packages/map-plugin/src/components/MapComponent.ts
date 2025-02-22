@@ -536,61 +536,71 @@ export class MapComponent extends AbstractComponent {
         context.restore();
 
         // draw the hotspots
-        [...this.config.hotspots, ...this.state.markers].forEach((hotspot: MapHotspot) => {
-            const isHover = this.state.hotspotId === hotspot.id;
-
-            const style = getStyle(this.config.spotStyle, hotspot, isHover);
-            const image = this.__loadImage(style.image);
-
-            const hotspotPos = { ...offset };
-            if ('yaw' in hotspot && 'distance' in hotspot) {
-                const angle = utils.parseAngle(hotspot.yaw) + rotation;
-                hotspotPos.x += Math.sin(-angle) * hotspot.distance * this.state.imgScale;
-                hotspotPos.y += Math.cos(-angle) * hotspot.distance * this.state.imgScale;
-            } else if ('x' in hotspot && 'y' in hotspot) {
-                hotspotPos.x += center.x - hotspot.x * this.state.imgScale;
-                hotspotPos.y += center.y - hotspot.y * this.state.imgScale;
-            } else {
-                utils.logWarn(`Hotspot ${hotspot['id']} is missing position (yaw+distance or x+y)`);
-                return;
-            }
-
-            const spotPos = projectPoint(hotspotPos, yawAndRotation, zoom);
-
-            // TODO filter out not visible
-
-            const x = canvasVirtualCenterX - spotPos.x;
-            const y = canvasVirtualCenterY - spotPos.y;
-
-            // save absolute position on the viewer
-            this.state.hotspotPos[hotspot.id] = {
-                x: x + canvasPos.x,
-                y: y + canvasPos.y,
-                s: style.size,
-            };
-
-            context.save();
-            context.translate(x * SYSTEM.pixelRatio, y * SYSTEM.pixelRatio);
-            canvasShadow(context, PIN_SHADOW_OFFSET, PIN_SHADOW_OFFSET, PIN_SHADOW_BLUR);
-            if (image) {
-                drawImageCentered(context, image, style.size);
-            } else {
-                context.fillStyle = style.color;
-                context.beginPath();
-                context.arc(0, 0, (style.size * SYSTEM.pixelRatio) / 2, 0, 2 * Math.PI);
-                context.fill();
-
-                if (style.borderColor && style.borderSize) {
-                    context.shadowColor = 'transparent';
-                    context.strokeStyle = style.borderColor;
-                    context.lineWidth = style.borderSize;
-                    context.beginPath();
-                    context.arc(0, 0, ((style.size + style.borderSize) * SYSTEM.pixelRatio) / 2, 0, 2 * Math.PI);
-                    context.stroke();
+        [...this.config.hotspots, ...this.state.markers]
+            .sort((a, b) => {
+                if (this.state.hotspotId === a.id) {
+                    return 1;
                 }
-            }
-            context.restore();
-        });
+                if (this.state.hotspotId === b.id) {
+                    return -1;
+                }
+                return (a.zIndex ?? 0) - (b.zIndex ?? 0);
+            })
+            .forEach((hotspot: MapHotspot) => {
+                const isHover = this.state.hotspotId === hotspot.id;
+
+                const style = getStyle(this.config.spotStyle, hotspot, isHover);
+                const image = this.__loadImage(style.image);
+
+                const hotspotPos = { ...offset };
+                if ('yaw' in hotspot && 'distance' in hotspot) {
+                    const angle = utils.parseAngle(hotspot.yaw) + rotation;
+                    hotspotPos.x += Math.sin(-angle) * hotspot.distance * this.state.imgScale;
+                    hotspotPos.y += Math.cos(-angle) * hotspot.distance * this.state.imgScale;
+                } else if ('x' in hotspot && 'y' in hotspot) {
+                    hotspotPos.x += center.x - hotspot.x * this.state.imgScale;
+                    hotspotPos.y += center.y - hotspot.y * this.state.imgScale;
+                } else {
+                    utils.logWarn(`Hotspot ${hotspot['id']} is missing position (yaw+distance or x+y)`);
+                    return;
+                }
+
+                const spotPos = projectPoint(hotspotPos, yawAndRotation, zoom);
+
+                // TODO filter out not visible
+
+                const x = canvasVirtualCenterX - spotPos.x;
+                const y = canvasVirtualCenterY - spotPos.y;
+
+                // save absolute position on the viewer
+                this.state.hotspotPos[hotspot.id] = {
+                    x: x + canvasPos.x,
+                    y: y + canvasPos.y,
+                    s: style.size,
+                };
+
+                context.save();
+                context.translate(x * SYSTEM.pixelRatio, y * SYSTEM.pixelRatio);
+                canvasShadow(context, PIN_SHADOW_OFFSET, PIN_SHADOW_OFFSET, PIN_SHADOW_BLUR);
+                if (image) {
+                    drawImageCentered(context, image, style.size);
+                } else {
+                    context.fillStyle = style.color;
+                    context.beginPath();
+                    context.arc(0, 0, (style.size * SYSTEM.pixelRatio) / 2, 0, 2 * Math.PI);
+                    context.fill();
+
+                    if (style.borderColor && style.borderSize) {
+                        context.shadowColor = 'transparent';
+                        context.strokeStyle = style.borderColor;
+                        context.lineWidth = style.borderSize;
+                        context.beginPath();
+                        context.arc(0, 0, ((style.size + style.borderSize) * SYSTEM.pixelRatio) / 2, 0, 2 * Math.PI);
+                        context.stroke();
+                    }
+                }
+                context.restore();
+            });
 
         const pinImage = this.__loadImage(this.config.pinImage);
         if (pinImage || (this.config.coneColor && this.config.coneSize)) {

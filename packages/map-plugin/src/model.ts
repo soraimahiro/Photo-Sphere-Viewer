@@ -50,6 +50,11 @@ export type MapHotspotStyle = {
      * @default 'rgba(255, 255, 255, 0.6)'
      */
     hoverBorderColor?: string;
+    /**
+     * Stacking position of the hotpost, defaults to declaration order
+     * @default null
+     */
+    zIndex?: number;
 };
 
 export type MapHotspot = (Point | { yaw: number | string; distance: number }) & MapHotspotStyle & {

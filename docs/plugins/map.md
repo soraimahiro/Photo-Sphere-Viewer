@@ -218,6 +218,11 @@ The hotspots are represented by a circle with configurable size and color, but c
      * @default 'rgba(255, 255, 255, 0.6)'
      */
     hoverBorderColor?: string;
+    /**
+     * Stacking position of the hotpost, defaults to declaration order
+     * @default null
+     */
+    zIndex?: number;
 }
 ```
 
