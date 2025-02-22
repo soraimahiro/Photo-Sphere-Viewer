@@ -512,12 +512,14 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
     private __setGalleryItems() {
         if (this.gallery) {
             this.gallery.setItems(
-                Object.values(this.datasource.nodes).map(node => ({
-                    id: node.id,
-                    panorama: node.panorama,
-                    name: node.name,
-                    thumbnail: node.thumbnail,
-                })),
+                Object.values(this.datasource.nodes)
+                    .filter(node => node.showInGallery !== false)
+                    .map(node => ({
+                        id: node.id,
+                        panorama: node.panorama,
+                        name: node.name,
+                        thumbnail: node.thumbnail,
+                    })),
                 (id) => {
                     this.setCurrentNode(id as string);
                 },

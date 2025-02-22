@@ -145,7 +145,12 @@ export type VirtualTourNode = {
      */
     gps?: GpsPosition;
     /**
-     * thumbnail for the gallery
+     * display this node in the gallery (if the plugin is loaded)
+     * @default true
+     */
+    showInGallery?: boolean;
+    /**
+     * thumbnail for the gallery, also use in the tooltip
      */
     thumbnail?: string;
     /**

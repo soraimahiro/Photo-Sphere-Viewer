@@ -165,6 +165,13 @@ Only the [ESPG:4326 projection](https://epsg.io/4326) is supported.
 
 Short name of this node, used in links tooltips and the GalleryPlugin.
 
+#### `showInGallery`
+
+-   type: `boolean`
+-   default: `true`
+
+Display this node in the GalleryPlugin.
+
 #### `thumbnail`
 
 -   type: `string`
