@@ -326,9 +326,12 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
                 if (this.gallery?.config.hideOnClick) {
                     this.gallery.hide();
                 }
-
-                this.map?.minimize();
-                this.plan?.minimize();
+                if (this.map?.config.minimizeOnHotspotClick) {
+                    this.map.minimize();
+                }
+                if (this.plan?.config.minimizeOnHotspotClick) {
+                    this.plan.minimize();
+                }
 
                 if (transitionOptions.rotation && transitionOptions.effect === 'none') {
                     return this.viewer
