@@ -159,12 +159,14 @@ export type VirtualTourNode = {
     markers?: Array<MarkerConfig & { gps?: GpsPosition }>;
     /**
      * configuration of the hotspot when using the MapPlugin
+     * set to `false` to hide this node from the map
      */
-    map?: Partial<Point> & Omit<MapHotspot, 'id' | 'yaw' | 'distance'>;
+    map?: false | Partial<Point> & Omit<MapHotspot, 'id' | 'yaw' | 'distance'>;
     /**
      * configuration of the hotspot when using the PlanPlugin
+     * set to `false` to hide this node from the plan
      */
-    plan?: Omit<PlanHotspot, 'id' | 'coordinates'>;
+    plan?: false | Omit<PlanHotspot, 'id' | 'coordinates'>;
     /**
      * Any custom data you want to attach to the node
      */

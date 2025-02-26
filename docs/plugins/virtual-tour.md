@@ -188,11 +188,15 @@ The markers can be positioned with the classic `position` option (yaw + pitch) o
 
 #### `map` (client mode only)
 
-Configuration of the hotspot when using the [Map plugin](map.md). See [global configuration](#map-client-mode-only-2) for details.
+Configuration of the hotspot when using the [Map plugin](map.md). See [global configuration](#map-client-mode-only-1) for details.
+
+Set to `false` to hide the node from the map (note: if `positionMode=manual` this can lead to undesired positionning of the map).
 
 #### `plan` (client+GPS mode only)
 
-Configuration of the hotspot when using the [Plan plugin](plan.md). The node will be automatically placed on the map but you can customize [the style of the hotspot](plan.md#hotspots-2).
+Configuration of the hotspot when using the [Plan plugin](plan.md). The node will be automatically placed on the map but you can customize [the style of the hotspot](plan.md#hotspots-1).
+
+Set to `false` to hide the node from the plan.
 
 #### `data`
 
@@ -397,9 +401,10 @@ The map image must be configured with `map.imageUrl` inside the VirtualTour plug
 
 ::: tab Configure the map manually
 
-This configuration is required if `positionMode=manual`. You can also choose to use it if `positionMode=gps`.
+This configuration is **required** if `positionMode=manual` but can also be used with `positionMode=gps`.
 
-To define the position of the node on the map you have to configure its `map` property with `x` and `y`. You can also configure other things like `color`, `image` and `size`. Please refer to the [Hotspots section](map.md#hotspots-2) of the Map plugin.
+To define the position of the node on the map you have to configure its `map` property with `x` and `y`.  
+You can also configure other things like `color`, `image` and `size`. Please refer to the [Hotspots section](map.md#hotspots-1) of the Map plugin.
 
 ```js{10}
 plugins: [
@@ -422,7 +427,7 @@ plugins: [
 
 ::: tab Configure the map with GPS
 
-This configuration can only be used if `positionMode=gps`.
+This configuration can **only** be used if `positionMode=gps`.
 
 You have to provide additional metadata about the map for the automatic positionning to work : its `size` in pixels and its `extent` (GPS bounds).
 

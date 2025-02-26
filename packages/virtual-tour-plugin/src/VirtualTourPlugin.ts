@@ -388,7 +388,11 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
 
                 this.state.currentNode = node;
 
-                this.map?.setCenter(this.__getNodeMapPosition(node));
+                if (this.map) {
+                    // if the node is not visible in the map, we don't know where to center the map
+                    // so we keep the current center
+                    this.map.setCenter(this.__getNodeMapPosition(node) ?? this.map.config.center);
+                }
                 this.plan?.setCoordinates(node.gps);
 
                 this.__addNodeMarkers(node);
@@ -536,12 +540,14 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
     private __setMapHotspots() {
         if (this.map) {
             this.map.setHotspots(
-                Object.values(this.datasource.nodes).map(node => ({
-                    ...(node.map || {}),
-                    ...this.__getNodeMapPosition(node),
-                    id: LINK_ID + node.id,
-                    tooltip: node.name,
-                })),
+                Object.values(this.datasource.nodes)
+                    .filter(node => node.map !== false)
+                    .map(node => ({
+                        tooltip: node.name,
+                        ...(node.map || {}),
+                        ...this.__getNodeMapPosition(node),
+                        id: LINK_ID + node.id,
+                    })),
             );
         }
     }
@@ -552,12 +558,14 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
     private __setPlanHotspots() {
         if (this.plan) {
             this.plan.setHotspots(
-                Object.values(this.datasource.nodes).map(node => ({
-                    ...(node.plan || {}),
-                    coordinates: node.gps,
-                    id: LINK_ID + node.id,
-                    tooltip: node.name,
-                })),
+                Object.values(this.datasource.nodes)
+                    .filter(node => node.plan !== false)
+                    .map(node => ({
+                        tooltip: node.name,
+                        ...(node.plan || {}),
+                        coordinates: node.gps,
+                        id: LINK_ID + node.id,
+                    })),
             );
         }
     }
