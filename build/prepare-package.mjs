@@ -20,7 +20,7 @@ fs.readdirSync(PACKAGES_DIR)
 
         fs.copySync(source, destination, {
             filter(name) {
-                return name === source || ['js', 'css', 'scss', 'ts', 'map', 'json'].some(ext => name.endsWith(ext));
+                return name === source || ['/styles', '.module.js', '.cjs', '.css', '.scss', '.d.ts', '.d.mts', '.map', '.json'].some(ext => name.endsWith(ext));
             },
         });
     });
