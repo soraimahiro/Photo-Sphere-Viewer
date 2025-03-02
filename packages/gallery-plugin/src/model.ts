@@ -26,6 +26,11 @@ export type GalleryItem = {
 export type GalleryPluginConfig = {
     items?: GalleryItem[];
     /**
+     * Displays arrows to navigate the gallery
+     * @default true
+     */
+    navigationArrows?: boolean;
+    /**
      * Displays the gallery when loading the first panorama
      * @default false
      */
@@ -42,4 +47,4 @@ export type GalleryPluginConfig = {
     thumbnailSize?: Size;
 };
 
-export type UpdatableGalleryPluginConfig = Omit<GalleryPluginConfig, 'visibleOnLoad' | 'items'>;
+export type UpdatableGalleryPluginConfig = Omit<GalleryPluginConfig, 'items' | 'navigationArrows' | 'visibleOnLoad'>;

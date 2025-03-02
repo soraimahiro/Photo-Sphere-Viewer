@@ -34,7 +34,9 @@
         display: flex;
         align-content: flex-start;
         padding: gallery.$padding;
-        overflow-x: auto;
+        overflow: auto hidden;
+        scrollbar-width: thin;
+        scrollbar-color: gallery.$scrollbar-color transparent;
     }
 
     &-item {
@@ -109,6 +111,93 @@
             box-sizing: border-box;
             border: gallery.$item-active-border;
             z-index: 3;
+        }
+    }
+
+    &-arrow {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: gallery.$padding;
+        z-index: 9; // bellow close button
+        cursor: pointer;
+        transition: opacity .3s ease-in-out;
+
+        svg {
+            color: gallery.$arrow-color;
+            filter: drop-shadow(5px 5px 2px black);
+            transition: translate .3s ease-in-out;
+        }
+
+        &--left, &--right {
+            top: 0;
+            bottom: 0;
+
+            svg {
+                height: 60%;
+                max-height: 60px;
+            }
+        }
+
+        &--left {
+            left: 0;
+            background: linear-gradient(to left, transparent 0%, gallery.$arrow-background 50%);
+
+            svg {
+                scale: -1 1;
+            }
+
+            &:hover svg {
+                translate: -10px 0;
+            }
+        }
+
+        &--right {
+            right: 0;
+            background: linear-gradient(to right, transparent 0%, gallery.$arrow-background 50%);
+
+            &:hover svg {
+                translate: 10px 0;
+            }
+        }
+
+        &--top, &--bottom {
+            left: 0;
+            right: 0;
+            padding: 0;
+
+            svg {
+                height: 60px;
+            }
+        }
+
+        &--top {
+            top: 0;
+            background: linear-gradient(to top, transparent 0%, gallery.$arrow-background 50%);
+
+            svg {
+                rotate: -90deg;
+                scale: 1 1.2;
+            }
+
+            &:hover svg {
+                translate: 0 -10px;
+            }
+        }
+
+        &--bottom {
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, gallery.$arrow-background 50%);
+
+            svg {
+                rotate: -90deg;
+                scale: -1 1.2;
+            }
+
+            &:hover svg {
+                translate: 0 10px;
+            }
         }
     }
 

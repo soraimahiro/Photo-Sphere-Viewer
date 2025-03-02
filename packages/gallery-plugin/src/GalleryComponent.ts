@@ -1,9 +1,12 @@
 import type { Viewer } from '@photo-sphere-viewer/core';
-import { AbstractComponent, utils, CONSTANTS } from '@photo-sphere-viewer/core';
+import { AbstractComponent, CONSTANTS, events, utils } from '@photo-sphere-viewer/core';
+import { MathUtils } from 'three';
 import { ACTIVE_CLASS, GALLERY_ITEM_DATA, GALLERY_ITEM_DATA_KEY, ITEMS_TEMPLATE } from './constants';
 import type { GalleryPlugin } from './GalleryPlugin';
+import arrowIcon from './icons/arrow.svg';
 import blankIcon from './icons/blank.svg';
 import { GalleryItem } from './model';
+import { clickRepeater } from './utils';
 
 export class GalleryComponent extends AbstractComponent {
     protected override readonly state = {
@@ -13,13 +16,22 @@ export class GalleryComponent extends AbstractComponent {
         mouse: null as number,
         itemMargin: null as number,
         breakpoint: null as number,
+        scrollLeft: 0,
+        scrollTop: 0,
+        isAboveBreakpoint: null as boolean,
     };
 
     private readonly observer: IntersectionObserver;
     private readonly items: HTMLElement;
+    private readonly arrowLeft?: HTMLElement;
+    private readonly arrowRight?: HTMLElement;
 
     get isAboveBreakpoint() {
-        return window.innerWidth > this.state.breakpoint;
+        return this.items.offsetWidth > this.state.breakpoint;
+    }
+
+    get config() {
+        return this.plugin.config;
     }
 
     constructor(
@@ -38,9 +50,26 @@ export class GalleryComponent extends AbstractComponent {
         closeBtn.innerHTML = CONSTANTS.ICONS.close;
         this.container.appendChild(closeBtn);
 
+        closeBtn.addEventListener('click', () => this.plugin.hide());
+
         this.items = document.createElement('div');
         this.items.className = 'psv-gallery-container';
         this.container.appendChild(this.items);
+
+        if (this.config.navigationArrows) {
+            this.arrowLeft = document.createElement('div');
+            this.arrowLeft.className = 'psv-gallery-arrow';
+            this.arrowLeft.innerHTML = arrowIcon;
+            this.container.appendChild(this.arrowLeft);
+
+            this.arrowRight = document.createElement('div');
+            this.arrowRight.className = 'psv-gallery-arrow';
+            this.arrowRight.innerHTML = arrowIcon;
+            this.container.appendChild(this.arrowRight);
+
+            clickRepeater(this.arrowLeft, () => this.__scroll(-1));
+            clickRepeater(this.arrowRight, () => this.__scroll(1));
+        }
 
         this.state.itemMargin = parseInt(utils.getStyleProperty(this.items, 'padding-left'), 10);
         this.state.breakpoint = parseInt(utils.getStyleProperty(this.container, '--psv-gallery-breakpoint'), 10);
@@ -61,19 +90,22 @@ export class GalleryComponent extends AbstractComponent {
             },
         );
 
+        this.viewer.addEventListener(events.SizeUpdatedEvent.type, this);
+
         this.items.addEventListener('wheel', this);
+        this.items.addEventListener('scroll', this);
         this.items.addEventListener('mousedown', this);
         this.items.addEventListener('mousemove', this);
         this.items.addEventListener('click', this);
         window.addEventListener('mouseup', this);
-
-        closeBtn.addEventListener('click', () => this.plugin.hide());
 
         this.hide();
     }
 
     override destroy() {
         window.removeEventListener('mouseup', this);
+
+        this.viewer.removeEventListener(events.SizeUpdatedEvent.type, this);
 
         this.observer.disconnect();
 
@@ -86,14 +118,16 @@ export class GalleryComponent extends AbstractComponent {
     handleEvent(e: Event) {
         switch (e.type) {
             case 'wheel': {
-                if (this.isAboveBreakpoint) {
-                    const evt = e as WheelEvent;
-                    const scrollAmount = this.plugin.config.thumbnailSize.width + (this.state.itemMargin ?? 0);
-                    this.items.scrollLeft += (evt.deltaY / Math.abs(evt.deltaY)) * scrollAmount;
-                    e.preventDefault();
-                }
+                const evt = e as WheelEvent;
+                this.__scroll(evt.deltaY > 0 ? 1 : -1);
+                e.preventDefault();
                 break;
             }
+
+            case 'scroll':
+            case events.SizeUpdatedEvent.type:
+                this.__updateArrows();
+                break;
 
             case 'mousedown':
                 this.state.mousedown = true;
@@ -110,10 +144,12 @@ export class GalleryComponent extends AbstractComponent {
                     if (this.isAboveBreakpoint) {
                         const delta = this.state.mouse - (e as MouseEvent).clientX;
                         this.items.scrollLeft += delta;
+                        this.state.scrollLeft = this.items.scrollLeft;
                         this.state.mouse = (e as MouseEvent).clientX;
                     } else {
                         const delta = this.state.mouse - (e as MouseEvent).clientY;
                         this.items.scrollTop += delta;
+                        this.state.scrollTop = this.items.scrollTop;
                         this.state.mouse = (e as MouseEvent).clientY;
                     }
                 }
@@ -159,6 +195,8 @@ export class GalleryComponent extends AbstractComponent {
                 this.observer.observe(child);
             });
         }
+
+        this.__updateArrows();
     }
 
     setActive(id: GalleryItem['id']) {
@@ -171,6 +209,86 @@ export class GalleryComponent extends AbstractComponent {
                 nextActive.classList.add(ACTIVE_CLASS);
                 this.items.scrollLeft = nextActive.offsetLeft + nextActive.clientWidth / 2 - this.items.clientWidth / 2;
             }
+        }
+    }
+
+    /**
+     * Applies scroll
+     */
+    private __scroll(direction: 1 | -1) {
+        if (this.isAboveBreakpoint) {
+            const maxScroll = this.items.scrollWidth - this.items.offsetWidth;
+            const scrollAmount = this.plugin.config.thumbnailSize.width + (this.state.itemMargin ?? 0);
+
+            this.state.scrollLeft = MathUtils.clamp(this.state.scrollLeft + direction * scrollAmount, 0, maxScroll);
+            if (direction === -1 && this.state.scrollLeft < scrollAmount * 0.8) {
+                this.state.scrollLeft = 0;
+            }
+            if (direction === 1 && this.state.scrollLeft > maxScroll - scrollAmount * 0.8) {
+                this.state.scrollLeft = maxScroll;
+            }
+
+            this.items.scroll({
+                left: this.state.scrollLeft,
+                behavior: 'smooth',
+            });
+        } else {
+            const maxScroll = this.items.scrollHeight - this.items.offsetHeight;
+            const scrollAmount = this.items.querySelector<HTMLElement>(':first-child').offsetHeight * 2 + (this.state.itemMargin ?? 0);
+
+            this.state.scrollTop = MathUtils.clamp(this.state.scrollTop + direction * scrollAmount, 0, maxScroll);
+            if (direction === -1 && this.state.scrollTop < scrollAmount * 0.8) {
+                this.state.scrollTop = 0;
+            }
+            if (direction === 1 && this.state.scrollTop > maxScroll - scrollAmount * 0.8) {
+                this.state.scrollTop = maxScroll;
+            }
+
+            this.items.scroll({
+                top: this.state.scrollTop,
+                behavior: 'smooth',
+            });
+        }
+    }
+
+    /**
+     * Updates the arrows visibility and indicator size
+     */
+    private __updateArrows() {
+        if (!this.config.navigationArrows) {
+            return;
+        }
+
+        // switch between vertical and horizontal
+        if (this.state.isAboveBreakpoint !== this.isAboveBreakpoint) {
+            utils.toggleClass(this.arrowLeft, 'psv-gallery-arrow--left', this.isAboveBreakpoint);
+            utils.toggleClass(this.arrowLeft, 'psv-gallery-arrow--top', !this.isAboveBreakpoint);
+            utils.toggleClass(this.arrowRight, 'psv-gallery-arrow--right', this.isAboveBreakpoint);
+            utils.toggleClass(this.arrowRight, 'psv-gallery-arrow--bottom', !this.isAboveBreakpoint);
+
+            this.state.isAboveBreakpoint = this.isAboveBreakpoint;
+        }
+
+        const toggle = (el: HTMLElement, show: boolean) => {
+            if (show) {
+                el.style.opacity = '1';
+                el.style.pointerEvents = 'auto';
+            } else {
+                el.style.opacity = '0';
+                el.style.pointerEvents = 'none';
+            }
+        };
+
+        if (this.isAboveBreakpoint) {
+            const maxScroll = this.items.scrollWidth - this.items.offsetWidth;
+
+            toggle(this.arrowLeft, this.items.scrollLeft > 50);
+            toggle(this.arrowRight, this.items.scrollLeft < maxScroll - 50);
+        } else {
+            const maxScroll = this.items.scrollHeight - this.items.offsetHeight;
+
+            toggle(this.arrowLeft, this.items.scrollTop > 50);
+            toggle(this.arrowRight, this.items.scrollTop < maxScroll - 50);
         }
     }
 }

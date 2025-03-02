@@ -9,6 +9,7 @@ import { GalleryItem, GalleryPluginConfig, UpdatableGalleryPluginConfig } from '
 
 const getConfig = utils.getConfigParser<GalleryPluginConfig>({
     items: [],
+    navigationArrows: true,
     visibleOnLoad: false,
     hideOnClick: true,
     thumbnailSize: {
@@ -29,7 +30,7 @@ export class GalleryPlugin extends AbstractConfigurablePlugin<
     static override readonly id = 'gallery';
     static override readonly VERSION = PKG_VERSION;
     static override readonly configParser = getConfig;
-    static override readonly readonlyOptions: Array<keyof GalleryPluginConfig> = ['visibleOnLoad', 'items'];
+    static override readonly readonlyOptions: Array<keyof GalleryPluginConfig> = ['items', 'navigationArrows', 'visibleOnLoad'];
 
     private readonly gallery: GalleryComponent;
 
