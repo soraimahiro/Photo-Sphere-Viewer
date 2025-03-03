@@ -187,7 +187,7 @@ export class GalleryPlugin extends AbstractConfigurablePlugin<
     /**
      * @internal
      */
-    __click(id: GalleryItem['id']) {
+    applyItem(id: GalleryItem['id']) {
         if (id === this.currentId) {
             return;
         }
@@ -203,11 +203,6 @@ export class GalleryPlugin extends AbstractConfigurablePlugin<
         }
 
         this.currentId = id;
-        this.gallery.setActive(id);
-
-        if (this.config.hideOnClick || !this.gallery.isAboveBreakpoint) {
-            this.hide();
-        }
     }
 
     private __updateButton() {

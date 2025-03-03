@@ -2,6 +2,7 @@ import type { Viewer } from '@photo-sphere-viewer/core';
 import { AbstractComponent, CONSTANTS, events, utils } from '@photo-sphere-viewer/core';
 import { MathUtils } from 'three';
 import { ACTIVE_CLASS, GALLERY_ITEM_DATA, GALLERY_ITEM_DATA_KEY, ITEMS_TEMPLATE } from './constants';
+import { GalleryButton } from './GalleryButton';
 import type { GalleryPlugin } from './GalleryPlugin';
 import arrowIcon from './icons/arrow.svg';
 import blankIcon from './icons/blank.svg';
@@ -91,7 +92,8 @@ export class GalleryComponent extends AbstractComponent {
         );
 
         this.viewer.addEventListener(events.SizeUpdatedEvent.type, this);
-
+        this.container.addEventListener('transitionend', this);
+        this.container.addEventListener('keydown', this);
         this.items.addEventListener('wheel', this);
         this.items.addEventListener('scroll', this);
         this.items.addEventListener('mousedown', this);
@@ -117,6 +119,25 @@ export class GalleryComponent extends AbstractComponent {
      */
     handleEvent(e: Event) {
         switch (e.type) {
+            case 'transitionend':
+                if (this.isVisible() && e.target === this.container) {
+                    this.__focusActiveOrFirst();
+                }
+                break;
+
+            case 'keydown':
+                if (this.isVisible()) {
+                    switch ((e as KeyboardEvent).key) {
+                        case CONSTANTS.KEY_CODES.Escape:
+                            this.plugin.hide();
+                            break;
+                        case CONSTANTS.KEY_CODES.Enter:
+                            this.__click(e);
+                            break;
+                    }
+                }
+                break;
+
             case 'wheel': {
                 const evt = e as WheelEvent;
                 this.__scroll(evt.deltaY > 0 ? 1 : -1);
@@ -165,10 +186,7 @@ export class GalleryComponent extends AbstractComponent {
                 // prevent click on drag
                 const currentMouse = this.isAboveBreakpoint ? (e as MouseEvent).clientX : (e as MouseEvent).clientY;
                 if (Math.abs(this.state.initMouse - currentMouse) < 10) {
-                    const item = utils.getMatchingTarget(e, `.psv-gallery-item`);
-                    if (item) {
-                        this.plugin.__click(item.dataset[GALLERY_ITEM_DATA]);
-                    }
+                    this.__click(e);
                 }
                 break;
             }
@@ -183,6 +201,10 @@ export class GalleryComponent extends AbstractComponent {
     override hide() {
         this.container.classList.remove('psv-gallery--open');
         this.state.visible = false;
+
+        if (utils.hasParent(document.activeElement as HTMLElement, this.container)) {
+            this.viewer.navbar.focusButton(GalleryButton.id);
+        }
     }
 
     setItems(items: GalleryItem[]) {
@@ -210,6 +232,31 @@ export class GalleryComponent extends AbstractComponent {
                 this.items.scrollLeft = nextActive.offsetLeft + nextActive.clientWidth / 2 - this.items.clientWidth / 2;
             }
         }
+    }
+
+    /**
+     * Handle clicks on items
+     */
+    private __click(e: Event) {
+        const item = utils.getMatchingTarget(e, `.psv-gallery-item`);
+        if (!item) {
+            return;
+        }
+
+        const id = item.dataset[GALLERY_ITEM_DATA];
+
+        this.plugin.applyItem(id);
+
+        this.setActive(id);
+
+        if (this.config.hideOnClick || !this.isAboveBreakpoint) {
+            this.hide();
+        }
+    }
+
+    private __focusActiveOrFirst() {
+        const el = this.items.querySelector<HTMLElement>('.' + ACTIVE_CLASS) ?? this.items.firstElementChild as HTMLElement;
+        el?.focus();
     }
 
     /**

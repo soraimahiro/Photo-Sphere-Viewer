@@ -101,6 +101,10 @@
             transform: scale3d(gallery.$thumb-hover-scale, gallery.$thumb-hover-scale, 1);
         }
 
+        &:focus-visible {
+            outline: psv.$element-focus-outline;
+        }
+
         &--active::after {
             content: '';
             position: absolute;
@@ -124,6 +128,7 @@
         cursor: pointer;
         transition: opacity .3s ease-in-out;
 
+        /* stylelint-disable no-descending-specificity */
         svg {
             color: gallery.$arrow-color;
             filter: drop-shadow(5px 5px 2px black);
@@ -199,6 +204,7 @@
                 translate: 0 10px;
             }
         }
+        /* stylelint-enable no-descending-specificity */
     }
 
     @container psv-container (max-width: #{gallery.$breakpoint}) {

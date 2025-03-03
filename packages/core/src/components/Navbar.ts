@@ -194,6 +194,15 @@ export class Navbar extends AbstractComponent {
     }
 
     /**
+     * Try to focus a button, will focus the first button if the requested button does not exist.
+     */
+    focusButton(id: string) {
+        if (this.isVisible()) {
+            (this.getButton(id, false)?.container || this.container.firstElementChild as HTMLElement)?.focus();
+        }
+    }
+
+    /**
      * Automatically collapses buttons
      * @internal
      */

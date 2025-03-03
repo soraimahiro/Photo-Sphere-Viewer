@@ -2,6 +2,7 @@ import type { Viewer } from '@photo-sphere-viewer/core';
 import { AbstractComponent, CONSTANTS, utils } from '@photo-sphere-viewer/core';
 import { ID_BACK, ID_ENTER, OPTION_DATA, SETTINGS_TEMPLATE, SETTING_DATA, SETTING_OPTIONS_TEMPLATE } from './constants';
 import { OptionsSetting, ToggleSetting } from './model';
+import { SettingsButton } from './SettingsButton';
 import type { SettingsPlugin } from './SettingsPlugin';
 
 export class SettingsComponent extends AbstractComponent {
@@ -27,10 +28,12 @@ export class SettingsComponent extends AbstractComponent {
                 break;
 
             case 'transitionend':
-                if (!this.isVisible()) {
-                    this.container.innerHTML = ''; // empty content after fade out
-                } else {
-                    this.__focusFirstOption();
+                if (e.target === this.container) {
+                    if (!this.isVisible()) {
+                        this.container.innerHTML = ''; // empty content after fade out
+                    } else {
+                        this.__focusFirstOption();
+                    }
                 }
                 break;
 
@@ -86,6 +89,10 @@ export class SettingsComponent extends AbstractComponent {
     override hide() {
         this.container.classList.remove('psv-settings--open');
         this.state.visible = false;
+
+        if (utils.hasParent(document.activeElement as HTMLElement, this.container)) {
+            this.viewer.navbar.focusButton(SettingsButton.id);
+        }
     }
 
     /**
