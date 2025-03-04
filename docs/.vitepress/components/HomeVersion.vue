@@ -1,5 +1,5 @@
 <template>
-    <a class="version" href="https://www.npmjs.com/package/@photo-sphere-viewer/core" v-if="version">{{ version }}</a>
+    <a class="version" href="/guide/changelog.html" v-if="version">{{ version }}</a>
 </template>
 
 <script setup lang="ts">
