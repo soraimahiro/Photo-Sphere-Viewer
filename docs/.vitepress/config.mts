@@ -40,6 +40,16 @@ const externals = {
 
 const importmap = `<script type="importmap">${JSON.stringify({ imports: externals })}</script>`;
 
+const adapters = [
+    { text: 'Equirectangular', link: '/equirectangular' },
+    { text: 'Equirectangular tiles', link: '/equirectangular-tiles' },
+    { text: 'Equirectangular video', link: '/equirectangular-video' },
+    { text: 'Cubemap', link: '/cubemap' },
+    { text: 'Cubemap tiles', link: '/cubemap-tiles' },
+    { text: 'Cubemap video', link: '/cubemap-video' },
+    { text: 'Dual fisheye', link: '/dual-fisheye' },
+];
+
 export default defineConfig({
     outDir: '../public',
     title: 'Photo Sphere Viewer',
@@ -108,15 +118,7 @@ export default defineConfig({
                             link: '/',
                             base: '/guide/adapters',
                             collapsed: true,
-                            items: [
-                                { text: 'Equirectangular', link: '/equirectangular' },
-                                { text: 'Equirectangular tiles', link: '/equirectangular-tiles' },
-                                { text: 'Equirectangular video', link: '/equirectangular-video' },
-                                { text: 'Cubemap', link: '/cubemap' },
-                                { text: 'Cubemap tiles', link: '/cubemap-tiles' },
-                                { text: 'Cubemap video', link: '/cubemap-video' },
-                                { text: 'Dual fisheye', link: '/dual-fisheye' },
-                            ],
+                            items: adapters,
                         },
                         {
                             text: 'Reusable components',
@@ -158,6 +160,11 @@ export default defineConfig({
                             text: startCase(f.replace('.md', '')),
                             link: '/' + f,
                         })),
+                },
+                {
+                    text: 'Adapters',
+                    base: '/guide/adapters',
+                    items: adapters,
                 },
             ],
             '/demos/': [
