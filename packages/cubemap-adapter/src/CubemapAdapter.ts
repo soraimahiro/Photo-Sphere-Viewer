@@ -212,7 +212,7 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
                             loader
                                 ? (p) => {
                                         progress[i] = p;
-                                        this.viewer.loader.setProgress(utils.sum(progress) / 6);
+                                        this.viewer.textureLoader.dispatchProgress(utils.sum(progress) / 6);
                                     }
                                 : null,
                             cacheKey,
@@ -262,7 +262,7 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
         const cacheKey = panorama.path;
         const img = await this.viewer.textureLoader.loadImage(
             panorama.path,
-            loader ? p => this.viewer.loader.setProgress(p) : null,
+            loader ? p => this.viewer.textureLoader.dispatchProgress(p) : null,
             cacheKey,
         );
 
@@ -306,7 +306,7 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
         const cacheKey = panorama.path;
         const img = await this.viewer.textureLoader.loadImage(
             panorama.path,
-            loader ? p => this.viewer.loader.setProgress(p) : null,
+            loader ? p => this.viewer.textureLoader.dispatchProgress(p) : null,
             cacheKey,
         );
 

@@ -75,7 +75,7 @@ export abstract class AbstractVideoAdapter<
             : createVideo({
                     src: panorama.source,
                     withCredentials: this.viewer.config.withCredentials,
-                    muted: this.config.muted,
+                    muted: true,
                     autoplay: false,
                 });
 
@@ -139,10 +139,9 @@ export abstract class AbstractVideoAdapter<
         return new Promise((resolve, reject) => {
             const onLoaded = () => {
                 if (this.video && video.duration === this.video.duration) {
-                    resolve(this.__videoBufferPromise(video, this.video.currentTime));
-                } else {
-                    resolve();
+                    video.currentTime = this.video.currentTime;
                 }
+                resolve();
                 video.removeEventListener('loadedmetadata', onLoaded);
             };
 
@@ -153,33 +152,6 @@ export abstract class AbstractVideoAdapter<
 
             video.addEventListener('loadedmetadata', onLoaded);
             video.addEventListener('error', onError);
-        });
-    }
-
-    private __videoBufferPromise(video: HTMLVideoElement, currentTime: number): Promise<void> {
-        return new Promise((resolve) => {
-            function onBuffer() {
-                const buffer = video.buffered;
-                for (let i = 0, l = buffer.length; i < l; i++) {
-                    if (buffer.start(i) <= video.currentTime && buffer.end(i) >= video.currentTime) {
-                        video.pause();
-                        video.removeEventListener('buffer', onBuffer);
-                        video.removeEventListener('progress', onBuffer);
-                        resolve();
-                        break;
-                    }
-                }
-            }
-
-            // try to reduce the switching time by preloading in advance
-            // FIXME find a better way ?
-            video.currentTime = Math.min(currentTime + 2000, video.duration);
-            video.muted = true;
-
-            video.addEventListener('buffer', onBuffer);
-            video.addEventListener('progress', onBuffer);
-
-            video.play();
         });
     }
 }

@@ -33,6 +33,7 @@ export class VideoPlugin extends AbstractConfigurablePlugin<
         curve: null as SplineCurve,
         start: null as VideoKeypoint,
         end: null as VideoKeypoint,
+        waiting: false,
         keypoints: null as VideoKeypoint[],
     };
 
@@ -121,8 +122,16 @@ export class VideoPlugin extends AbstractConfigurablePlugin<
                 this.__onKeyPress((e as events.KeypressEvent).originalEvent);
                 break;
             case 'play':
+                if (this.state.waiting) {
+                    this.viewer.loader.showUndefined();
+                }
+                this.dispatchEvent(new PlayPauseEvent(true));
+                break;
             case 'pause':
-                this.dispatchEvent(new PlayPauseEvent(this.isPlaying()));
+                if (this.state.waiting) {
+                    this.viewer.loader.hide();
+                }
+                this.dispatchEvent(new PlayPauseEvent(false));
                 break;
             case 'progress':
                 this.dispatchEvent(new BufferEvent(this.getBufferProgress()));
@@ -132,6 +141,14 @@ export class VideoPlugin extends AbstractConfigurablePlugin<
                 break;
             case 'timeupdate':
                 this.dispatchEvent(new ProgressEvent(this.getTime(), this.getDuration(), this.getProgress()));
+                break;
+            case 'playing':
+                this.state.waiting = false;
+                this.viewer.loader.hide();
+                break;
+            case 'waiting':
+                this.state.waiting = true;
+                this.viewer.loader.showUndefined();
                 break;
         }
     }
@@ -143,15 +160,20 @@ export class VideoPlugin extends AbstractConfigurablePlugin<
             this.video.removeEventListener('progress', this);
             this.video.removeEventListener('volumechange', this);
             this.video.removeEventListener('timeupdate', this);
+            this.video.removeEventListener('playing', this);
+            this.video.removeEventListener('waiting', this);
         }
 
         this.video = (textureData as TextureData<Texture>).texture.image;
+        this.state.waiting = false;
 
         this.video.addEventListener('play', this);
         this.video.addEventListener('pause', this);
         this.video.addEventListener('progress', this);
         this.video.addEventListener('volumechange', this);
         this.video.addEventListener('timeupdate', this);
+        this.video.addEventListener('playing', this);
+        this.video.addEventListener('waiting', this);
     }
 
     private __onKeyPress(e: KeyboardEvent) {

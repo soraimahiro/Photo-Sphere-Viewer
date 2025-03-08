@@ -1,9 +1,10 @@
 import { PSVError } from '../PSVError';
 import type { Viewer } from '../Viewer';
 import { Cache } from '../data/cache';
-import { AbstractService } from './AbstractService';
+import { LoadProgressEvent } from '../events';
 import { BlobLoader } from '../lib/BlobLoader';
 import { ImageLoader } from '../lib/ImageLoader';
+import { AbstractService } from './AbstractService';
 
 /**
  * Image and texture loading system
@@ -154,6 +155,14 @@ export class TextureLoader extends AbstractService {
         } else {
             return Promise.reject(new PSVError('Current adapter does not support preload'));
         }
+    }
+
+    /**
+     * @internal
+     */
+    dispatchProgress(progress: number) {
+        this.viewer.loader.setProgress(progress);
+        this.viewer.dispatchEvent(new LoadProgressEvent(Math.round(progress)));
     }
 
     /**

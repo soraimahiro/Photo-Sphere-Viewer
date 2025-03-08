@@ -1,5 +1,5 @@
 import { MathUtils } from 'three';
-import { ConfigChangedEvent, LoadProgressEvent } from '../events';
+import { ConfigChangedEvent } from '../events';
 import { getStyleProperty } from '../utils';
 import type { Viewer } from '../Viewer';
 import { AbstractComponent } from './AbstractComponent';
@@ -73,6 +73,8 @@ export class Loader extends AbstractComponent {
      * Sets the loader progression
      */
     setProgress(value: number) {
+        this.container.classList.remove('psv-loader--undefined');
+
         const angle = (MathUtils.clamp(value, 0, 99.999) / 100) * Math.PI * 2;
         const halfSize = this.size / 2;
         const startX = halfSize;
@@ -85,8 +87,15 @@ export class Loader extends AbstractComponent {
         this.canvas.querySelector('path').setAttributeNS(null, 'd',
             `M ${startX} ${startY} A ${radius} ${radius} 0 ${largeArc} 1 ${endX} ${endY}`,
         );
+    }
 
-        this.viewer.dispatchEvent(new LoadProgressEvent(Math.round(value)));
+    /**
+     * Animates the loader with an unknown state
+     */
+    showUndefined() {
+        this.show();
+        this.setProgress(25);
+        this.container.classList.add('psv-loader--undefined');
     }
 
     private __updateContent() {

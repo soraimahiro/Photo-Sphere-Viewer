@@ -132,7 +132,7 @@ export class EquirectangularAdapter extends AbstractAdapter<string | Equirectang
 
         const blob = await this.viewer.textureLoader.loadFile(
             cleanPanorama.path,
-            loader ? p => this.viewer.loader.setProgress(p) : null,
+            loader ? p => this.viewer.textureLoader.dispatchProgress(p) : null,
             cleanPanorama.path,
         );
         const xmpPanoData = useXmpPanoData ? await this.loadXMP(blob) : null;
