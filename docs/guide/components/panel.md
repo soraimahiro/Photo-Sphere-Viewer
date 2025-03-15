@@ -2,7 +2,7 @@
 
 ::: module
 <ApiButton page="classes/Core.Panel.html"/>
-Display HTML content on a sidebar on the left of the viewer.
+Display HTML content on a sidebar on the right of the viewer.
 :::
 
 ## Example

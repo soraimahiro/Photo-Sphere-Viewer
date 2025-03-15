@@ -5,7 +5,7 @@
 Add custom tooltips over the viewer.
 :::
 
-To add a tooltip you must call `viewer.createTooltip()`, this will a return a tooltip instance with two methods : `move()` and `hide()`. This allows to have multiple tooltips at the same time.
+To add a tooltip you must call `viewer.createTooltip()`, this will a return a tooltip instance with methods : `move()`, `update()` and `hide()`. This allows to have multiple tooltips at the same time.
 
 ## Example
 
@@ -23,7 +23,7 @@ title: PSV Tooltip Demo
 
 ## Methods
 
-### `create(config)`
+### `viewer.createTooltip(config)`
 
 Create a tooltip.
 
@@ -51,8 +51,8 @@ Hide and destroy the tooltip.
 
 ### `show-tooltip(data)`
 
-Triggered when the tooltip is shown.
+Triggered when a tooltip is shown.
 
 ### `hide-tooltip(data)`
 
-Triggered when the tooltip is hidden.
+Triggered when a tooltip is hidden.
