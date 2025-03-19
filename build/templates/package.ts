@@ -1,7 +1,4 @@
 import _ from 'lodash';
-import sortPackageJson, { sortOrder } from 'sort-package-json';
-
-sortOrder.splice(sortOrder.indexOf('style') + 1, 0, 'sass');
 
 export const packageJson = (pkg: any) => {
     const content = {
@@ -48,15 +45,18 @@ export const packageJson = (pkg: any) => {
         content.contributors = [
             {
                 name: 'Jérémy Heleine',
-                email: 'jeremy.heleine@gmail.com',
-                homepage: 'https://jeremyheleine.me',
+                homepage: 'http://jeremyheleine.me',
             },
         ];
+    }
+
+    if (!Object.entries(content.peerDependencies).length) {
+        delete content.peerDependencies;
     }
 
     delete content.devDependencies;
     delete content.psv;
     delete content.scripts;
 
-    return JSON.stringify(sortPackageJson(content), null, 2);
+    return JSON.stringify(content, null, 2);
 };

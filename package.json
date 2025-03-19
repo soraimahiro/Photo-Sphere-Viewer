@@ -4,6 +4,9 @@
   "private": true,
   "license": "MIT",
   "packageManager": "yarn@1.22.22",
+  "engines": {
+    "node": ">=20"
+  },
   "workspaces": [
     "build",
     "docs",
@@ -51,7 +54,6 @@
     "postcss": "^8.5.1",
     "queue": "^7.0.0",
     "selfsigned": "^2.4.1",
-    "sort-package-json": "^2.15.1",
     "stylelint": "^16.16.0",
     "stylelint-config-standard-scss": "^14.0.0",
     "ts-node": "^10.9.2",
