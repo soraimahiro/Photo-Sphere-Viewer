@@ -828,9 +828,8 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
         const nbMarkers = Object.values(this.markers).filter(m => !m.config.hideList).length;
 
         if (nbMarkers === 0) {
-            if (this.viewer.panel.isVisible(ID_PANEL_MARKERS_LIST) || this.viewer.panel.isVisible(ID_PANEL_MARKER)) {
-                this.viewer.panel.hide();
-            }
+            this.viewer.panel.hide(ID_PANEL_MARKER);
+            this.viewer.panel.hide(ID_PANEL_MARKERS_LIST);
         } else {
             if (this.viewer.panel.isVisible(ID_PANEL_MARKERS_LIST)) {
                 this.showMarkersList();

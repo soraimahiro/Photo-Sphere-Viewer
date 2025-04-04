@@ -319,6 +319,8 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
                     transitionOptions.effect = 'none';
                 }
 
+                this.viewer.panel.hide('description');
+
                 this.__hideTooltip();
 
                 this.arrowsRenderer.clear();
