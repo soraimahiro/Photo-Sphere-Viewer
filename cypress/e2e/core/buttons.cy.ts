@@ -31,7 +31,7 @@ describe('core: buttons', () => {
             .then(viewer => expect(viewer.getZoomLevel()).gt(50));
 
         cy.get('[title="Zoom out"]').trigger('mousedown');
-        cy.wait(500);
+        cy.wait(1000);
         cy.get('[title="Zoom out"]').trigger('mouseup');
 
         callViewer('check zoom <50')
@@ -75,7 +75,7 @@ describe('core: buttons', () => {
             .then(viewer => expect(viewer.getPosition().yaw).gt(Math.PI));
 
         cy.get('[title="Move left"]').trigger('mousedown');
-        cy.wait(500);
+        cy.wait(1000);
         cy.get('[title="Move left"]').trigger('mouseup');
 
         callViewer('check zoom <Math.PI')
@@ -92,7 +92,7 @@ describe('core: buttons', () => {
             .then(viewer => expect(viewer.getPosition().pitch).gt(0));
 
         cy.get('[title="Move down"]').trigger('mousedown');
-        cy.wait(500);
+        cy.wait(1000);
         cy.get('[title="Move down"]').trigger('mouseup');
 
         callViewer('check pitch <0')

@@ -139,6 +139,7 @@ describe('plugin: settings', () => {
 
         cy.get('.psv-settings-button')
             .should('include.text', 'B')
+            .blur()
             .compareScreenshots('badge-b');
     });
 

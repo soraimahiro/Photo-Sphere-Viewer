@@ -65,7 +65,9 @@ describe('plugin: resolution', () => {
 
         checkPanorama('sphere-small.jpg?hd');
         checkEventHandler(resolutionChangeHandler, { resolutionId: 'HD' });
-        cy.get('.psv-settings-button').compareScreenshots('button-hd');
+        cy.get('.psv-settings-button')
+            .blur()
+            .compareScreenshots('button-hd');
     });
 
     it('should change the resolution by API', () => {
