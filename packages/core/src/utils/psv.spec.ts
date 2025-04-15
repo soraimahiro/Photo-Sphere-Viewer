@@ -430,6 +430,20 @@ describe('utils:psv:mergePanoData', () => {
         } satisfies PanoData);
     });
 
+    it('should generate default panoData with pose', () => {
+        assertDeepEqualLenient(mergePanoData(2000, 1000, {
+            poseHeading: 90,
+        } as PanoData), {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 2000,
+            croppedHeight: 1000,
+            croppedX: 0,
+            croppedY: 0,
+            poseHeading: 90,
+        } satisfies PanoData);
+    });
+
     it('should keep XMP data', () => {
         assertDeepEqualLenient(mergePanoData(2000, 500, undefined, {
             fullWidth: 2000,
@@ -557,6 +571,21 @@ describe('utils:psv:mergePanoData', () => {
             croppedX: 0,
             croppedY: 0,
         } satisfies PanoData);
+    });
+
+    it('should complete missing fullWidth', () => {
+        assertDeepEqualLenient(mergePanoData(1000, 1000, {
+            fullHeight: 1000,
+            croppedX: 500,
+            croppedY: 0,
+        } as PanoData), {
+            fullWidth: 2000,
+            fullHeight: 1000,
+            croppedWidth: 1000,
+            croppedHeight: 1000,
+            croppedX: 500,
+            croppedY: 0,
+        });
     });
 
     it('should complete missing fullHeight', () => {

@@ -464,30 +464,14 @@ export function checkClosedShadowDom(el: Node) {
  * Merge XMP data with custom panoData, also apply default behaviour when data is missing
  */
 export function mergePanoData(width: number, height: number, newPanoData?: PanoData, xmpPanoData?: PanoData): PanoData {
-    if (!newPanoData && !xmpPanoData) {
-        const fullWidth = Math.max(width, height * 2);
-        const fullHeight = Math.round(fullWidth / 2);
-        const croppedX = Math.round((fullWidth - width) / 2);
-        const croppedY = Math.round((fullHeight - height) / 2);
-
-        newPanoData = {
-            fullWidth: fullWidth,
-            fullHeight: fullHeight,
-            croppedWidth: width,
-            croppedHeight: height,
-            croppedX: croppedX,
-            croppedY: croppedY,
-        };
-    }
-
     const panoData: PanoData = {
         isEquirectangular: true,
         fullWidth: firstNonNull(newPanoData?.fullWidth, xmpPanoData?.fullWidth),
         fullHeight: firstNonNull(newPanoData?.fullHeight, xmpPanoData?.fullHeight),
-        croppedWidth: firstNonNull(newPanoData?.croppedWidth, xmpPanoData?.croppedWidth, width),
-        croppedHeight: firstNonNull(newPanoData?.croppedHeight, xmpPanoData?.croppedHeight, height),
-        croppedX: firstNonNull(newPanoData?.croppedX, xmpPanoData?.croppedX, 0),
-        croppedY: firstNonNull(newPanoData?.croppedY, xmpPanoData?.croppedY, 0),
+        croppedWidth: width,
+        croppedHeight: height,
+        croppedX: firstNonNull(newPanoData?.croppedX, xmpPanoData?.croppedX),
+        croppedY: firstNonNull(newPanoData?.croppedY, xmpPanoData?.croppedY),
         poseHeading: firstNonNull(newPanoData?.poseHeading, xmpPanoData?.poseHeading, 0),
         posePitch: firstNonNull(newPanoData?.posePitch, xmpPanoData?.posePitch, 0),
         poseRoll: firstNonNull(newPanoData?.poseRoll, xmpPanoData?.poseRoll, 0),
@@ -496,18 +480,25 @@ export function mergePanoData(width: number, height: number, newPanoData?: PanoD
         initialFov: xmpPanoData?.initialFov,
     };
 
-    if (!panoData.fullWidth && panoData.fullHeight) {
+    // construct missing data
+    if (!panoData.fullWidth && !panoData.fullHeight) {
+        panoData.fullWidth = Math.max(width, height * 2);
+        panoData.fullHeight = Math.round(panoData.fullWidth / 2);
+    }
+    if (!panoData.fullWidth) {
         panoData.fullWidth = panoData.fullHeight * 2;
-    } else if (!panoData.fullWidth || !panoData.fullHeight) {
-        panoData.fullWidth = panoData.fullWidth ?? width;
-        panoData.fullHeight = panoData.fullHeight ?? height;
+    }
+    if (!panoData.fullHeight) {
+        panoData.fullHeight = Math.round(panoData.fullWidth / 2);
+    }
+    if (panoData.croppedX === null) {
+        panoData.croppedX = Math.round((panoData.fullWidth - width) / 2);
+    }
+    if (panoData.croppedY === null) {
+        panoData.croppedY = Math.round((panoData.fullHeight - height) / 2);
     }
 
-    if (panoData.croppedWidth !== width || panoData.croppedHeight !== height) {
-        logWarn(`Invalid panoData, croppedWidth/croppedHeight is not coherent with the loaded image.
-        panoData: ${panoData.croppedWidth}x${panoData.croppedHeight}, image: ${width}x${height}`);
-    }
-
+    // sanity checks
     if (Math.abs(panoData.fullWidth - panoData.fullHeight * 2) > 1) {
         logWarn('Invalid panoData, fullWidth should be twice fullHeight');
         panoData.fullHeight = Math.round(panoData.fullWidth / 2);
