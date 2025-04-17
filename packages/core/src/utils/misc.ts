@@ -67,6 +67,9 @@ export function deepmerge<T>(target: T, src: T): T {
                 target = {};
             }
             Object.keys(src).forEach((key) => {
+                if (key === '__proto__') {
+                    return;
+                }
                 if (typeof src[key] !== 'object' || !src[key] || !isPlainObject(src[key])) {
                     target[key] = src[key];
                 } else if (src[key] !== first) {

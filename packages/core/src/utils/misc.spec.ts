@@ -58,6 +58,21 @@ describe('utils:misc:deepmerge', () => {
 
         assert.deepStrictEqual(result, { a: 'foo' });
     });
+
+    it('should avoid prototype pollution', () => {
+        const payload = JSON.parse(`{
+            "key1": "value",
+            "__proto__": {"bad1": "foobar"},
+            "key2": {"__proto__": {"bad2": "foobar"}}
+        }`);
+
+        const result = deepmerge({}, payload);
+
+        assert.deepEqual(result.key1, 'value');
+        assert.deepEqual(result.key2, {});
+        assert.deepEqual(({} as any).bad1, undefined);
+        assert.deepEqual(({} as any).bad2, undefined);
+    });
 });
 
 describe('utils:misc:dasherize', () => {
