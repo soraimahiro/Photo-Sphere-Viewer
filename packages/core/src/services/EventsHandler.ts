@@ -250,6 +250,10 @@ export class EventsHandler extends AbstractService {
         this.step.add(Step.CLICK);
         this.data.startMouseX = evt.clientX;
         this.data.startMouseY = evt.clientY;
+
+        if (this.config.mousemove) {
+            evt.preventDefault();
+        }
     }
 
     /**
