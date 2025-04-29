@@ -66,6 +66,14 @@ const sponsors = [
       { icon: 'googlehome', link: 'https://www.sachin.ninja' },
     ],
   },
+  {
+    avatar: 'https://avatars.githubusercontent.com/u/115240595?s=200',
+    name: 'Seweryn Pietrucha',
+    links: [
+      { icon: 'github', link: 'https://github.com/seweryn1502' },
+      { icon: 'googlehome', link: 'https://3dtrip.pl/en' },
+    ],
+  },
   // one time
   {
     avatar: 'https://avatars.githubusercontent.com/u/17426654?s=200',
