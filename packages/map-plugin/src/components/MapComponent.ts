@@ -550,7 +550,19 @@ export class MapComponent extends AbstractComponent {
                 const isHover = this.state.hotspotId === hotspot.id;
 
                 const style = getStyle(this.config.spotStyle, hotspot, isHover);
-                const image = this.__loadImage(style.image);
+                let image: ImageSource;
+
+                if (style.image) {
+                    image = this.__loadImage(style.image);
+                    if (!image) {
+                        return;
+                    }
+
+                    // preload the hover image
+                    if (!isHover && (hotspot.hoverImage || this.config.spotStyle.hoverImage)) {
+                        this.__loadImage(hotspot.hoverImage || this.config.spotStyle.hoverImage, false, false);
+                    }
+                }
 
                 const hotspotPos = { ...offset };
                 if ('yaw' in hotspot && 'distance' in hotspot) {
@@ -762,7 +774,7 @@ export class MapComponent extends AbstractComponent {
      * Loads an image and returns the result **synchronously**.
      * If the image is not already loaded it returns `null` and schedules a new render when the image is ready.
      */
-    private __loadImage(url: string, isInit = false): ImageSource {
+    private __loadImage(url: string, isInit = false, autoRefresh = true): ImageSource {
         if (!url) {
             return null;
         }
@@ -790,8 +802,10 @@ export class MapComponent extends AbstractComponent {
                 }
 
                 this.state.images[url].loading = false;
-                this.update(false);
 
+                if (autoRefresh) {
+                    this.update(false);
+                }
                 if (isInit) {
                     this.show();
                 }
