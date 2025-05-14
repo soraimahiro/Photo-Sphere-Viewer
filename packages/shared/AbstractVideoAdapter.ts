@@ -74,7 +74,7 @@ export abstract class AbstractVideoAdapter<
             ? panorama.source
             : createVideo({
                     src: panorama.source,
-                    withCredentials: this.viewer.config.withCredentials,
+                    withCredentials: this.viewer.config.withCredentials(panorama.source as any),
                     muted: true,
                     autoplay: false,
                 });
