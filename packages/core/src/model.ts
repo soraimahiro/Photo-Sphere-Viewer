@@ -367,7 +367,9 @@ export type ViewerConfig = {
     mousewheelCtrlKey?: boolean;
     /** @default false */
     touchmoveTwoFingers?: boolean;
+    /** @default null */
     panoData?: PanoData | PanoDataProvider;
+    /** @default null */
     requestHeaders?: Record<string, string> | ((url: string) => Record<string, string>);
     /** @default '#000' */
     canvasBackground?: string;
@@ -376,10 +378,11 @@ export type ViewerConfig = {
     /** @default '{ alpha: true, antialias: true }' */
     rendererParameters?: WebGLRendererParameters;
     /** @default false */
-    withCredentials?: boolean;
+    withCredentials?: boolean | ((url: string) => boolean);
     /** @default 'zoom move download description caption fullscreen' */
     navbar?: boolean | string | Array<string | NavbarCustomButton>;
     lang?: Record<string, string>;
+    /** @default 'fullscreen' */
     keyboard?: boolean | 'always' | 'fullscreen';
     keyboardActions?: Record<string, ACTIONS | ((viewer: Viewer, e: KeyboardEvent) => void)>;
 };
@@ -396,6 +399,7 @@ export type ParsedViewerConfig = Omit<
     | 'moveInertia'
     | 'fisheye'
     | 'requestHeaders'
+    | 'withCredentials'
     | 'navbar'
 > & {
     adapter?: [AdapterConstructor, any];
@@ -405,6 +409,7 @@ export type ParsedViewerConfig = Omit<
     moveInertia?: number;
     fisheye?: number;
     requestHeaders?: (url: string) => Record<string, string>;
+    withCredentials?: (url: string) => boolean;
     navbar?: Array<string | NavbarCustomButton>;
 };
 

@@ -269,6 +269,13 @@ Speed multiplicator for panorama moves. Used for click move, touch move and navb
 
 Speed multiplicator for panorama zooms. Used for mouse wheel, touch pinch and navbar buttons.
 
+#### `moveInertia`
+
+-   type: `boolean | number`
+-   default: `0.8`
+
+Applies damping to the camera movement, higher value mean stronger damping (`true` is default damping factor, `false` is not damping).
+
 #### `requestHeaders`
 
 -   type: `object | function<string, object>`
@@ -277,7 +284,7 @@ Sets the HTTP headers when loading the images files.
 
 ```js
 requestHeaders: {
-  header: value,
+    header: 'value',
 }
 ```
 
@@ -285,23 +292,22 @@ It can also be a function to dynamically set the request headers before every ca
 
 ```js
 requestHeaders: (url) => ({
-    header: value,
+    header: 'value',
 });
 ```
 
-#### `moveInertia`
-
--   type: `boolean | number`
--   default: `0.8`
-
-Applies damping to the camera movement, higher value mean stronger damping (`true` is default damping factor, `false` is not damping).
-
 #### `withCredentials`
 
--   type: `boolean`
+-   type: `boolean | function<string, boolean>`
 -   default: `false`
 
 Use credentials for HTTP requests.
+
+It can also be a function to dynamically change the option before every call.
+
+```js
+withCredentials: (url) => !url.includes('amazonaws');
+```
 
 #### `keyboardActions`
 

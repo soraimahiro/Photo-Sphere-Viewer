@@ -23,11 +23,6 @@ export class TextureLoader extends AbstractService {
 
         this.fileLoader = new BlobLoader();
         this.imageLoader = new ImageLoader();
-
-        if (this.config.withCredentials) {
-            this.fileLoader.setWithCredentials(true);
-            this.imageLoader.setCrossOrigin('use-credentials');
-        }
     }
 
     /**
@@ -66,6 +61,8 @@ export class TextureLoader extends AbstractService {
         if (this.config.requestHeaders) {
             this.fileLoader.setRequestHeader(this.config.requestHeaders(url));
         }
+
+        this.fileLoader.setWithCredentials(this.config.withCredentials(url));
 
         return new Promise((resolve, reject) => {
             let progress = 0;
@@ -113,6 +110,8 @@ export class TextureLoader extends AbstractService {
         }
 
         if (!onProgress && !this.config.requestHeaders) {
+            this.imageLoader.setCrossOrigin(this.config.withCredentials(url) ? 'use-credentials' : undefined);
+
             return new Promise((resolve, reject) => {
                 this.imageLoader.load(
                     url,

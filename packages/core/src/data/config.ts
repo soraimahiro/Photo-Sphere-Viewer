@@ -45,7 +45,7 @@ export const DEFAULTS: Required<ParsedViewerConfig> = {
         effect: 'fade',
     },
     rendererParameters: { alpha: true, antialias: true },
-    withCredentials: false,
+    withCredentials: () => false,
     navbar: [
         'zoom',
         'move',
@@ -191,6 +191,15 @@ export const CONFIG_PARSERS: ConfigParsers<ViewerConfig, ParsedViewerConfig> = {
             return requestHeaders;
         }
         return null;
+    },
+    withCredentials: (withCredentials) => {
+        if (typeof withCredentials === 'boolean') {
+            return () => withCredentials;
+        }
+        if (typeof withCredentials === 'function') {
+            return withCredentials;
+        }
+        return () => false;
     },
     defaultTransition: (defaultTransition, { defValue }) => {
         if (defaultTransition === null || defaultTransition.speed === 0) {
