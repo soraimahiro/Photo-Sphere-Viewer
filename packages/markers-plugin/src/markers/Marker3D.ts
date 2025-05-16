@@ -168,7 +168,7 @@ export class Marker3D extends Marker {
 
                     const video = createVideo({
                         src: this.config.videoLayer,
-                        withCredentials: this.viewer.config.withCredentials,
+                        withCredentials: this.viewer.config.withCredentials(this.config.videoLayer),
                         muted: true,
                         autoplay: this.config.autoplay ?? true,
                     });
