@@ -110,7 +110,7 @@ export class TextureLoader extends AbstractService {
         }
 
         if (!onProgress && !this.config.requestHeaders) {
-            this.imageLoader.setCrossOrigin(this.config.withCredentials(url) ? 'use-credentials' : undefined);
+            this.imageLoader.setWithCredentials(this.config.withCredentials(url));
 
             return new Promise((resolve, reject) => {
                 this.imageLoader.load(

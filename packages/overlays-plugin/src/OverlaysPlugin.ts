@@ -23,6 +23,7 @@ import {
 const getConfig = utils.getConfigParser<OverlaysPluginConfig>({
     overlays: [],
     autoclear: true,
+    inheritSphereCorrection: true,
     cubemapAdapter: null,
 });
 
@@ -38,7 +39,7 @@ export class OverlaysPlugin extends AbstractConfigurablePlugin<
     static override readonly id = 'overlays';
     static override readonly VERSION = PKG_VERSION;
     static override configParser = getConfig;
-    static override readonlyOptions: Array<keyof OverlaysPluginConfig> = ['overlays', 'cubemapAdapter'];
+    static override readonlyOptions: Array<keyof OverlaysPluginConfig> = ['overlays', 'cubemapAdapter', 'inheritSphereCorrection'];
 
     private readonly state = {
         overlays: {} as Record<string, { config: OverlayConfig; mesh: Mesh }>,
@@ -60,6 +61,7 @@ export class OverlaysPlugin extends AbstractConfigurablePlugin<
         this.viewer.addEventListener(events.PanoramaLoadedEvent.type, this, { once: true });
         this.viewer.addEventListener(events.PanoramaLoadEvent.type, this);
         this.viewer.addEventListener(events.ClickEvent.type, this);
+        this.viewer.addEventListener(events.ConfigChangedEvent.type, this);
     }
 
     /**
@@ -71,11 +73,23 @@ export class OverlaysPlugin extends AbstractConfigurablePlugin<
         this.viewer.removeEventListener(events.PanoramaLoadedEvent.type, this);
         this.viewer.removeEventListener(events.PanoramaLoadEvent.type, this);
         this.viewer.removeEventListener(events.ClickEvent.type, this);
+        this.viewer.removeEventListener(events.ConfigChangedEvent.type, this);
 
         delete this.cubemapAdapter;
         delete this.equirectangularAdapter;
 
         super.destroy();
+    }
+
+    override addEventListener<T extends OverlaysPluginEvents['type'], E extends OverlayClickEvent & { type: T }>(
+        type: T,
+        callback: EventListenerObject | ((e: E) => void),
+        options?: AddEventListenerOptions | boolean,
+    ): void {
+        if (type === 'overlay-click') {
+            utils.logWarn(`"overlay-click" event is deprecated and will be removed in next version.`);
+        }
+        super.addEventListener(type, callback, options);
     }
 
     /**
@@ -103,6 +117,10 @@ export class OverlaysPlugin extends AbstractConfigurablePlugin<
 
             if (overlay) {
                 this.dispatchEvent(new OverlayClickEvent(overlay.id));
+            }
+        } else if (e instanceof events.ConfigChangedEvent) {
+            if (e.containsOptions('sphereCorrection')) {
+                this.__applySphereCorrection();
             }
         }
     }
@@ -192,6 +210,7 @@ export class OverlaysPlugin extends AbstractConfigurablePlugin<
         adapter.setTexture(mesh, textureData);
         adapter.setTextureOpacity(mesh, config.opacity);
         mesh.material.transparent = true;
+        this.__applySphereCorrection(mesh);
 
         this.state.overlays[config.id] = { config, mesh };
 
@@ -220,11 +239,24 @@ export class OverlaysPlugin extends AbstractConfigurablePlugin<
         adapter.setTexture(mesh, textureData);
         adapter.setTextureOpacity(mesh, config.opacity);
         mesh.material.forEach(m => m.transparent = true);
+        this.__applySphereCorrection(mesh);
 
         this.state.overlays[config.id] = { config, mesh };
 
         this.viewer.renderer.addObject(mesh);
         this.viewer.needsUpdate();
+    }
+
+    private __applySphereCorrection(mesh?: Mesh) {
+        if (this.config.inheritSphereCorrection) {
+            if (mesh) {
+                this.viewer.renderer.setSphereCorrection(this.viewer.config.sphereCorrection, mesh);
+            } else {
+                Object.values(this.state.overlays).forEach(({ mesh }) => {
+                    this.viewer.renderer.setSphereCorrection(this.viewer.config.sphereCorrection, mesh);
+                });
+            }
+        }
     }
 
     private __getEquirectangularAdapter() {

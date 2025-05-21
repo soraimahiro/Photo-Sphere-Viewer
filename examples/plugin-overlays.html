@@ -78,10 +78,6 @@
 
             const overlays = viewer.getPlugin('overlays');
 
-            overlays.addEventListener('overlay-click', ({ overlayId }) => {
-                console.log(`click overlay ${overlayId}`);
-            });
-
             function setSphereOverlay(path) {
                 viewer.textureLoader.loadImage(path).then((image) => {
                     const canvas = document.createElement('canvas');

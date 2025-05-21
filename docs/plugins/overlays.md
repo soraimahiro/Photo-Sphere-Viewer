@@ -62,6 +62,14 @@ The list of overlays, see below. Can be updated with various [methods](#methods)
 
 Automatically remove all overlays when the panorama changes.
 
+#### `inheritSphereCorrection`
+
+-   type: `boolean`
+-   default: `true`
+-   updatable: no
+
+Applies the global [`sphereCorrection`](../guide/config.md#spherecorrection) to each overlay.
+
 ### Overlays
 
 Overlays can be a single image/video for a spherical gerometry or six images for a cube geometry (no videos).
@@ -112,15 +120,3 @@ Removes an overlay.
 #### `clearOverlays()`
 
 Removes all overlays.
-
-## Events
-
-#### `overlay-click(overlayId)`
-
-Triggered when an overlay is clicked.
-
-```js
-overlaysPlugin.addEventListener('overlay-click', ({ overlayId }) => {
-    console.log(`Clicked on overlay ${overlayId}`);
-});
-```

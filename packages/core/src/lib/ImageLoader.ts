@@ -50,8 +50,8 @@ export class ImageLoader extends Loader<HTMLImageElement, string> {
 
         abortSignal?.addEventListener('abort', onAbortSignal, false);
 
-        if (!url.startsWith('data:') && this.crossOrigin !== undefined) {
-            image.crossOrigin = this.crossOrigin;
+        if (!url.startsWith('data:')) {
+            image.crossOrigin = this.withCredentials ? 'use-credentials' : 'anonymous';
         }
 
         image.src = url;

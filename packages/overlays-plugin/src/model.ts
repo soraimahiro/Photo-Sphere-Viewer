@@ -40,9 +40,14 @@ export type OverlaysPluginConfig = {
      */
     autoclear?: boolean;
     /**
+     * Applies the global "sphereCorrection" to each overlay
+     * @default true
+     */
+    inheritSphereCorrection?: boolean;
+    /**
      * Used to display cubemap overlays on equirectangular panoramas
      */
     cubemapAdapter?: AdapterConstructor;
 };
 
-export type UpdatableOverlaysPluginConfig = Omit<OverlaysPluginConfig, 'overlays' | 'cubemapAdapter'>;
+export type UpdatableOverlaysPluginConfig = Omit<OverlaysPluginConfig, 'overlays' | 'cubemapAdapter' | 'inheritSphereCorrection'>;
