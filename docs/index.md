@@ -76,6 +76,13 @@ const sponsors = [
   },
   // one time
   {
+    avatar: 'https://avatars.githubusercontent.com/u/171242208?s=200',
+    name: 'JaniPonkko',
+    links: [
+      { icon: 'github', link: 'https://github.com/JaniPonkko' },
+    ],
+  },
+  {
     avatar: 'https://avatars.githubusercontent.com/u/17426654?s=200',
     name: 'ntrwansui',
     links: [
