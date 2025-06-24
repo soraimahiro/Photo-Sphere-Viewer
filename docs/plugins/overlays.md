@@ -12,7 +12,7 @@ This plugin is available in the [@photo-sphere-viewer/overlays-plugin](https://w
 ## Usage
 
 Overlays are images "glued" to the panorama. Contrary to [markers](./markers.md) they are part of the 3D scene and not drawn on top of the viewer.
-The images must have the same proportions of the base panorama and must be transparent. Both equirectangular (full or cropped) and cubemaps are supported.
+Both equirectangular (full or cropped) and cubemaps are supported.
 
 ```js
 import { OverlaysPlugin } from '@photo-sphere-viewer/overlays-plugin';
@@ -99,6 +99,27 @@ Used to remove the overlay with `removeOverlay()` method.
 
 Path to the image.
 
+#### `panoData`
+
+-   type: `PanoData`
+
+This option acts the same as the core [`panoData`](../guide/config.md#panodata) and allows to display partial panoramas.
+
+```js
+overlays.addOverlay({
+    id: 'my-overlay',
+    path: 'my-overlay.png',
+    opacity: 0.8,
+    panoData: {
+        fullWidth: 3000,
+        croppedX: 1250,
+        croppedY: 500,
+    },
+});
+```
+
+_Note:_ The `fullWidth` provided here is not necessarily the same of the base panorama, `croppedX/croppedY` will be scaled accordingly.
+
 #### Cube overlays
 
 #### `path` (required)
@@ -120,3 +141,15 @@ Removes an overlay.
 #### `clearOverlays()`
 
 Removes all overlays.
+
+## Events
+
+#### `overlay-click(overlayId)`
+
+Triggered when an overlay is clicked.
+
+```js
+overlaysPlugin.addEventListener('overlay-click', ({ overlayId }) => {
+    console.log(`Clicked on overlay ${overlayId}`);
+});
+```

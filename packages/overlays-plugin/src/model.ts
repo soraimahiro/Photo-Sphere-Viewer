@@ -1,4 +1,4 @@
-import type { AdapterConstructor } from '@photo-sphere-viewer/core';
+import type { AdapterConstructor, PanoData } from '@photo-sphere-viewer/core';
 import type { CubemapPanorama } from '@photo-sphere-viewer/cubemap-adapter';
 
 export type BaseOverlayConfig = {
@@ -18,6 +18,7 @@ export type BaseOverlayConfig = {
  */
 export type SphereOverlayConfig = BaseOverlayConfig & {
     path: string;
+    panoData?: PanoData;
 };
 
 /**

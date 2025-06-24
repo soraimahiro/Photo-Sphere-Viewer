@@ -1,4 +1,4 @@
-import type { AbstractAdapter, PanoData, Viewer } from '@photo-sphere-viewer/core';
+import type { AbstractAdapter, Viewer } from '@photo-sphere-viewer/core';
 import {
     AbstractConfigurablePlugin,
     EquirectangularAdapter,
@@ -79,17 +79,6 @@ export class OverlaysPlugin extends AbstractConfigurablePlugin<
         delete this.equirectangularAdapter;
 
         super.destroy();
-    }
-
-    override addEventListener<T extends OverlaysPluginEvents['type'], E extends OverlayClickEvent & { type: T }>(
-        type: T,
-        callback: EventListenerObject | ((e: E) => void),
-        options?: AddEventListenerOptions | boolean,
-    ): void {
-        if (type === 'overlay-click') {
-            utils.logWarn(`"overlay-click" event is deprecated and will be removed in next version.`);
-        }
-        super.addEventListener(type, callback, options);
     }
 
     /**
@@ -182,28 +171,11 @@ export class OverlaysPlugin extends AbstractConfigurablePlugin<
      * Add a spherical overlay
      */
     private async __addSphereImageOverlay(config: SphereOverlayConfig) {
-        const currentPanoData = this.viewer.state.textureData.panoData as PanoData;
-
         const adapter = this.__getEquirectangularAdapter();
 
-        const textureData = await adapter.loadTexture(config.path, false, null, false);
+        const textureData = await adapter.loadTexture(config.path, false, config.panoData, false);
 
-        let panoData: PanoData;
-        if (currentPanoData.isEquirectangular) {
-            const r = textureData.panoData.croppedWidth / currentPanoData.croppedWidth;
-            panoData = {
-                fullWidth: r * currentPanoData.fullWidth,
-                fullHeight: r * currentPanoData.fullHeight,
-                croppedWidth: r * currentPanoData.croppedWidth,
-                croppedHeight: r * currentPanoData.croppedHeight,
-                croppedX: r * currentPanoData.croppedX,
-                croppedY: r * currentPanoData.croppedY,
-            };
-        } else {
-            panoData = textureData.panoData;
-        }
-
-        const mesh = adapter.createMesh(panoData);
+        const mesh = adapter.createMesh(textureData.panoData);
         mesh.renderOrder = 100 + config.zIndex;
         mesh.userData[OVERLAY_DATA] = config.id;
 

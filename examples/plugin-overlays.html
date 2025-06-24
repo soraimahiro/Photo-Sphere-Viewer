@@ -60,6 +60,23 @@
                     },
                     {
                         className: 'custom-button',
+                        content: 'Partial overlay',
+                        onClick: () => {
+                            overlays.clearOverlays();
+                            overlays.addOverlay({
+                                id: 'paper',
+                                path: baseUrl + 'sphere-paper-overlay.png',
+                                opacity: 0.8,
+                                panoData: {
+                                    fullWidth: 3000,
+                                    croppedX: 1250,
+                                    croppedY: 500,
+                                },
+                            });
+                        },
+                    },
+                    {
+                        className: 'custom-button',
                         content: 'Cubemap overlay',
                         onClick: () => {
                             overlays.clearOverlays();
@@ -77,6 +94,10 @@
             });
 
             const overlays = viewer.getPlugin('overlays');
+
+            overlays.addEventListener('overlay-click', ({ overlayId }) => {
+                console.log(`click overlay ${overlayId}`);
+            });
 
             function setSphereOverlay(path) {
                 viewer.textureLoader.loadImage(path).then((image) => {
