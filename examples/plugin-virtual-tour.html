@@ -183,19 +183,19 @@
                 defaultYaw: '100deg',
                 plugins: [
                     MarkersPlugin,
-                    [GalleryPlugin, {
+                    GalleryPlugin.withConfig({
                         // visibleOnLoad: true,
                         // hideOnClick: false,
-                    }],
-                    [MapPlugin, {
+                    }),
+                    MapPlugin.withConfig({
                         static: true,
                         maxZoom: 150,
-                    }],
-                    [PlanPlugin, {
+                    }),
+                    PlanPlugin.withConfig({
                         position: 'bottom right',
                         defaultZoom: 18,
-                    }],
-                    [VirtualTourPlugin, {
+                    }),
+                    VirtualTourPlugin.withConfig({
                         positionMode: 'gps',
                         renderMode: '3d',
                         startNodeId: nodes[1].id,
@@ -241,7 +241,7 @@
                         //         }), 200)
                         //     });
                         // },
-                    }],
+                    }),
                 ],
             });
 

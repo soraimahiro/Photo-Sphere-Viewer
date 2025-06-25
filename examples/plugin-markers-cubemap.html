@@ -58,7 +58,7 @@
                     'fullscreen',
                 ],
                 plugins: [
-                    [MarkersPlugin, {
+                    MarkersPlugin.withConfig({
                         markers: (() => {
                             const a = [];
                             for (let i = 0; i < Math.PI * 2; i += Math.PI / 4) {
@@ -115,7 +115,7 @@
 
                             return a;
                         })(),
-                    }],
+                    }),
                 ],
             });
 

@@ -43,9 +43,9 @@
                 caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',
                 loadingImg: baseUrl + 'loader.gif',
                 plugins: [
-                    [SettingsPlugin, {
+                    SettingsPlugin.withConfig({
                         persist: urlParams.get('persist') === 'true',
-                    }],
+                    }),
                 ],
             });
 

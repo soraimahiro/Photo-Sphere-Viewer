@@ -44,7 +44,7 @@
                 panorama: urlParams.get('withPanorama') ? baseUrl + 'sphere-small.jpg' : null,
                 plugins: [
                     SettingsPlugin,
-                    [ResolutionPlugin, {
+                    ResolutionPlugin.withConfig({
                         showBadge: urlParams.get('showBadge') !== 'false',
                         defaultResolution: urlParams.get('resolution'),
                         resolutions: [
@@ -59,7 +59,7 @@
                                 panorama: baseUrl + 'sphere-small.jpg?hd',
                             },
                         ],
-                    }],
+                    }),
                 ],
             });
 

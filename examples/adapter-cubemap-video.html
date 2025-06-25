@@ -37,20 +37,20 @@
 
             const viewer = new Viewer({
                 container: 'photosphere',
-                adapter: [CubemapVideoAdapter, {
+                adapter: CubemapVideoAdapter.withConfig({
                     autoplay: false,
                     muted: true,
-                }],
+                }),
                 caption: 'Dreams of Dalí <b>&copy; The Dalí Museum</b>',
                 loadingImg: baseUrl + 'loader.gif',
                 navbar: 'video zoom move caption settings fullscreen',
                 plugins: [
-                    [VideoPlugin, {
+                    VideoPlugin.withConfig({
                         progressbar: true,
                         bigbutton: true,
-                    }],
+                    }),
                     SettingsPlugin,
-                    [ResolutionPlugin, {
+                    ResolutionPlugin.withConfig({
                         defaultResolution: 'FHD',
                         resolutions: [
                             {
@@ -69,7 +69,7 @@
                                 panorama: { source: baseUrl + 'cubemap-video/DreamOfDali_HD.webm' },
                             },
                         ],
-                    }],
+                    }),
                 ],
             });
 

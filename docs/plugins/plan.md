@@ -18,9 +18,9 @@ import { PlanPlugin } from '@photo-sphere-viewer/plan-plugin';
 
 const viewer = new Viewer({
     plugins: [
-        [PlanPlugin, {
+        PlanPlugin.withConfig({
             coordinates: [6.79077, 44.58041],
-        }],
+        }),
     ],
 });
 ```

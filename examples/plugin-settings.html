@@ -34,7 +34,7 @@
                 caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',
                 loadingImg: baseUrl + 'loader.gif',
                 plugins: [
-                    [SettingsPlugin, {
+                    SettingsPlugin.withConfig({
                         persist: true, // default
                         // storage: { // default is localStorage
                         //     get(id) {
@@ -44,7 +44,7 @@
                         //         sessionStorage.setItem(`psv-${id}`, JSON.stringify(value));
                         //     },
                         // },
-                    }],
+                    }),
                 ],
             });
 

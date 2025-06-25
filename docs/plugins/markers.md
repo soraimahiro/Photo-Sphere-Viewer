@@ -28,7 +28,7 @@ import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 
 const viewer = new Viewer({
     plugins: [
-        [MarkersPlugin, {
+        MarkersPlugin.withConfig({
             markers: [
                 {
                     id: 'new-marker',
@@ -37,7 +37,7 @@ const viewer = new Viewer({
                     size: { width: 32, height: 32 },
                 },
             ],
-        }],
+        }),
     ],
 });
 

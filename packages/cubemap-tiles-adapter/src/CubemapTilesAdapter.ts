@@ -1,4 +1,4 @@
-import type { PanoramaPosition, Position, TextureData, Viewer } from '@photo-sphere-viewer/core';
+import type { AdapterConstructor, PanoramaPosition, Position, TextureData, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractAdapter, CONSTANTS, PSVError, events, utils } from '@photo-sphere-viewer/core';
 import { CubemapAdapter, CubemapData, CubemapFaces } from '@photo-sphere-viewer/cubemap-adapter';
 import { BoxGeometry, BufferAttribute, Group, Mesh, MeshBasicMaterial, Texture, Vector3 } from 'three';
@@ -85,6 +85,10 @@ export class CubemapTilesAdapter extends AbstractAdapter<
     // @internal
     public adapter: CubemapAdapter;
     private readonly queue = new Queue();
+
+    static withConfig(config: CubemapTilesAdapterConfig): [AdapterConstructor, any] {
+        return [CubemapTilesAdapter, config];
+    }
 
     constructor(viewer: Viewer, config: CubemapTilesAdapterConfig) {
         super(viewer);

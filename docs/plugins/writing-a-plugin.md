@@ -26,6 +26,10 @@ import { AbstractPlugin } from '@photo-sphere-viewer/core';
 export class CustomPlugin extends AbstractPlugin {
     static id = 'custom-plugin';
 
+    static withConfig(config) {
+        return [CustomPlugin, config];
+    }
+
     constructor(viewer, config) {
         super(viewer);
     }

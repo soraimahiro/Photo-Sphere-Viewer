@@ -78,10 +78,10 @@ const stream = await navigator.mediaDevices.getUserMedia({ video: true });
 
 const viewer = new Viewer({
     container: 'photosphere',
-    adapter: [EquirectangularVideoAdapter, {
+    adapter: EquirectangularVideoAdapter.withConfig({
         autoplay: true,
         muted: true,
-    }],
+    }),
     panorama: {
         source: stream,
     },

@@ -1,4 +1,4 @@
-import type { Viewer } from '@photo-sphere-viewer/core';
+import type { PluginConstructor, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractPlugin, events, PSVError, utils } from '@photo-sphere-viewer/core';
 import type { OptionsSetting, SettingsPlugin } from '@photo-sphere-viewer/settings-plugin';
 import { ResolutionChangedEvent, ResolutionPluginEvents } from './events';
@@ -27,6 +27,10 @@ export class ResolutionPlugin extends AbstractPlugin<ResolutionPluginEvents> {
     };
 
     private settings: SettingsPlugin;
+
+    static withConfig(config: ResolutionPluginConfig): [PluginConstructor, any] {
+        return [ResolutionPlugin, config];
+    }
 
     constructor(viewer: Viewer, config: ResolutionPluginConfig) {
         super(viewer);

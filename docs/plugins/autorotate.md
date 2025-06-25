@@ -22,9 +22,9 @@ import { AutorotatePlugin } from '@photo-sphere-viewer/autorotate-plugin';
 
 const viewer = new Viewer({
     plugins: [
-        [AutorotatePlugin, {
+        AutorotatePlugin.withConfig({
             autorotatePitch: '5deg',
-        }],
+        }),
     ],
 });
 ```
@@ -40,7 +40,7 @@ It is also possible to configure each keypoint with a pause time and a tooltip.
 ```js
 const viewer = new Viewer({
     plugins: [
-        [AutorotatePlugin, {
+        AutorotatePlugin.withConfig({
             keypoints: [
                 'existing-marker-id',
 
@@ -57,7 +57,7 @@ const viewer = new Viewer({
                     pause: 2500,
                 },
             ],
-        }],
+        }),
     ],
 });
 ```

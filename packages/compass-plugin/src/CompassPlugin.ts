@@ -1,4 +1,4 @@
-import type { Viewer } from '@photo-sphere-viewer/core';
+import type { PluginConstructor, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractConfigurablePlugin, events, utils } from '@photo-sphere-viewer/core';
 import type { events as markersEvents, MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 import compass from './compass.svg';
@@ -38,6 +38,10 @@ export class CompassPlugin extends AbstractConfigurablePlugin<
 
     private markers?: MarkersPlugin;
     private readonly component: CompassComponent;
+
+    static withConfig(config: CompassPluginConfig): [PluginConstructor, any] {
+        return [CompassPlugin, config];
+    }
 
     constructor(viewer: Viewer, config: CompassPluginConfig) {
         super(viewer, config);

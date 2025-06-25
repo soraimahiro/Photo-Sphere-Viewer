@@ -124,11 +124,11 @@
                 panorama: items[0].panorama,
                 caption: items[0].options.caption,
                 plugins: [
-                    [GalleryPlugin, {
+                    GalleryPlugin.withConfig({
                         items: items,
                         visibleOnLoad: urlParams.get('visibleOnLoad') !== 'false',
                         hideOnClick: false,
-                    }],
+                    }),
                 ],
             });
 

@@ -36,7 +36,7 @@
                 defaultYaw: 2.45,
                 defaultPitch: 0.1,
                 plugins: [
-                    [MarkersPlugin, {
+                    MarkersPlugin.withConfig({
                         markers: (() => {
                             const a = [];
 
@@ -144,7 +144,7 @@
 
                             return a;
                         })(),
-                    }],
+                    }),
                 ],
             });
 

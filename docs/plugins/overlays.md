@@ -19,14 +19,14 @@ import { OverlaysPlugin } from '@photo-sphere-viewer/overlays-plugin';
 
 const viewer = new Viewer({
     plugins: [
-        [OverlaysPlugin, {
+        OverlaysPlugin.withConfig({
             overlays: [
                 {
                     id: 'overlay',
                     path: 'path/to/overlay.png',
                 },
             ],
-        }],
+        }),
     ],
 });
 ```

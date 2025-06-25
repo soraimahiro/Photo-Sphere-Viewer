@@ -43,7 +43,7 @@
                 caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',
                 loadingImg: baseUrl + 'loader.gif',
                 plugins: [
-                    [OverlaysPlugin, {
+                    OverlaysPlugin.withConfig({
                         overlays: [
                             {
                                 id: 'xray',
@@ -59,7 +59,7 @@
                                 zIndex: 1,
                             },
                         ],
-                    }],
+                    }),
                 ],
             });
 

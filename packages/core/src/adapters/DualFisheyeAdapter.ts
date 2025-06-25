@@ -2,6 +2,7 @@ import { BufferAttribute, Mesh, MeshBasicMaterial, SphereGeometry } from 'three'
 import { type Viewer } from '../Viewer';
 import { SPHERE_RADIUS } from '../data/constants';
 import { EquirectangularAdapter, EquirectangularMesh, EquirectangularTextureData } from './EquirectangularAdapter';
+import { AdapterConstructor } from './AbstractAdapter';
 
 export type DualFisheyeAdapterConfig = {
     /**
@@ -17,6 +18,10 @@ export type DualFisheyeAdapterConfig = {
 export class DualFisheyeAdapter extends EquirectangularAdapter {
     static override readonly id: string = 'dual-fisheye';
     static override readonly VERSION = PKG_VERSION;
+
+    static override withConfig(config: DualFisheyeAdapterConfig): [AdapterConstructor, any] {
+        return [DualFisheyeAdapter, config];
+    }
 
     constructor(viewer: Viewer, config?: DualFisheyeAdapterConfig) {
         super(viewer, {

@@ -16,12 +16,12 @@ import { VirtualTourPlugin } from '@photo-sphere-viewer/virtual-tour-plugin';
 
 const viewer = new Viewer({
     plugins: [
-        [VirtualTourPlugin, {
+        VirtualTourPlugin.withConfig({
             nodes: [...],
             // or
             getNode: async (id) => { ... },
             startNodeId: ...,
-        }],
+        }),
     ],
 });
 ```

@@ -22,7 +22,7 @@ import { GalleryPlugin } from '@photo-sphere-viewer/gallery-plugin';
 
 const viewer = new Viewer({
     plugins: [
-        [GalleryPlugin, {
+        GalleryPlugin.withConfig({
             items: [
                 {
                     id: 'pano-1',
@@ -37,7 +37,7 @@ const viewer = new Viewer({
                     thumbnail: 'path/to/pano-2-thumb.jpg',
                 },
             ],
-        }],
+        }),
     ],
 });
 ```

@@ -12,9 +12,7 @@ There is no need to declare the equirectangular adapter as it is the default one
 import { EquirectangularAdapter } from '@photo-sphere-viewer/core';
 
 const viewer = new Viewer({
-    adapter: [EquirectangularAdapter, {
-        // options
-    }],
+    adapter: EquirectangularAdapter,
     panorama: 'path/panorama.jpg',
 });
 ```

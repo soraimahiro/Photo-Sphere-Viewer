@@ -46,7 +46,7 @@
                 defaultYaw: '-10deg',
                 keyboard: 'always',
                 plugins: [
-                    [PlanPlugin, {
+                    PlanPlugin.withConfig({
                         // position: 'top left',
                         // visibleOnLoad: false,
                         // size: {
@@ -114,8 +114,8 @@
                                 color: 'green',
                             },
                         ],
-                    }],
-                    [MarkersPlugin, {
+                    }),
+                    MarkersPlugin.withConfig({
                         markers: [
                             {
                                 id: 'mountain',
@@ -135,7 +135,7 @@
                                 },
                             },
                         ],
-                    }],
+                    }),
                 ],
             });
 

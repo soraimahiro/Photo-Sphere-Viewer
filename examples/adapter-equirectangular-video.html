@@ -42,15 +42,15 @@
 
             const viewer = new Viewer({
                 container: 'photosphere',
-                adapter: [EquirectangularVideoAdapter, {
+                adapter: EquirectangularVideoAdapter.withConfig({
                     autoplay: false,
                     muted: true,
-                }],
+                }),
                 caption: 'Ayutthaya <b>&copy; meetle</b>',
                 loadingImg: baseUrl + 'loader.gif',
                 navbar: 'autorotate video zoom move caption settings fullscreen',
                 plugins: [
-                    [VideoPlugin, {
+                    VideoPlugin.withConfig({
                         progressbar: true,
                         bigbutton: true,
                         keypoints: [
@@ -63,11 +63,11 @@
                             { time: 30, position: { yaw: (-3 * Math.PI) / 2, pitch: 0 } },
                             { time: 35, position: { yaw: (-7 * Math.PI) / 4, pitch: -Math.PI / 8 } },
                         ],
-                    }],
+                    }),
                     AutorotatePlugin,
                     MarkersPlugin,
                     SettingsPlugin,
-                    [ResolutionPlugin, {
+                    ResolutionPlugin.withConfig({
                         defaultResolution: 'FHD',
                         resolutions: [
                             {
@@ -91,7 +91,7 @@
                                 panorama: { source: baseUrl + 'equirectangular-video/Ayutthaya_SD.mp4' },
                             },
                         ],
-                    }],
+                    }),
                 ],
             });
 

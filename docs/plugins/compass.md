@@ -18,12 +18,12 @@ import { CompassPlugin } from '@photo-sphere-viewer/compass-plugin';
 
 const viewer = new Viewer({
     plugins: [
-        [CompassPlugin, {
+        CompassPlugin.withConfig({
             hotspots: [
                 { yaw: '45deg' }, 
                 { yaw: '60deg', color: 'red' },
             ],
-        }],
+        }),
     ],
 });
 ```

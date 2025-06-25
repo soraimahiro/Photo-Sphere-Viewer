@@ -1,4 +1,4 @@
-import type { AbstractAdapter, Viewer } from '@photo-sphere-viewer/core';
+import type { AbstractAdapter, PluginConstructor, Viewer } from '@photo-sphere-viewer/core';
 import {
     AbstractConfigurablePlugin,
     EquirectangularAdapter,
@@ -47,6 +47,10 @@ export class OverlaysPlugin extends AbstractConfigurablePlugin<
 
     private cubemapAdapter: CubemapAdapter;
     private equirectangularAdapter: EquirectangularAdapter;
+
+    static withConfig(config: OverlaysPluginConfig): [PluginConstructor, any] {
+        return [OverlaysPlugin, config];
+    }
 
     constructor(viewer: Viewer, config?: OverlaysPluginConfig) {
         super(viewer, config);

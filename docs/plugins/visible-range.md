@@ -18,10 +18,10 @@ import { VisibleRangePlugin } from '@photo-sphere-viewer/visible-range-plugin';
 
 const viewer = new Viewer({
     plugins: [
-        [VisibleRangePlugin, {
+        VisibleRangePlugin.withConfig({
             horizontalRange: [-Math.PI / 2, Math.PI / 2],
             verticalRange: [-Math.PI / 3, Math.PI / 3],
-        }],
+        }),
     ],
 });
 

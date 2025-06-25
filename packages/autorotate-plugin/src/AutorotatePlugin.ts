@@ -1,4 +1,4 @@
-import type { ExtendedPosition, Position, Tooltip, Viewer } from '@photo-sphere-viewer/core';
+import type { ExtendedPosition, PluginConstructor, Position, Tooltip, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractConfigurablePlugin, CONSTANTS, events, PSVError, utils } from '@photo-sphere-viewer/core';
 import type { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 import type { VideoPlugin } from '@photo-sphere-viewer/video-plugin';
@@ -105,6 +105,10 @@ export class AutorotatePlugin extends AbstractConfigurablePlugin<
 
     private video?: VideoPlugin;
     private markers?: MarkersPlugin;
+
+    static withConfig(config: AutorotatePluginConfig): [PluginConstructor, any] {
+        return [AutorotatePlugin, config];
+    }
 
     constructor(viewer: Viewer, config: AutorotatePluginConfig) {
         super(viewer, config);

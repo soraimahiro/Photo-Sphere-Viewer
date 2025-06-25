@@ -151,7 +151,7 @@
                 plugins: [
                     GyroscopePlugin,
                     StereoPlugin,
-                    [MarkersPlugin, {
+                    MarkersPlugin.withConfig({
                         // defaultHoverScale: true,
                         markers: (() => {
                             const a = [];
@@ -450,7 +450,7 @@ tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretiu
 
                             return a;
                         })(),
-                    }],
+                    }),
                 ],
             });
 

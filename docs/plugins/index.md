@@ -64,35 +64,19 @@ Import `@photo-sphere-viewer/markers-plugin/index.css` with the prefered way dep
 
 ## Using a plugin
 
-All plugins consists of a JavaScript class which must be provided to the `plugins` array. Some plugins will also take a configuration object provided in a nested array.
+All plugins consists of a JavaScript class which must be provided to the `plugins` array. Some plugins will also take a configuration object provided with the static method `withConfig`.
 
 ```js
 const viewer = new Viewer({
     plugins: [
-        PluginWithoutConfig,
-        [PluginWithConfig, {
+        PluginA,
+        PluginB.withConfig({
             option1: 'foo',
             option2: 'bar',
-        }],
+        }),
     ],
 });
 ```
-
-::: tip
-When using Typescript you can also type-check the configuration object :
-
-```ts
-import { MarkersPlugin, MarkersPluginConfig } from '@photo-sphere-viewer/markers-plugin';
-
-const viewer = new Viewer({
-    plugins: [
-        [MarkersPlugin, {
-            markers,
-        } satisfies MarkersPluginConfig],
-    ],
-});
-```
-:::
 
 ### Methods and events
 

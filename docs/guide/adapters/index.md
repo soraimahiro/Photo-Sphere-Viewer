@@ -14,7 +14,7 @@ The supported adapters are:
 
 ## Import an adapter
 
-Official adapters are available in various `@photo-sphere-viewer/***-adapter` packages.
+Official adapters are available in various `@photo-sphere-viewer/***-adapter` packages. All adapters consist of a JavaScrpt class which must be provided to the `adapter` option. Some adapters will also take a configuration object provided with the static method `withConfig`.
 
 **Example for the Cubemap adapter:**
 
@@ -37,9 +37,11 @@ Official adapters are available in various `@photo-sphere-viewer/***-adapter` pa
     import { CubemapAdapter } from '@photo-sphere-viewer/cubemap-adapter';
 
     new Viewer({
-        adapter: [CubemapAdapter, {
+        adapter: CubemapAdapter,
+        // OR
+        adapter: CubemapAdapter.withConfig({
             // optional adapter config
-        }],
+        }),
         panorama: // specific to the adapter,
     });
 </script>
@@ -54,9 +56,7 @@ import { Viewer } from '@photo-sphere-viewer/core';
 import { CubemapAdapter } from '@photo-sphere-viewer/cubemap-adapter';
 
 new Viewer({
-    adapter: [CubemapAdapter, {
-        // optional adapter config
-    }],
+    adapter: CubemapAdapter,
     panorama: // specific to the adapter,
 });
 ```

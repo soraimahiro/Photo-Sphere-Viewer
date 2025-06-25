@@ -36,7 +36,7 @@
                 loadingImg: baseUrl + 'loader.gif',
                 plugins: [
                     SettingsPlugin,
-                    [ResolutionPlugin, {
+                    ResolutionPlugin.withConfig({
                         showBadge: true,
                         defaultResolution: 'SD',
                         resolutions: [
@@ -51,7 +51,7 @@
                                 panorama: baseUrl + 'sphere.jpg',
                             },
                         ],
-                    }],
+                    }),
                 ],
             });
 

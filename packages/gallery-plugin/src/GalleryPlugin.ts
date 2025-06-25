@@ -1,4 +1,4 @@
-import type { Viewer } from '@photo-sphere-viewer/core';
+import type { PluginConstructor, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractConfigurablePlugin, events, PSVError, utils } from '@photo-sphere-viewer/core';
 import type { MapPlugin } from '@photo-sphere-viewer/map-plugin';
 import type { PlanPlugin } from '@photo-sphere-viewer/plan-plugin';
@@ -40,6 +40,10 @@ export class GalleryPlugin extends AbstractConfigurablePlugin<
 
     private map?: MapPlugin;
     private plan?: PlanPlugin;
+
+    static withConfig(config: GalleryPluginConfig): [PluginConstructor, any] {
+        return [GalleryPlugin, config];
+    }
 
     constructor(viewer: Viewer, config: GalleryPluginConfig) {
         super(viewer, config);

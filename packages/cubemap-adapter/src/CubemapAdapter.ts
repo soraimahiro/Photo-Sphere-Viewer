@@ -1,4 +1,4 @@
-import type { PanoramaPosition, Position, TextureData, Viewer } from '@photo-sphere-viewer/core';
+import type { AdapterConstructor, PanoramaPosition, Position, TextureData, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractAdapter, CONSTANTS, PSVError, SYSTEM, utils } from '@photo-sphere-viewer/core';
 import { BoxGeometry, MathUtils, Mesh, MeshBasicMaterial, Texture, Vector2, Vector3 } from 'three';
 import {
@@ -32,6 +32,10 @@ export class CubemapAdapter extends AbstractAdapter<CubemapPanorama, CubemapData
     static override readonly supportsDownload = false;
 
     private readonly config: CubemapAdapterConfig;
+
+    static withConfig(config: CubemapAdapterConfig): [AdapterConstructor, any] {
+        return [CubemapAdapter, config];
+    }
 
     constructor(viewer: Viewer, config: CubemapAdapterConfig) {
         super(viewer);

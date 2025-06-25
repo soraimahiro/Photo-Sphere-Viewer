@@ -41,7 +41,7 @@
                 caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',
                 loadingImg: baseUrl + 'loader.gif',
                 plugins: [
-                    [CompassPlugin, {
+                    CompassPlugin.withConfig({
                         // size: '200px',
                         // coneColor: 'rgba(150, 50, 50, 0.5)',
                         // navigationColor: 'rgba(200, 200, 0, 0.5)',
@@ -54,8 +54,8 @@
                             { yaw: '180deg' },
                             { yaw: '270deg' },
                         ],
-                    }],
-                    [MarkersPlugin, {
+                    }),
+                    MarkersPlugin.withConfig({
                         markers: (() => {
                             const m = [];
                             for (let i = 0, l = Math.random() * 2 + 2; i < l; i++) {
@@ -110,7 +110,7 @@
 
                             return m;
                         })(),
-                    }],
+                    }),
                 ],
             });
 

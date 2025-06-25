@@ -24,7 +24,7 @@ import { ResolutionPlugin } from '@photo-sphere-viewer/resolution-plugin';
 const viewer = new Viewer({
     plugins: [
         SettingsPlugin,
-        [ResolutionPlugin, {
+        ResolutionPlugin.withConfig({
             defaultResolution: 'SD',
             resolutions: [
                 {
@@ -38,7 +38,7 @@ const viewer = new Viewer({
                     panorama: 'sphere.jpg',
                 },
             ],
-        }],
+        }),
     ],
 });
 ```

@@ -1,4 +1,4 @@
-import type { Position, Viewer } from '@photo-sphere-viewer/core';
+import type { PluginConstructor, Position, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractConfigurablePlugin, DEFAULTS, events, utils } from '@photo-sphere-viewer/core';
 import { Object3D, Vector3 } from 'three';
 import { DeviceOrientationControls } from './DeviceOrientationControls';
@@ -49,6 +49,10 @@ export class GyroscopePlugin extends AbstractConfigurablePlugin<
     };
 
     private controls: DeviceOrientationControls;
+
+    static withConfig(config: GyroscopePluginConfig): [PluginConstructor, any] {
+        return [GyroscopePlugin, config];
+    }
 
     constructor(viewer: Viewer, config: GyroscopePluginConfig) {
         super(viewer, config);

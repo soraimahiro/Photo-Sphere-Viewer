@@ -1,5 +1,5 @@
 import type { AutorotatePlugin } from '@photo-sphere-viewer/autorotate-plugin';
-import type { PanoData, Position, Viewer } from '@photo-sphere-viewer/core';
+import type { PanoData, PluginConstructor, Position, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractConfigurablePlugin, events, utils } from '@photo-sphere-viewer/core';
 import { MathUtils } from 'three';
 import { Range, UpdatableVisibleRangePluginConfig, VisibleRangePluginConfig } from './model';
@@ -34,6 +34,10 @@ export class VisibleRangePlugin extends AbstractConfigurablePlugin<
     ];
 
     private autorotate?: AutorotatePlugin;
+
+    static withConfig(config: VisibleRangePluginConfig): [PluginConstructor, any] {
+        return [VisibleRangePlugin, config];
+    }
 
     constructor(viewer: Viewer, config: VisibleRangePluginConfig) {
         super(viewer, config);

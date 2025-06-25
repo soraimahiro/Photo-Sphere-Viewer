@@ -54,13 +54,13 @@
                     'fullscreen',
                 ],
                 plugins: [
-                    [AutorotatePlugin, {
+                    AutorotatePlugin.withConfig({
                         // autostartDelay: 1000,
                         // autostartOnIdle: false,
                         autorotateSpeed: '3rpm',
                         // autorotatePitch: '15deg',
                         // autorotateZoomLvl: 40,
-                    }],
+                    }),
                     MarkersPlugin,
                 ],
             });

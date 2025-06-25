@@ -1,4 +1,4 @@
-import type { TextureData, Viewer } from '@photo-sphere-viewer/core';
+import type { AdapterConstructor, TextureData, Viewer } from '@photo-sphere-viewer/core';
 import { CONSTANTS, utils } from '@photo-sphere-viewer/core';
 import { BoxGeometry, BufferAttribute, Mesh, ShaderMaterial, Texture, Vector2, VideoTexture } from 'three';
 import { AbstractVideoAdapter } from '../../shared/AbstractVideoAdapter';
@@ -30,6 +30,10 @@ export class CubemapVideoAdapter extends AbstractVideoAdapter<CubemapVideoPanora
     static override readonly VERSION = PKG_VERSION;
 
     protected override readonly config: CubemapVideoAdapterConfig;
+
+    static withConfig(config: CubemapVideoAdapterConfig): [AdapterConstructor, any] {
+        return [CubemapVideoAdapter, config];
+    }
 
     constructor(viewer: Viewer, config: CubemapVideoAdapterConfig) {
         super(viewer);

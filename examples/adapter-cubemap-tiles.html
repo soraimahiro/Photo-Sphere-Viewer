@@ -111,11 +111,11 @@
 
             const viewer = new Viewer({
                 container: 'photosphere',
-                adapter: [CubemapTilesAdapter, {
+                adapter: CubemapTilesAdapter.withConfig({
                     showErrorTile: true,
                     baseBlur: true,
                     // debug: true,
-                }],
+                }),
                 plugins: [GyroscopePlugin],
                 loadingImg: baseUrl + 'loader.gif',
                 navbar: [

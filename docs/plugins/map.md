@@ -22,11 +22,11 @@ import { MapPlugin } from '@photo-sphere-viewer/map-plugin';
 
 const viewer = new Viewer({
     plugins: [
-        [MapPlugin, {
+        MapPlugin.withConfig({
             imageUrl: 'path/to/map.jpg',
             center: { x: 785, y: 421 },
             rotation: '-12deg',
-        }],
+        }),
     ],
 });
 ```

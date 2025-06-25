@@ -1,4 +1,4 @@
-import type { PanoData, PanoramaPosition, Position, TextureData, Viewer } from '@photo-sphere-viewer/core';
+import type { AdapterConstructor, PanoData, PanoramaPosition, Position, TextureData, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractAdapter, CONSTANTS, EquirectangularAdapter, events, utils } from '@photo-sphere-viewer/core';
 import { BufferAttribute, Group, Mesh, MeshBasicMaterial, SphereGeometry, Texture, Vector3 } from 'three';
 import { Queue, Task } from '../../shared/Queue';
@@ -120,6 +120,10 @@ export class EquirectangularTilesAdapter extends AbstractAdapter<
     // @internal
     public adapter: EquirectangularAdapter;
     private readonly queue = new Queue();
+
+    static withConfig(config: EquirectangularTilesAdapterConfig): [AdapterConstructor, any] {
+        return [EquirectangularTilesAdapter, config];
+    }
 
     constructor(viewer: Viewer, config: EquirectangularTilesAdapterConfig) {
         super(viewer);

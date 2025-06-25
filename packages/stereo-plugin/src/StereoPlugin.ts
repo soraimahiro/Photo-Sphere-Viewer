@@ -1,5 +1,5 @@
 import type { CompassPlugin } from '@photo-sphere-viewer/compass-plugin';
-import type { Viewer } from '@photo-sphere-viewer/core';
+import type { PluginConstructor, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractPlugin, events, PSVError, utils } from '@photo-sphere-viewer/core';
 import type { GalleryPlugin } from '@photo-sphere-viewer/gallery-plugin';
 import type { GyroscopePlugin } from '@photo-sphere-viewer/gyroscope-plugin';
@@ -38,6 +38,10 @@ export class StereoPlugin extends AbstractPlugin<StereoPluginEvents> {
      */
     get isSupported(): Promise<boolean> {
         return this.gyroscope.isSupported();
+    }
+
+    static withConfig(): [PluginConstructor, any] {
+        return [StereoPlugin, undefined];
     }
 
     constructor(viewer: Viewer) {

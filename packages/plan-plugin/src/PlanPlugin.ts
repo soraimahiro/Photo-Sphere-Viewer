@@ -1,4 +1,4 @@
-import { AbstractConfigurablePlugin, events, utils, type Viewer } from '@photo-sphere-viewer/core';
+import { AbstractConfigurablePlugin, events, PluginConstructor, utils, type Viewer } from '@photo-sphere-viewer/core';
 import type { Marker, events as markersEvents, MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 import { type Map } from 'leaflet';
 import { PlanComponent } from './components/PlanComponent';
@@ -75,6 +75,10 @@ export class PlanPlugin extends AbstractConfigurablePlugin<
 
     private markers?: MarkersPlugin;
     readonly component: PlanComponent;
+
+    static withConfig(config: PlanPluginConfig): [PluginConstructor, any] {
+        return [PlanPlugin, config];
+    }
 
     constructor(viewer: Viewer, config: PlanPluginConfig) {
         super(viewer, config);

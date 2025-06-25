@@ -1,5 +1,5 @@
 import type { CompassPlugin } from '@photo-sphere-viewer/compass-plugin';
-import type { Point, Position, Tooltip, Viewer } from '@photo-sphere-viewer/core';
+import type { PluginConstructor, Point, Position, Tooltip, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractConfigurablePlugin, PSVError, events, utils } from '@photo-sphere-viewer/core';
 import type { GalleryPlugin } from '@photo-sphere-viewer/gallery-plugin';
 import type { MapPlugin, events as mapEvents } from '@photo-sphere-viewer/map-plugin';
@@ -129,6 +129,10 @@ export class VirtualTourPlugin extends AbstractConfigurablePlugin<
 
     get isGps(): boolean {
         return this.config.positionMode === 'gps';
+    }
+
+    static withConfig(config: VirtualTourPluginConfig): [PluginConstructor, any] {
+        return [VirtualTourPlugin, config];
     }
 
     constructor(viewer: Viewer, config: VirtualTourPluginConfig) {

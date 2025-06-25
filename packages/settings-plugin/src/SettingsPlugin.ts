@@ -1,4 +1,4 @@
-import type { Viewer } from '@photo-sphere-viewer/core';
+import type { PluginConstructor, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractPlugin, events, PSVError, utils } from '@photo-sphere-viewer/core';
 import { LOCAL_STORAGE_KEY } from './constants';
 import { SettingChangedEvent, SettingsPluginEvents } from './events';
@@ -39,6 +39,10 @@ export class SettingsPlugin extends AbstractPlugin<SettingsPluginEvents> {
 
     private readonly component: SettingsComponent;
     readonly settings: Setting[] = [];
+
+    static withConfig(config: SettingsPluginConfig): [PluginConstructor, any] {
+        return [SettingsPlugin, config];
+    }
 
     constructor(viewer: Viewer, config: SettingsPluginConfig) {
         super(viewer);

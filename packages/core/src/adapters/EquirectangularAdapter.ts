@@ -5,7 +5,7 @@ import { SPHERE_RADIUS } from '../data/constants';
 import { SYSTEM } from '../data/system';
 import { EquirectangularPanorama, PanoData, PanoDataProvider, PanoramaPosition, Position, TextureData } from '../model';
 import { createTexture, getConfigParser, getXMPValue, isNil, mergePanoData } from '../utils';
-import { AbstractAdapter } from './AbstractAdapter';
+import { AbstractAdapter, AdapterConstructor } from './AbstractAdapter';
 
 /**
  * Configuration for {@link EquirectangularAdapter}
@@ -61,6 +61,10 @@ export class EquirectangularAdapter extends AbstractAdapter<string | Equirectang
     public readonly SPHERE_SEGMENTS: number;
     // @internal
     public readonly SPHERE_HORIZONTAL_SEGMENTS: number;
+
+    static withConfig(config: EquirectangularAdapterConfig): [AdapterConstructor, any] {
+        return [EquirectangularAdapter, config];
+    }
 
     constructor(viewer: Viewer, config?: EquirectangularAdapterConfig) {
         super(viewer);

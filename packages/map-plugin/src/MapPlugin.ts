@@ -1,4 +1,4 @@
-import { AbstractConfigurablePlugin, events, Point, utils, Viewer } from '@photo-sphere-viewer/core';
+import { AbstractConfigurablePlugin, events, PluginConstructor, Point, utils, Viewer } from '@photo-sphere-viewer/core';
 import type { Marker, events as markersEvents, MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 import { Color } from 'three';
 import { MapComponent } from './components/MapComponent';
@@ -81,6 +81,10 @@ export class MapPlugin extends AbstractConfigurablePlugin<
 
     private markers?: MarkersPlugin;
     readonly component: MapComponent;
+
+    static withConfig(config: MapPluginConfig): [PluginConstructor, any] {
+        return [MapPlugin, config];
+    }
 
     constructor(viewer: Viewer, config: MapPluginConfig) {
         super(viewer, config);

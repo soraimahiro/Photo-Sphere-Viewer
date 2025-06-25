@@ -65,9 +65,9 @@
                 ],
                 plugins: [
                     AutorotatePlugin,
-                    [VisibleRangePlugin, {
+                    VisibleRangePlugin.withConfig({
                         usePanoData: true,
-                    }],
+                    }),
                 ],
             });
 

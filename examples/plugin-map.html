@@ -44,7 +44,7 @@
                 defaultYaw: '-10deg',
                 keyboard: 'always',
                 plugins: [
-                    [MapPlugin, {
+                    MapPlugin.withConfig({
                         imageUrl: baseUrl + 'map.jpg',
                         center: { x: 807, y: 607 },
                         rotation: '135deg',
@@ -88,8 +88,8 @@
                             // close: false,
                             // reset: false,
                         },
-                    }],
-                    [MarkersPlugin, {
+                    }),
+                    MarkersPlugin.withConfig({
                         markers: [
                             {
                                 id: 'mountain',
@@ -108,7 +108,7 @@
                                 },
                             },
                         ],
-                    }],
+                    }),
                 ],
                 navbar: [
                     'zoom',

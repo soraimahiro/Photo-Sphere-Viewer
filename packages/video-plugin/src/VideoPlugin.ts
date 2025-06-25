@@ -1,5 +1,5 @@
 import type { AutorotatePlugin } from '@photo-sphere-viewer/autorotate-plugin';
-import type { AbstractAdapter, Position, TextureData, Viewer } from '@photo-sphere-viewer/core';
+import type { AbstractAdapter, PluginConstructor, Position, TextureData, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractConfigurablePlugin, CONSTANTS, events, PSVError, utils } from '@photo-sphere-viewer/core';
 import type { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
 import { MathUtils, SplineCurve, Texture, Vector2 } from 'three';
@@ -43,6 +43,10 @@ export class VideoPlugin extends AbstractConfigurablePlugin<
 
     private autorotate?: AutorotatePlugin;
     private markers?: MarkersPlugin;
+
+    static withConfig(config: VideoPluginConfig): [PluginConstructor, any] {
+        return [VideoPlugin, config];
+    }
 
     constructor(viewer: Viewer, config: VideoPluginConfig) {
         super(viewer, config);

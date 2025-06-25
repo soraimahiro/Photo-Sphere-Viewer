@@ -35,12 +35,12 @@
                 caption: 'Parc national du Mercantour <b>&copy; Damien Sorel</b>',
                 loadingImg: baseUrl + 'loader.gif',
                 plugins: [
-                    [GyroscopePlugin, {
+                    GyroscopePlugin.withConfig({
                         // touchmove: false,
                         // roll: false,
                         // absolutePosition: true,
                         // moveMode: 'fast',
-                    }],
+                    }),
                     StereoPlugin,
                 ],
             });

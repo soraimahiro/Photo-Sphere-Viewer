@@ -1,4 +1,4 @@
-import type { Point, Viewer } from '@photo-sphere-viewer/core';
+import type { PluginConstructor, Point, Viewer } from '@photo-sphere-viewer/core';
 import { AbstractConfigurablePlugin, PSVError, events, utils } from '@photo-sphere-viewer/core';
 import { Object3D } from 'three';
 import { CSS3DContainer } from './CSS3DContainer';
@@ -122,6 +122,10 @@ export class MarkersPlugin extends AbstractConfigurablePlugin<
     private readonly container: HTMLElement;
     private readonly svgContainer: SVGElement;
     private readonly css3DContainer: CSS3DContainer;
+
+    static withConfig(config: MarkersPluginConfig): [PluginConstructor, any] {
+        return [MarkersPlugin, config];
+    }
 
     constructor(viewer: Viewer, config: MarkersPluginConfig) {
         super(viewer, config);
