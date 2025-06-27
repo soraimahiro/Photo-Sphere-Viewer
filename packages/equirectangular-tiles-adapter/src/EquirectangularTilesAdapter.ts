@@ -345,7 +345,10 @@ export class EquirectangularTilesAdapter extends AbstractAdapter<
         baseMesh.material.dispose();
 
         tilesMesh.geometry.dispose();
-        tilesMesh.material.forEach(m => m.dispose());
+        tilesMesh.material.forEach((m) => {
+            m.map?.dispose();
+            m.dispose();
+        });
     }
 
     /**

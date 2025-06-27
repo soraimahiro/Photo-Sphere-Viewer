@@ -276,7 +276,7 @@ export class CubemapTilesAdapter extends AbstractAdapter<
     }
 
     disposeTexture({ texture }: CubemapTilesTextureData) {
-        texture.forEach(t => t.dispose());
+        texture?.forEach(t => t.dispose());
     }
 
     disposeMesh(group: Group) {
@@ -286,7 +286,10 @@ export class CubemapTilesAdapter extends AbstractAdapter<
         baseMesh.material.forEach(m => m.dispose());
 
         tilesMesh.geometry.dispose();
-        tilesMesh.material.forEach(m => m.dispose());
+        tilesMesh.material.forEach((m) => {
+            m.map?.dispose();
+            m.dispose();
+        });
     }
 
     /**
@@ -297,8 +300,7 @@ export class CubemapTilesAdapter extends AbstractAdapter<
             return;
         }
 
-        const panorama = this.viewer.state.textureData.panorama as CubemapTilesPanorama | CubemapMultiTilesPanorama;
-        const panoData = this.viewer.state.textureData.panoData as CubemapTilesPanoData;
+        const panorama = this.viewer.config.panorama as CubemapTilesPanorama | CubemapMultiTilesPanorama;
         const zoomLevel = this.viewer.getZoomLevel();
         const tileConfig = getTileConfig(panorama, zoomLevel, { CUBE_SEGMENTS });
 
@@ -331,7 +333,7 @@ export class CubemapTilesAdapter extends AbstractAdapter<
                         config,
                         url: null,
                     };
-                    if (panoData.flipTopBottom && isTopOrBottom(face)) {
+                    if (panorama.flipTopBottom && isTopOrBottom(face)) {
                         col = config.nbTiles - col - 1;
                         row = config.nbTiles - row - 1;
                     }
