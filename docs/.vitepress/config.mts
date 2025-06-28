@@ -86,7 +86,7 @@ export default defineConfig({
             { text: 'Plugins', link: '/plugins/' },
             { text: 'Playground', link: '/playground' },
             { text: 'Demos', link: '/demos/' },
-            { text: 'API', link: '/api/', target: '_blank' },
+            { text: 'Reference', link: '/api/', target: '_blank' },
             {
                 text: 'v5',
                 items: [
@@ -133,11 +133,11 @@ export default defineConfig({
                             ],
                         },
                         { text: 'Frameworks', link: '/frameworks' },
-                        { text: 'Changelog', link: '/changelog' },
-                        { text: 'Development', link: '/development' },
-                        { text: 'Migration from v4', link: '/migration' },
                     ],
                 },
+                { text: 'Changelog', link: '/guide/changelog' },
+                { text: 'Development & Credits', link: '/guide/development' },
+                { text: 'Migration from v4', link: '/guide/migration' },
             ],
             '/plugins/': [
                 {

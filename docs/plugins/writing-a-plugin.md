@@ -16,7 +16,7 @@ The recommended way to create your own plugin is as an ES6 class extending `Abst
 -   It **must** implement the `destroy` method which is used to cleanup the plugin when the viewer is unloaded.
 -   The constructor **can** take an `config` object as second parameter.
 
-In the plugin you have access to `this.viewer` which is the instance of the viewer, check the [API Documentation](/api/classes/Core.Viewer.html){target=_blank} for more information.
+In the plugin you have access to `this.viewer` which is the instance of the viewer, check the [API Reference](/api/classes/Core.Viewer.html){target=_blank} for more information.
 
 Your plugin is also an `EventTarget` with `addEventListener`, `removeEventListener` and `dispatchEvent` methods.
 
@@ -135,7 +135,7 @@ Your plugin may need to add a new button in the navbar. This section will descri
 
 ### Creating a button
 
-Photo Sphere Viewer buttons **must** extend `AbstractButton`, check the [API Documentation](/api/classes/Core.AbstractButton.html){target=_blank} for more information.
+Photo Sphere Viewer buttons **must** extend `AbstractButton`, check the [API Reference](/api/classes/Core.AbstractButton.html){target=_blank} for more information.
 
 **Requirements:**
 

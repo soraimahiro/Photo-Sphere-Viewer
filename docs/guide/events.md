@@ -23,13 +23,15 @@ viewer.addEventListener(events.PositionUpdateEvent.type, (e) => {
 viewer.addEventListener('position-updated', ({ position }) => ());
 ```
 
-The full list of events is available in the [API Documentation](/api/modules/Core.events.html){target=_blank}.
+The full list of events is available in the [API Reference](/api/modules/Core.events.html){target=_blank}.
 
 ## Main events
 
 This section describes the most useful events available.
 
 ### `click(data)` | `dblclick(data)`
+
+- data: [`ClickData`](/api/types/Core.ClickData.html){target=_blank}
 
 Triggered when the user clicks on the viewer (excluding the navbar and the side panel), it contains many information about where the user clicked including a [marker](../plugins/markers.md) if the `clickEventOnMarker` option is enabled.
 

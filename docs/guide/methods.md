@@ -2,7 +2,7 @@
 
 ## Presentation
 
-Many methods are available to control the viewer from your application. The full list of methods is available in the [API Documentation](/api/classes/Core.Viewer.html){target=_blank}.
+Many methods are available to control the viewer from your application. The full list of methods is available in the [API Reference](/api/classes/Core.Viewer.html){target=_blank}.
 
 ::: tip Modular architecture
 Photo Sphere Viewer is internally splitted in multiple components, this has an impact on where are located each method. For example, the methods to control the navbar are in the `navbar` object.
@@ -32,6 +32,8 @@ When using a [cubemap](./adapters/cubemap.md) you will also have to provide `tex
 :::
 
 ### `animate(options): Animation`
+
+- options: [`AnimateOptions`](/api/types/Core.AnimateOptions.html){target=_blank}
 
 Rotate and zoom the view with a smooth animation. You can change the position (`yaw`, `pitch` or `textureX`, `textureY`) and the zoom level (`zoom`).
 
@@ -97,7 +99,9 @@ viewer.setOptions({
 
 ### `setPanorama(panorama[, options]): Promise`
 
-Change the panorama image with an optional transition animation (enabled by default). See all options in the [API Documentation](/api/types/Core.PanoramaOptions.html){target=_blank}.
+- options: [`PanoramaOptions`](/api/types/Core.PanoramaOptions.html){target=_blank}
+
+Change the panorama image with an optional transition animation (enabled by default).
 
 The method returns a Promise resolved when the new panorama has finished loading.
 

@@ -6,12 +6,12 @@ The building process is based on [tsup](https://tsup.egoist.dev/) (toolkit based
 The documentation is created with [VitePress](https://vitepress.dev/) and [TypeDoc](https://typedoc.org/).
 Files are linted with [ESLint](https://eslint.org/) and [Stylelint](https://stylelint.io/).
 Tests are executed with [Mocha](https://mochajs.org/) and [Cypress](https://www.cypress.io/).
-You will need [Node.js 20](https://nodejs.org/).
+You will need [Node.js 22](https://nodejs.org/).
 
 ## Commands
 
 -   launch the dev server with `npm run serve`
-    -   watch only some packages wuth `npm run serve-filter`
+    -   watch only some packages with `npm run serve-filter`
 -   launch the documentation with `npm run doc:serve`
 -   launch the Cypress runner with `npm run e2e:open`
 -   register all package for npm link with `npm run npm-link`
@@ -20,3 +20,15 @@ You will need [Node.js 20](https://nodejs.org/).
 -   execute the e2e tests with `npm run e2e:run`
 -   build all the packages with `npm run build`
 -   build the documentation with `npm run doc:build`
+
+## Credits
+
+These are the various photos and videos used across the demos:
+
+- sphere, sphere-tiles, cubemap, cubemap-tiles: [Damien Sorel (me!)](https://galerie.strangeplanet.fr/picture.php?/1802/category/81)
+- sphere-tiles-24k, cubemap-tiles-24k: [Greg Zaal](https://polyhaven.com/a/cannon)
+- artist-workshop: [Oliksiy Yakovlyev](https://polyhaven.com/a/artist_workshop)
+- equirectangular-video: [Mettle Communications](https://www.mettle.com/360vr-master-series-free-360-downloads-page)
+- cubemap-video: [The Dalí Museum](https://www.youtube.com/watch?v=zQ2-oJOkTKc)
+- tour : Pixexid (dead link)
+- dualfisheye: [Jonna Luostari](https://jonnaluostari.com)

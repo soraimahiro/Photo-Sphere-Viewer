@@ -1,6 +1,6 @@
 <template>
     <v-btn @click="open" style="float: right;" color="primary">
-        <v-icon icon="mdi-information" start/> API Documentation
+        <v-icon icon="mdi-information" start/> API Reference
     </v-btn>
 </template>
 
